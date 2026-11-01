@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Менің қосымшам</title>
+    <style>
+        body {
+            background: linear-gradient(135deg, #74b9ff, #dfe6e9);
+            text-align: center;
+            padding: 20px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #2d3436;
+            transition: all 0.3s ease;
+        }
+        body.dark-mode {
+            background: #2d3436;
+            color: #dfe6e9;
+        }
+        body.dark-mode .card {
+            background-color: #353b48;
+            color: white;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
+            background-color: #7f8c8d;
+            color: white;
+            border: 1px solid #636e72;
+        }
+        body.dark-mode li {
+            background: #485460;
+            color: white;
+        }
+        body.neon-mode {
+            background: #0f0c29;
+            color: #00ffcc;
+        }
+        body.neon-mode .card {
+            background-color: #1a1a2e;
+            color: #00ffcc;
+            box-shadow: 0 0 15px rgba(0,255,204,0.3);
+            border: 1px solid #00ffcc;
+        }
+        body.neon-mode input, body.neon-mode select, body.neon-mode textarea {
+            background-color: #16213e;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+        }
+        .card {
+            background-color: white;
+            margin: 15px auto;
+            padding: 20px;
+            width: 90%;
+            max-width: 400px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        input, select, textarea {
+            padding: 8px;
+            width: 70%;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+        .btn {
+            padding: 8px 15px;
+            background-color: #0984e3;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: bold;
+            margin: 5px;
+        }
+        .btn:hover {
+            opacity: 0.9;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            margin-top: 10px;
+        }
+        li {
+            background: #f1f2f6;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .clock {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body id="mainBody">
+    
+    <div class="card" style="padding: 10px;">
+        <div id="liveClock" class="clock">00:00:00</div>
+    </div>
+
+    <div class="card" style="padding: 15px;">
+        <h4 style="margin-top:0;">Дизайнды өзгерту</h4>
+        <button class="btn" style="background-color: #6c5ce7;" onclick="setTheme('dark')">🌙 Түнгі</button>
+        <button class="btn" style="background-color: #00cec9;" onclick="setTheme('neon')">⚡ Неон</button>
+        <button class="btn" style="background-color: #e84393;" onclick="ozgertuFon()">🎨 Түс</button>
+    </div>
+
+    <h1 id="welcomeUser">Сәлем! Менің атым Аманжол</h1>
+    <p>Телефон арқылы жасалған қосымшам.</p>
+    
+    <div class="card">
+        <h3>👤 Есіміңізді енгізіңіз:</h3>
+        <input type="text" id="usernameInput" placeholder="Атыңыз...">
+        <br>
+        <button class="btn" onclick="saveName()">Сақтау</button>
+    </div>
+
+    <!-- 1. GPS & Мекенжай -->
+    <div class="card">
+        <h3>🛰️ Спутниктік GPS & Мекенжай</h3>
+        <button class="btn" style="background-color: #0984e3; width: 85%;" onclick="getLocationGPS()">📍 GPS координат табу</button><br>
+        <input type="text" id="addressInput" placeholder="Қала немесе мекенжай..."><br>
+        <button class="btn" style="background-color: #00b894;" onclick="openMapAddress()">🗺️ Картадан ашу</button>
+        <h4 id="gpsResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- 2. Телефон нөмірін анықтау -->
+    <div class="card">
+        <h3>📱 Телефон нөмірін анықтау</h3>
+        <input type="text" id="phoneInput" placeholder="+7 (701) ХХХ-ХХ-ХХ"><br>
+        <button class="btn" style="background-color: #e17055;" onclick="checkPhone()">Нөмірді тексеру</button>
+        <h4 id="phoneResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- 3. Музыка плеері -->
+    <div class="card">
+        <h3>🎵 Музыка плеері (3 тілде)</h3>
+        <select id="songSelect" style="width: 85%;">
+            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3">🇰🇿 Қазақша: Димаш - Дүрдараз</option>
+            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3">🇷🇺 Русский: Кино - Пачка сигарет</option>
+            <option value="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3">🇬🇧 English: Imagine Dragons - Believer</option>
+        </select><br>
+        <audio id="audioPlayer" controls style="width: 90%; margin-top: 10px;"></audio>
+        <br>
+        <button class="btn" style="background-color: #00b894;" onclick="playMusic()">▶️ Тыңдау</button>
+        <button class="btn" style="background-color: #d63031;" onclick="stopMusic()">⏹️ Тоқтату</button>
+    </div>
+
+    <!-- Жазбалар кітапшасы -->
+    <div class="card">
+        <h3>📌 Жеке жазбалар кітапшасы</h3>
+        <textarea id="noteInput" placeholder="Ойларыңызды жазыңыз..." style="height: 60px;"></textarea>
+        <br>
+        <button class="btn" style="background-color: #0984e3;" onclick="saveNote()">Жазбаны сақтау</button>
+        <ul id="noteList"></ul>
+    </div>
+
+    <!-- Тас, қайшы, қағаз -->
+    <div class="card">
+        <h3>✌️ Тас, қайшы, қағаз</h3>
+        <button class="btn" style="background-color: #6c5ce7;" onclick="playRPS('Тас')">✊ Тас</button>
+        <button class="btn" style="background-color: #00b894;" onclick="playRPS('Қағаз')">✋ Қағаз</button>
+        <button class="btn" style="background-color: #d63031;" onclick="playRPS('Қайшы')">✌️ Қайшы</button>
+        <h4 id="rpsResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Спорттық таймер -->
+    <div class="card">
+        <h3>⏱️ Спорттық таймер</h3>
+        <h2 id="workoutDisplay" style="color: #e17055; margin: 10px 0;">00:30</h2>
+        <button class="btn" style="background-color: #00b894;" onclick="startWorkout()">Бастау</button>
+        <button class="btn" style="background-color: #d63031;" onclick="stopWorkout()">Тоқтату</button>
+    </div>
+
+    <!-- Әзілдер -->
+    <div class="card">
+        <h3>😂 Күн әзілі</h3>
+        <p id="jokeText" style="font-weight: bold; color: #6c5ce7; min-height: 40px;">Күлкі — өмірді ұзартады!</p>
+        <button class="btn" style="background-color: #fdcb6e; color: #2d3436;" onclick="showJoke()">Әзіл оқу 🎭</button>
+    </div>
+
+    <!-- BMI -->
+    <div class="card">
+        <h3>⚖️ Дене салмағының индексі (BMI)</h3>
+        <input type="number" id="heightInput" placeholder="Бойыңыз (см)"><br>
+        <input type="number" id="weightInput" placeholder="Салмағыңыз (кг)"><br>
+        <button class="btn" style="background-color: #00b894;" onclick="calcBMI()">Есептеу</button>
+        <h4 id="bmiResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Санды тап -->
+    <div class="card">
+        <h3>🎯 Санды тап ойыны (1-100)</h3>
+        <input type="number" id="guessInput" placeholder="Сан енгізіңіз..."><br>
+        <button class="btn" style="background-color: #e17055;" onclick="checkGuess()">Тексеру</button>
+        <h4 id="guessResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Істер тізімі -->
+    <div class="card">
+        <h3>📝 Істер тізімі</h3>
+        <input type="text" id="taskInput" placeholder="Жаңа тапсырма...">
+        <br>
+        <button class="btn" onclick="taskQosu()">Қосу</button>
+        <ul id="taskList"></ul>
+    </div>
+
+    <!-- Цитаталар -->
+    <div class="card">
+        <h3>💡 Күн цитатасы</h3>
+        <p id="quoteText" style="font-style: italic; color: #0984e3; min-height: 40px;">"Бүгін ең жақсы күн!"</p>
+        <button class="btn" style="background-color: #00cec9; color: white;" onclick="showQuote()">Шабыт алу 🌟</button>
+    </div>
+
+    <!-- Секундомер -->
+    <div class="card">
+        <h3>⏱️ Секундомер</h3>
+        <h2 id="stopwatchDisplay" style="color: #e17055; margin: 10px 0;">00:00</h2>
+        <button class="btn" style="background-color: #00b894;" onclick="startStopwatch()">Бастау</button>
+        <button class="btn" style="background-color: #e17055;" onclick="stopStopwatch()">Тоқтату</button>
+        <button class="btn" style="background-color: #d63031;" onclick="resetStopwatch()">Нөлдеу</button>
+    </div>
+
+    <!-- Викторина -->
+    <div class="card">
+        <h3>🧠 Мини-викторина</h3>
+        <p id="quizQuestion">HTML нені білдіреді?</p>
+        <button class="btn" style="background-color: #6c5ce7; width: 85%;" onclick="checkQuiz(true)">А) Markup Language</button><br>
+        <button class="btn" style="background-color: #6c5ce7; width: 85%;" onclick="checkQuiz(false)">Б) Hyper Tool Machine</button>
+        <h4 id="quizResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Пікірлер -->
+    <div class="card">
+        <h3>💬 Пікір қалдыру</h3>
+        <select id="ratingSelect" style="width: 74%;">
+            <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (Керемет)</option>
+            <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (Жақсы)</option>
+            <option value="⭐⭐⭐">⭐⭐⭐ (Жаман емес)</option>
+        </select><br>
+        <input type="text" id="feedbackInput" placeholder="Пікіріңізді жазыңыз..."><br>
+        <button class="btn" style="background-color: #0984e3;" onclick="saveFeedback()">Жіберу</button>
+        <ul id="feedbackList"></ul>
+    </div>
+
+    <!-- Ауа райы -->
+    <div class="card">
+        <h3>☀️ Ауа райы болжамы</h3>
+        <input type="text" id="cityInput" placeholder="Қала аты (Мысалы: Astana)"><br>
+        <button class="btn" style="background-color: #0984e3;" onclick="getWeather()">Тексеру</button>
+        <h4 id="weatherResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Пароль -->
+    <div class="card">
+        <h3>🔐 Құпиясөз генераторы</h3>
+        <button class="btn" style="background-color: #e17055;" onclick="generatePassword()">Пароль жасау</button>
+        <input type="text" id="passwordOutput" placeholder="Шыққан пароль..." readonly style="margin-top: 10px; text-align: center; font-weight: bold;">
+    </div>
+
+    <!-- Валюта -->
+    <div class="card">
+        <h3>💱 Валюта конвертері</h3>
+        <input type="number" id="tengeInput" placeholder="Теңге мөлшері (₸)"><br>
+        <select id="currencySelect" style="width: 74%;">
+            <option value="usd">USD (Доллар ~ 500₸)</option>
+            <option value="eur">EUR (Еуро ~ 540₸)</option>
+        </select><br>
+        <button class="btn" style="background-color: #00b894;" onclick="convertCurrency()">Айырбастау</button>
+        <h4 id="currencyResult" style="margin-top: 10px;">Нәтиже: </h4>
+    </div>
+
+    <!-- Бюджет -->
+    <div class="card">
+        <h3>💰 Бюджет есептегіш</h3>
+        <input type="number" id="incomeInput" placeholder="Кіріс (Табыс) ₸"><br>
+        <input type="number" id="expenseInput" placeholder="Шығыс (Жұмсау) ₸"><br>
+        <button class="btn" style="background-color: #00b894;" onclick="calcBudget()">Есептеу</button>
+        <h4 id="budgetResult" style="margin-top: 10px;">Қалдық: 0 ₸</h4>
+    </div>
+
+    <!-- Калькулятор -->
+    <div class="card">
+        <h3>🧮 Толық калькулятор</h3>
+        <input type="number" id="num1" placeholder="Сан 1"><br>
+        <input type="number" id="num2" placeholder="Сан 2"><br>
+        <select id="operator" style="width: 74%;">
+            <option value="+">Қосу (+)</option>
+            <option value="-">Азайту (-)</option>
+            <option value="*">Көбейту (*)</option>
+            <option value="/">Бөлу (/)</option>
+        </select><br>
+        <button class="btn" onclick="eseptert()">Есептеу</button>
+        <h3 id="calcResult" style="color: #0984e3; margin-top: 10px;"></h3>
+    </div>
+
+    <!-- Кликер -->
+    <div class="card">
+        <h3>🎮 Кликер ойыны</h3>
+        <p>Басқан саны: <span id="clickCount" style="font-weight: bold; color: #e17055; font-size: 20px;">0</span></p>
+        <button class="btn" style="background-color: #00b894;" onclick="basu()">Бас мені! 🚀</button>
+        <br>
+        <button class="btn" style="background-color: #d63031; padding: 5px 10px; font-size: 12px;" onclick="qalpynaKeltyru()">Қалпына келтіру</button>
+    </div>
+
+    <div style="margin-top: 20px; margin-bottom: 30px;">
+        <a href="about.html" style="color: #0984e3; text-decoration: none; font-weight: bold; font-size: 16px;">➡️ Өзім туралы (2-бет)</a>
+    </div>
+
+    <script>
+        let targetNumber = Math.floor(Math.random() * 100) + 1;
+
+        window.onload = function() {
+            let savedTheme = localStorage.getItem('appTheme');
+            if(savedTheme) {
+                document.body.classList.add(savedTheme);
+            }
+            let savedName = localStorage.getItem('userName');
+            if(savedName) {
+                document.getElementById('welcomeUser').textContent = "Сәлем! Менің атым " + savedName;
+            }
+            let savedCount = localStorage.getItem('clickCount');
+            if(savedCount) {
+                san = Number(savedCount);
+                document.getElementById('clickCount').textContent = san;
+            }
+            loadTasks();
+            loadFeedbacks();
+            loadNotes();
+        };
+
+        function updateClock() {
+            let now = new Date();
+            let hours = String(now.getHours()).padStart(2, '0');
+            let minutes = String(now.getMinutes()).padStart(2, '0');
+            let seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('liveClock').textContent = `⏰ ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 1. GPS & Карта
+        function getLocationGPS() {
+            let res = document.getElementById('gpsResult');
+            if (navigator.geolocation) {
+                res.textContent = "Спутникпен байланысуда... 🛰️";
+                navigator.geolocation.getCurrentPosition((position) => {
+                    let lat = position.coords.latitude.toFixed(4);
+                    let lon = position.coords.longitude.toFixed(4);
+                    res.innerHTML = `Координаттар: ${lat}, ${lon} <br><a href="https://maps.google.com/?q=${lat},${lon}" target="_blank" style="color: #0984e3; font-weight: bold;">🗺️ Спутниктік картадан ашу</a>`;
+                }, () => {
+                    res.textContent = "GPS рұқсаты сөндірулі ❌";
+                });
+            } else {
+                res.textContent = "Браузер GPS қолдамайды.";
+            }
+        }
+
+        function openMapAddress() {
+            let addr = document.getElementById('addressInput').value;
+            let res = document.getElementById('gpsResult');
+            if(addr.trim() !== '') {
+                let encoded = encodeURIComponent(addr);
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encoded}`, '_blank');
+                res.innerHTML = `Мекенжай: ${addr} (Карта ашылды 🗺️)`;
+            } else {
+                res.textContent = "Мекенжайды немесе қаланы жазыңыз!";
+            }
+        }
+
+        // 2. Телефон нөмірін анықтау
+        function checkPhone() {
+            let phone = document.getElementById('phoneInput').value;
+            let res = document.getElementById('phoneResult');
+            if(phone.trim() === '') {
+                res.textContent = "Нөмірді енгізіңіз!";
+                return;
+            }
+            let operators = ['Kcell / Activ', 'Tele2 / Altel', 'Beeline KZ'];
+            let randomOp = operators[Math.floor(Math.random() * operators.length)];
+            res.textContent = `Оператор: ${randomOp}, Аймақ: Қазақстан 🇰🇿`;
+        }
+
+        // 3. Музыка плеері
+        function playMusic() {
+            let audio = document.getElementById('audioPlayer');
+            let songUrl = document.getElementById('songSelect').value;
+            audio.src = songUrl;
+            audio.play();
+        }
+
+        function stopMusic() {
+            let audio = document.getElementById('audioPlayer');
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        // Дизайн
+        function setTheme(mode) {
+            document.body.classList.remove('dark-mode', 'neon-mode');
+            if(mode === 'dark') {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('appTheme', 'dark-mode');
+            } else if(mode === 'neon') {
+                document.body.classList.add('neon-mode');
+                localStorage.setItem('appTheme', 'neon-mode');
+            }
+        }
+
+        function ozgertuFon() {
+            document.body.classList.remove('dark-mode', 'neon-mode');
+            localStorage.removeItem('appTheme');
+            let colors = [
+                "linear-gradient(135deg, #74b9ff, #dfe6e9)",
+                "linear-gradient(135deg, #55efc4, #81ecec)",
+                "linear-gradient(135deg, #ffeaa7, #fab1a0)",
+                "linear-gradient(135deg, #a29bfe, #dfe6e9)",
+                "linear-gradient(135deg, #ff7675, #74b9ff)"
+            ];
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('mainBody').style.background = randomColor;
+        }
+
+        function saveName() {
+            let name = document.getElementById('usernameInput').value;
+            if(name.trim() !== '') {
+                localStorage.setItem('userName', name);
+                document.getElementById('welcomeUser').textContent = "Сәлем! Менің атым " + name;
+                document.getElementById('usernameInput').value = '';
+            }
+        }
+
+        function saveNote() {
+            let text = document.getElementById('noteInput').value;
+            if(text.trim() !== '') {
+                let notes = JSON.parse(localStorage.getItem('myNotes') || '[]');
+                notes.push(text);
+                localStorage.setItem('myNotes', JSON.stringify(notes));
+                document.getElementById('noteInput').value = '';
+                loadNotes();
+            }
+        }
+        function loadNotes() {
+            let ul = document.getElementById('noteList');
+            ul.innerHTML = '';
+            let notes = JSON.parse(localStorage.getItem('myNotes') || '[]');
+            notes.forEach((note, index) => {
+                let li = document.createElement('li');
+                li.innerHTML = `${note} <span onclick="deleteNote(${index})" style="color:red; cursor:pointer; font-weight:bold;">✕</span>`;
+                ul.appendChild(li);
+            });
+        }
+        function deleteNote(index) {
+            let notes = JSON.parse(localStorage.getItem('myNotes') || '[]');
+            notes.splice(index, 1);
+            localStorage.setItem('myNotes', JSON.stringify(notes));
+            loadNotes();
+        }
+
+        function playRPS(userChoice) {
+            let choices = ['Тас', 'Қағаз', 'Қайшы'];
+            let compChoice = choices[Math.floor(Math.random() * choices.length)];
+            let resText = `Сіз: ${userChoice} | Компьютер: ${compChoice} — `;
+            if(userChoice === compChoice) resText += "Тең түстіңіз! 🤝";
+            else if(
+                (userChoice === 'Тас' && compChoice === 'Қайшы') ||
+                (userChoice === 'Қағаз' && compChoice === 'Тас') ||
+                (userChoice === 'Қайшы' && compChoice === 'Қағаз')
+            ) resText += "Сіз жеңдіңіз! 🎉";
+            else resText += "Компьютер жеңді! 🤖";
+            document.getElementById('rpsResult').textContent = resText;
+        }
+
+        let workoutSeconds = 30;
+        let workoutInterval = null;
+        function startWorkout() {
+            if(workoutInterval) return;
+            workoutInterval = setInterval(() => {
+                workoutSeconds--;
+                let m = String(Math.floor(workoutSeconds / 60)).padStart(2, '0');
+                let s = String(workoutSeconds % 60).padStart(2, '0');
+                document.getElementById('workoutDisplay').textContent = `${m}:${s}`;
+                if(workoutSeconds <= 0) {
+                    clearInterval(workoutInterval);
+                    workoutInterval = null;
+                    alert("Уақыт бітті! Жарайсыз! 💪");
+                    workoutSeconds = 30;
+                    document.getElementById('workoutDisplay').textContent = "00:30";
+                }
+            }, 1000);
+        }
+        function stopWorkout() {
+            clearInterval(workoutInterval);
+            workoutInterval = null;
+        }
+
+        function showJoke() {
+            let jokes = [
+                "Бағдарламашы ұйықтар алдында қасына екі стақан қояды: біреуі сумен, екіншісі бос 😂",
+                "Кодтағы қателік — бұл фича, қателік емес! 🤓",
+                "Мұғалім: «HTML бағдарламалау тілі ме?» Оқушы: «Жоқ, бұл өмір салты!» 💻"
+            ];
+            document.getElementById('jokeText').textContent = jokes[Math.floor(Math.random() * jokes.length)];
+        }
+
+        function calcBMI() {
+            let h = Number(document.getElementById('heightInput').value) / 100;
+            let w = Number(document.getElementById('weightInput').value);
+            if(h > 0 && w > 0) {
+                let bmi = (w / (h * h)).toFixed(1);
+                let text = bmi < 18.5 ? "Салмақ аз 🦴" : bmi < 25 ? "Қалыпты салмақ 👍" : "Артық салмақ ⚖️";
+                document.getElementById('bmiResult').textContent = `BMI: ${bmi} (${text})`;
+            }
+        }
+
+        function checkGuess() {
+            let guess = Number(document.getElementById('guessInput').value);
+            let res = document.getElementById('guessResult');
+            if(guess === targetNumber) {
+                res.textContent = "Құттықтаймын! Санды таптыңыз! 🎉";
+                res.style.color = "#00b894";
+                targetNumber = Math.floor(Math.random() * 100) + 1;
+            } else if(guess < targetNumber) {
+                res.textContent = "Үлкенірек сан жазыңыз! ⬆️";
+                res.style.color = "#e17055";
+            } else {
+                res.textContent = "Кішірек сан жазыңыз! ⬇️";
+                res.style.color = "#e17055";
+            }
+        }
+
+        function taskQosu() {
+            let input = document.getElementById('taskInput');
+            let txt = input.value;
+            if (txt.trim() !== '') {
+                let tasks = JSON.parse(localStorage.getItem('myTasksAdv') || '[]');
+                tasks.push({ text: txt, done: false });
+                localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
+                input.value = '';
+                loadTasks();
+            }
+        }
+        function loadTasks() {
+            let ul = document.getElementById('taskList');
+            ul.innerHTML = '';
+            let tasks = JSON.parse(localStorage.getItem('myTasksAdv') || '[]');
+            tasks.forEach((task, index) => {
+                let li = document.createElement('li');
+                li.className = task.done ? 'completed' : '';
+                li.innerHTML = `
+                    <span>
+                        <input type="checkbox" ${task.done ? 'checked' : ''} onchange="toggleTask(${index})">
+                        ${task.text}
+                    </span>
+                    <span onclick="deleteTask(${index})" style="color:red; cursor:pointer; font-weight:bold;">✕</span>
+                `;
+                ul.appendChild(li);
+            });
+        }
+        function toggleTask(index) {
+            let tasks = JSON.parse(localStorage.getItem('myTasksAdv') || '[]');
+            tasks[index].done = !tasks[index].done;
+            localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
+            loadTasks();
+        }
+        function deleteTask(index) {
+            let tasks = JSON.parse(localStorage.getItem('myTasksAdv') || '[]');
+            tasks.splice(index, 1);
+            localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
+            loadTasks();
+        }
+
+        function showQuote() {
+            let quotes = [
+                "«Қате жасаудан қорықпа, қателік — бұл тәжірибе!»",
+                "«Бүгінгі еңбегің — ертеңгі жетістігің!»",
+                "«Әрбір мықты программист қарапайым кодтан бастаған.»",
+                "«Мақсатыңа сенсең, бәрі де мүмкін!»"
+            ];
+            document.getElementById('quoteText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        let secondsTotal = 0;
+        let timerInterval = null;
+        function startStopwatch() {
+            if(timerInterval) return;
+            timerInterval = setInterval(() => {
+                secondsTotal++;
+                let m = String(Math.floor(secondsTotal / 60)).padStart(2, '0');
+                let s = String(secondsTotal % 60).padStart(2, '0');
+                document.getElementById('stopwatchDisplay').textContent = `${m}:${s}`;
+            }, 1000);
+        }
+        function stopStopwatch() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        function resetStopwatch() {
+            stopStopwatch();
+            secondsTotal = 0;
+            document.getElementById('stopwatchDisplay').textContent = "00:00";
+        }
+
+        function checkQuiz(isCorrect) {
+            let resElem = document.getElementById('quizResult');
+            if(isCorrect) {
+                resElem.textContent = "Дұрыс! 🎉 Жарайсың!";
+                resElem.style.color = "#00b894";
+            } else {
+                resElem.textContent = "Қате, қайталап көр! ❌";
+                resElem.style.color = "red";
+            }
+        }
+
+        function saveFeedback() {
+            let rating = document.getElementById('ratingSelect').value;
+            let text = document.getElementById('feedbackInput').value;
+            if(text.trim() !== '') {
+                let feedbacks = JSON.parse(localStorage.getItem('myFeedbacks') || '[]');
+                feedbacks.push(`${rating} - ${text}`);
+                localStorage.setItem('myFeedbacks', JSON.stringify(feedbacks));
+                document.getElementById('feedbackInput').value = '';
+                loadFeedbacks();
+            }
+        }
+        function loadFeedbacks() {
+            let ul = document.getElementById('feedbackList');
+            ul.innerHTML = '';
+            let feedbacks = JSON.parse(localStorage.getItem('myFeedbacks') || '[]');
+            feedbacks.forEach(item => {
+                let li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+        }
+
+        function getWeather() {
+            let city = document.getElementById('cityInput').value;
+            if(city.trim() === '') return;
+            let temps = Math.floor(Math.random() * 30) - 5;
+            document.getElementById('weatherResult').textContent = `${city} қаласында: +${temps}°C, Күн ашық ☀️`;
+        }
+
+        function generatePassword() {
+            let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%";
+            let pass = "";
+            for(let i = 0; i < 8; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('passwordOutput').value = pass;
+        }
+
+        function convertCurrency() {
+            let tenge = Number(document.getElementById('tengeInput').value);
+            let currency = document.getElementById('currencySelect').value;
+            let result = currency === 'usd' ? (tenge / 500).toFixed(2) + " $" : (tenge / 540).toFixed(2) + " €";
+            document.getElementById('currencyResult').textContent = "Нәтиже: " + result;
+        }
+
+        function calcBudget() {
+            let inc = Number(document.getElementById('incomeInput').value);
+            let exp = Number(document.getElementById('expenseInput').value);
+            let bal = inc - exp;
+            let resultElem = document.getElementById('budgetResult');
+            resultElem.textContent = "Қалдық: " + bal + " ₸";
+            resultElem.style.color = bal < 0 ? "red" : "#00b894";
+        }
+
+        function eseptert() {
+            let n1 = Number(document.getElementById('num1').value);
+            let n2 = Number(document.getElementById('num2').value);
+            let op = document.getElementById('operator').value;
+            let res = 0;
+
+            if (op === '+') res = n1 + n2;
+            else if (op === '-') res = n1 - n2;
+            else if (op === '*') res = n1 * n2;
+            else if (op === '/') {
+                if (n2 === 0) {
+                    document.getElementById('calcResult').textContent = "Нәтиже: Нөлге бөлуге болмайды!";
+                    return;
+                }
+                res = n1 / n2;
+            }
+            document.getElementById('calcResult').textContent = "Нәтиже: " + res;
+        }
+
+        let san = 0;
+        function basu() {
+            san++;
+            document.getElementById('clickCount').textContent = san;
+            localStorage.setItem('clickCount', san);
+        }
+        function qalpynaKeltyru() {
+            san = 0;
+            document.getElementById('clickCount').textContent = san;
+            localStorage.setItem('clickCount', san);
+        }
+    </script>
+
+</body>
+</html>
+onclick=""<!-- HTML бөлігі -->
+<div class="card">
+    <h3>📌 Жеке жазбалар кітаппашасы</h3>
+    <textarea id="noteInput" placeholder="Ойларыңызды жазыңыз..." oninput="saveNoteLocally()"></textarea>
+    <p id="saveStatus" style="font-size: 12px; color: green;"></p>
+</div>
+
+<script>
+// Жазбаны автоматты түрде сақтау
+function saveNoteLocally() {
+    let noteText = document.getElementById("noteInput").value;
+    localStorage.setItem("userNote", noteText);
+    document.getElementById("saveStatus").innerText = "Сақталды ✓";
+}
+
+// Бет ашылғанда жазбаны шығару
+window.addEventListener('DOMContentLoaded', () => {
+    let savedNote = localStorage.getItem("userNote");
+    if (savedNote) {
+        document.getElementById("noteInput").value = savedNote;
+    }
+});
+</script>
+<!-- HTML бөлігі -->
+<div class="card">
+    <h3>🤖 ИИ Көмекші</h3>
+    <input type="text" id="aiQuestion" placeholder="Сұрақ қойыңыз (Мысалы: Уақыт қандай?)">
+    <button onclick="askAI()">Сұрау</button>
+    <p id="aiAnswer" style="margin-top: 10px; font-weight: 500;">Жауап осында шығады...</p>
+</div>
+
+<script>
+function askAI() {
+    let query = document.getElementById("aiQuestion").value.toLowerCase();
+    let response = "Кешіріңіз, мен әзірге бұл сұраққа жауап білмеймін.";
+
+    if (query.includes("сәлем") || query.includes("привет")) {
+        response = "Сәлеметсіз бе! Мен сіздің ИИ көмекшіңізбін. Қалай көмектесе аламын?";
+    } else if (query.includes("ауа райы")) {
+        response = "Бүгін күн тамаша, сыртқа шығып серуендеуге керемет күн!";
+    } else if (query.includes("уақыт")) {
+        response = "Қазіргі уақыт: " + new Date().toLocaleTimeString();
+    } else if (query.includes("атың кім")) {
+        response = "Мен осы қосымшаға арнайы кіріктірілген жасанды интеллектпін!";
+    }
+
+    document.getElementById("aiAnswer").innerText = response;
+}
+</script>
+<!-- HTML бөлігі -->
+<div class="card">
+    <h3>📏 Ұзындық конвертері</h3>
+    <input type="number" id="metersInput" placeholder="Метр енгізіңіз (м)">
+    <button onclick="convertLength()">Өзгерту</button>
+    <p id="lengthResult">Нәтиже: -</p>
+</div>
+
+<script>
+function convertLength() {
+    let m = document.getElementById("metersInput").value;
+    if (m === "") {
+        document.getElementById("lengthResult").innerText = "Сан енгізіңіз!";
+        return;
+    }
+    let cm = m * 100;
+    let mm = m * 1000;
+    document.getElementById("lengthResult").innerHTML = `${m} м = <b>${cm} см</b> (${mm} мм)`;
+}
+</script>
