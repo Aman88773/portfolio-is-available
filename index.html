@@ -210,9 +210,113 @@
         .full-width {
             grid-column: 1 / -1;
         }
+        .projects-section {
+            margin-top: 18px;
+        }
+        .projects-section-header {
+            padding: 22px;
+            margin-bottom: 16px;
+        }
+        .projects-section-header h2 {
+            margin: 0 0 6px;
+        }
+        .projects-section-header p {
+            margin: 0;
+            color: var(--muted);
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border-top: 4px solid var(--primary);
+        }
+        .project-card:nth-child(2) {
+            border-top-color: var(--success);
+        }
+        .project-card:nth-child(3) {
+            border-top-color: #fdcb6e;
+        }
+        .project-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 12px;
+            background: rgba(108, 92, 231, 0.12);
+            font-size: 24px;
+        }
+        .project-card p {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+        }
+        .project-tag {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(108, 92, 231, 0.10);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .project-details {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 9px;
+            background: rgba(108, 92, 231, 0.08);
+            color: var(--text);
+        }
+        .project-details.open {
+            display: block;
+        }
+        .tariff-calculator {
+            max-width: 620px;
+        }
+        .tariff-summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .tariff-summary-item {
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(108, 92, 231, 0.08);
+        }
+        .tariff-summary-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .tariff-summary-item strong {
+            display: block;
+            margin-top: 4px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        #tripResult {
+            min-height: 24px;
+            margin: 12px 0 0;
+            font-weight: 800;
+            color: var(--success);
+        }
         @media (max-width: 980px) {
             .grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
             }
         }
         @media (max-width: 640px) {
@@ -470,6 +574,70 @@
         <p id="lengthResult">Нәтиже: -</p>
     </div>
     </div>
+
+    <section class="projects-section" aria-labelledby="projectsHeading">
+        <div class="card projects-section-header">
+            <h2 id="projectsHeading">Жобалар мен құралдар</h2>
+            <p>Қолданылған жобалар және Жайремге арналған локальді сапар калькуляторы.</p>
+        </div>
+
+        <div class="project-grid">
+            <article class="card project-card">
+                <div class="project-icon" aria-hidden="true">🚕</div>
+                <h3>Жайрем такси қызметі</h3>
+                <p>Жайрем ауданындағы жергілікті жолақыға арналған ыңғайлы такси қызметі концепті.</p>
+                <div class="project-tags" aria-label="Технологиялар">
+                    <span class="project-tag">Қызмет</span>
+                    <span class="project-tag">Жергілікті тариф</span>
+                </div>
+                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'taxiDetails')">Толығырақ</button>
+                <div class="project-details" id="taxiDetails">Сапар санын және жолақы сомасын калькулятор арқылы жылдам есептеуге арналған.</div>
+            </article>
+
+            <article class="card project-card">
+                <div class="project-icon" aria-hidden="true">🧮</div>
+                <h3>Веб-калькулятор</h3>
+                <p>Қарапайым арифметикалық есептер мен күнделікті сандарды жылдам есептейтін веб-құрал.</p>
+                <div class="project-tags" aria-label="Технологиялар">
+                    <span class="project-tag">HTML</span>
+                    <span class="project-tag">JavaScript</span>
+                </div>
+                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'calculatorDetails')">Толығырақ</button>
+                <div class="project-details" id="calculatorDetails">Қосу, азайту, көбейту және бөлу амалдарын телефон мен компьютерден орындауға болады.</div>
+            </article>
+
+            <article class="card project-card">
+                <div class="project-icon" aria-hidden="true">🎬</div>
+                <h3>Бейнемонтаж / контент</h3>
+                <p>Әлеуметтік желілерге арналған қысқа видео, монтаж және контент дайындау бағыты.</p>
+                <div class="project-tags" aria-label="Технологиялар">
+                    <span class="project-tag">Монтаж</span>
+                    <span class="project-tag">Контент</span>
+                </div>
+                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'videoDetails')">Толығырақ</button>
+                <div class="project-details" id="videoDetails">Қысқа роликтер, субтитрлер, өңдеу және әлеуметтік желі форматтарына бейімдеу ұсынылады.</div>
+            </article>
+        </div>
+
+        <div class="card tariff-calculator">
+            <h3>🚕 Жайрем локальді тариф калькуляторы</h3>
+            <p style="color: var(--muted);">Бір сапардың бағасы: <strong>400 ₸</strong></p>
+            <label for="tripCount">Сапар саны</label>
+            <input type="number" id="tripCount" min="1" step="1" placeholder="Мысалы: 5" inputmode="numeric">
+            <button class="btn" type="button" style="background-color: #00b894;" onclick="calculateTrips()">Жалпы соманы есептеу</button>
+            <div class="tariff-summary">
+                <div class="tariff-summary-item">
+                    <span>Бір сапар</span>
+                    <strong>400 ₸</strong>
+                </div>
+                <div class="tariff-summary-item">
+                    <span>Сапар саны</span>
+                    <strong id="tripCountResult">0</strong>
+                </div>
+            </div>
+            <p id="tripResult" role="status" aria-live="polite">Жалпы сома: 0 ₸</p>
+        </div>
+    </section>
     </main>
 
     <script>
@@ -910,6 +1078,42 @@
             let mm = m * 1000;
             document.getElementById("lengthResult").textContent = `${m} м = ${cm} см = ${mm} мм`;
         }
+
+        function toggleProjectDetails(button, detailsId) {
+            const details = document.getElementById(detailsId);
+            const isOpen = details.classList.toggle('open');
+            button.textContent = isOpen ? 'Жасыру' : 'Толығырақ';
+            button.setAttribute('aria-expanded', String(isOpen));
+        }
+
+        function calculateTrips() {
+            const input = document.getElementById('tripCount');
+            const trips = Number(input.value);
+
+            if (input.value.trim() === '' || !Number.isInteger(trips) || trips < 1) {
+                document.getElementById('tripCountResult').textContent = '0';
+                document.getElementById('tripResult').textContent = 'Сапар санын кемінде 1 деп енгізіңіз!';
+                document.getElementById('tripResult').style.color = 'var(--danger)';
+                input.focus();
+                return;
+            }
+
+            const total = trips * 400;
+            document.getElementById('tripCountResult').textContent = trips;
+            document.getElementById('tripResult').textContent = `Жалпы сома: ${total.toLocaleString('kk-KZ')} ₸`;
+            document.getElementById('tripResult').style.color = 'var(--success)';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tripInput = document.getElementById('tripCount');
+            if (tripInput) {
+                tripInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        calculateTrips();
+                    }
+                });
+            }
+        });
     </script>
 </body>
 </html>
