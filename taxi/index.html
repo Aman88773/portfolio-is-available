@@ -124,6 +124,12 @@
     .permission-actions,.navigator-actions { display:flex; flex-wrap:wrap; gap:8px; }
     .permission-state { color:var(--accent); font-weight:800; }
     .navigator-message { min-height:56px; border-left:4px solid var(--accent); border-radius:10px; background:var(--surface2); padding:12px; }
+    .weather-reading { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
+    .weather-reading div { border:1px solid var(--line); border-radius:12px; background:var(--surface2); padding:10px; }
+    .weather-reading strong,.weather-reading span { display:block; }
+    .weather-reading span { color:var(--muted); font-size:.78rem; }
+    .weather-temp { color:var(--accent); font-size:1.5rem; font-weight:900; }
+    .legal-note { border-left:4px solid #f2c94c; border-radius:8px; background:#f2c94c12; padding:10px; }
     @media(max-width:700px) {
       .app { width:min(100% - 16px,1120px); }
       .grid-2,.grid-3,.form-grid,.auth-choice { grid-template-columns:1fr; }
@@ -133,6 +139,7 @@
       .hero { min-height:250px; }
       .map { height:185px; }
       .brand small { display:none; }
+      .weather-reading { grid-template-columns:1fr; }
     }
   </style>
 </head>
@@ -155,6 +162,7 @@
         <button data-screen="chat">💬 Чат</button>
         <button data-screen="history">🧾 Тарих</button>
         <button data-screen="intercity">🛣️ Қалааралық калькулятор</button>
+        <button data-screen="weather">🌦️ Ауа райы болжамы</button>
         <button data-screen="notifications">🔔 Хабарламалар</button>
         <button data-screen="ai">🤖 AI-көмекші</button>
         <button data-screen="help">❓ Анықтамалық орталық</button>
@@ -244,6 +252,14 @@
           </div>
         </article>
         <article class="card" style="margin-top:12px">
+          <div class="settings-row">
+            <div><h2 style="margin:0">Ауа райы болжамы</h2><span class="field-help" id="homeWeatherMode">Дерек жүктелуде…</span></div>
+            <span class="weather-temp" id="homeWeatherTemp">—°</span>
+          </div>
+          <p id="homeWeatherSummary" class="muted">Жайрем кенті · GPS/әдепкі координата</p>
+          <button class="button secondary" type="button" data-screen="weather">Толық болжамды ашу</button>
+        </article>
+        <article class="card" style="margin-top:12px">
           <h2>AI-навигатор</h2>
           <p class="field-help">Бағыт пен сапар/жеткізу мәртебесі жолаушыға да, жүргізушіге де мәтінмен көрсетіліп, дауыс қосылса дауыстап оқылады.</p>
           <div class="navigator-message" id="navigatorMessage" aria-live="polite">Жайрем кенті: әдепкі бағыт · 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге).</div>
@@ -266,7 +282,20 @@
           <button class="tile" data-screen="chat"><span>💬</span><strong>Чат</strong></button>
           <button class="tile" data-screen="ai"><span>🤖</span><strong>AI-көмекші</strong></button>
           <button class="tile" data-screen="help"><span>❓</span><strong>Анықтамалық орталық</strong></button>
+          <button class="tile" data-screen="weather"><span>🌦️</span><strong>Ауа райы болжамы</strong></button>
         </div>
+      </section>
+
+      <section id="weatherScreen" class="screen">
+        <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Ауа райы болжамы</h1></div>
+        <article class="card">
+          <div class="settings-row"><div><strong id="weatherMode">Дерек жүктелуде…</strong><span class="field-help" id="weatherUpdated"></span></div><button class="button primary" id="refreshWeather" type="button">Болжамды жаңарту</button></div>
+          <p id="weatherLocation" class="muted">Локация: Жайрем · 48.0061, 67.5964</p>
+          <div id="weatherCurrent" aria-live="polite"></div>
+          <h2 style="margin-top:18px">Алдағы күндер</h2>
+          <div class="list" id="weatherForecast"></div>
+          <p class="field-help" id="weatherOfflineNote"></p>
+        </article>
       </section>
 
       <section id="bookingScreen" class="screen">
@@ -432,6 +461,11 @@
 
       <section id="historyScreen" class="screen">
         <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Тарих / История</h1></div>
+        <article class="card" style="margin-bottom:14px">
+          <h2>Платформа үлесі · аяқталған тапсырыстар</h2>
+          <div id="historyRevenueSummary" class="quote-result"></div>
+          <div class="list" id="historyRevenueOrders" style="margin-top:10px"></div>
+        </article>
         <article class="card">
           <div class="tabs"><button class="active" data-history-tab="trips">Сапарлар және төлемдер</button><button data-history-tab="bonuses">Бонустар</button><button data-history-tab="thanks">Алғыстар</button><button data-history-tab="violations">Ереже бұзушылықтар</button></div>
           <div id="historyTrips" class="list"></div>
@@ -475,6 +509,18 @@
           <div class="settings-row"><strong>Негізгі екпін түсі</strong><select id="accentSelect"><option value="#c1f11d">Жасыл</option><option value="#f2c94c">Алтын</option><option value="#57a5ff">Көк</option><option value="#ff8a4c">Қызғылт сары</option></select></div>
           <div class="settings-row"><strong>Қаріп өлшемі</strong><select id="fontSelect"><option value="14px">Кішкентай</option><option value="16px" selected>Орташа</option><option value="18px">Үлкен</option></select></div>
           <button class="button primary" id="saveSettings" style="margin-top:12px">Дизайнды сақтау</button>
+        </article>
+        <article class="card" style="margin-top:14px">
+          <h2>Әкімші / платформа үлесі</h2>
+          <div class="field">
+            <label for="adminCommissionPercent">Қалааралық үлес (%)</label>
+            <input id="adminCommissionPercent" type="number" min="0" max="100" step="0.1" inputmode="decimal" value="10">
+            <p class="field-help">Әдепкі үлес — 10%. Өзгеріс тек жаңа қалааралық тапсырыстарға қолданылады. Жайрем ішіндегі 400 ₸ тарифі өзгермейді: 350 ₸ жүргізушіге / 50 ₸ әкімшіге.</p>
+          </div>
+          <button class="button primary" id="saveCommission" type="button" style="margin-top:10px">Үлесті сақтау</button>
+          <div id="settingsRevenueSummary" class="quote-result" style="margin-top:12px"></div>
+          <div class="list" id="settingsRevenueOrders" style="margin-top:10px"></div>
+          <p class="legal-note">Бұл — платформа үлесінің есебі, салық мөлшерлемесі емес. Кәсіпкерлік тіркеу түріңізге сай заңды салық мөлшерлемесін және есеп жүргізуді бухгалтермен немесе салық маманымен нақтылаңыз.</p>
         </article>
         <article class="card" style="margin-top:14px">
           <h2>Құқықтық ақпарат және деректер</h2>
@@ -547,11 +593,19 @@
     const INTERCITY_RATES = { zhezkazgan:6000, karaganda:15000, astana:25000, custom:6000 };
     const BONUS_REWARDS = { passenger:20, driver:50 };
     const DEFAULT_LOCATION = { lat:48.0061, lng:67.5964 };
+    const WEATHER_CACHE_KEY = "zhairemWeatherCache";
     const $ = (s, p=document) => p.querySelector(s);
     const $$ = (s, p=document) => [...p.querySelectorAll(s)];
     const store = {
       get:(key,fallback=null) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch(_) { return fallback; } },
-      set:(key,value) => { try { localStorage.setItem(key,JSON.stringify(value)); } catch(_) { toast("Деректерді сақтау мүмкін болмады."); } }
+      set:(key,value) => {
+        try { localStorage.setItem(key,JSON.stringify(value)); return true; }
+        catch(error) {
+          console.error("Жергілікті деректерді сақтау мүмкін болмады:",error);
+          if(key!=="zhairemNotifications")toast("Деректерді сақтау мүмкін болмады.");
+          return false;
+        }
+      }
     };
     let authRole="passenger";
     let smsCode="";
@@ -561,6 +615,137 @@
     let currentOrder=store.get("zhairemCurrentOrder",null);
     let account=store.get("zhairemAccount",null);
     let navigatorMessage="Жайрем кенті: әдепкі бағыт · 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге).";
+    let weatherLastRequestedAt=0;
+    let weatherRequestedLocation=null;
+    let weatherGpsLocationRefreshed=false;
+    let weatherOfflineMode=navigator.onLine===false;
+
+    function adminCommissionPercent() {
+      const value=Number(store.get("zhairemAdminCommissionPercent",10));
+      return Number.isFinite(value)&&value>=0&&value<=100?value:10;
+    }
+    function intercitySplit(amount,percent=adminCommissionPercent()) {
+      const platformShare=Math.round(amount*percent/100);
+      return {platformShare,driverEarnings:amount-platformShare,commissionPercent:percent};
+    }
+    function intercityOrderSplit(order) {
+      const amount=Number(order.net)||0;
+      if(Number.isSafeInteger(order.platformShare)&&Number.isSafeInteger(order.driverEarnings)){
+        return {platformShare:order.platformShare,driverEarnings:order.driverEarnings,commissionPercent:Number(order.commissionPercent)||0};
+      }
+      return intercitySplit(amount,Number.isFinite(Number(order.commissionPercent))?Number(order.commissionPercent):adminCommissionPercent());
+    }
+    function weatherCodeLabel(code) {
+      const labels={0:"Ашық",1:"Көбіне ашық",2:"Ала бұлтты",3:"Бұлтты",45:"Тұман",48:"Қыраулы тұман",51:"Сіркіреме",53:"Сіркіреме",55:"Қатты сіркіреме",61:"Жаңбыр",63:"Жаңбыр",65:"Қатты жаңбыр",71:"Қар",73:"Қар",75:"Қатты қар",80:"Нөсер",81:"Нөсер",82:"Қатты нөсер",95:"Найзағай",96:"Бұршақ аралас найзағай",99:"Қатты найзағай"};
+      return labels[Number(code)]||"Ауа райы";
+    }
+    function offlineWeatherEstimate(location,date=new Date()) {
+      const month=date.getMonth();
+      const seasonalTemperature=month===11||month<=1?-12:month>=5&&month<=7?22:month>=2&&month<=4?7:5;
+      const latitudeAdjustment=Math.round((48.0061-location.lat)*0.7);
+      const dailyAdjustment=Math.round(Math.sin((date.getHours()-8)*Math.PI/12)*3);
+      const temperature=seasonalTemperature+latitudeAdjustment+dailyAdjustment;
+      const season=month===11||month<=1?"Қыс":month>=5&&month<=7?"Жаз":month>=2&&month<=4?"Көктем":"Күз";
+      const condition=season==="Қыс"?"Суық, бұлттылық өзгеруі мүмкін":season==="Жаз"?"Жылы, көбіне ашық болуы мүмкін":season==="Көктем"?"Салқын, құбылмалы болуы мүмкін":"Салқын, құбылмалы болуы мүмкін";
+      return {temperature,condition,season,updatedAt:date.toISOString(),lat:location.lat,lng:location.lng};
+    }
+    function cachedWeatherReport() {
+      const cached=store.get(WEATHER_CACHE_KEY,null);
+      return cached&&cached.current&&Array.isArray(cached.daily)&&cached.location&&Number.isFinite(Number(cached.location.lat))&&Number.isFinite(Number(cached.location.lng))?cached:null;
+    }
+    function renderWeather() {
+      const cached=cachedWeatherReport();
+      const location=Number.isFinite(geoLocation?.lat)&&Number.isFinite(geoLocation?.lng)?geoLocation:DEFAULT_LOCATION;
+      const offline=navigator.onLine===false||weatherOfflineMode;
+      const estimate=offlineWeatherEstimate(location);
+      $("#weatherLocation").textContent=`Локация: ${location.lat===DEFAULT_LOCATION.lat&&location.lng===DEFAULT_LOCATION.lng?"Жайрем":"GPS"} · ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`;
+      $("#homeWeatherTemp").textContent=offline?`${estimate.temperature}°`:(cached?`${Math.round(cached.current.temperature)}°`:"—°");
+      $("#homeWeatherMode").textContent=offline?"Офлайн · GPS локация және кэш":cached?"Онлайн дерек":"Дерек жүктелуде…";
+      $("#homeWeatherSummary").textContent=offline?`${estimate.condition} · ${estimate.season} бойынша шамамен · ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}`:cached?`${weatherCodeLabel(cached.current.weatherCode)} · Жаңартылды ${new Date(cached.fetchedAt).toLocaleString("kk-KZ")}`:"Болжамды жүктеп жатырмыз.";
+      $("#weatherMode").textContent=offline?"Офлайн · GPS локация және кэш":cached?"Онлайн дерек":"Дерек қолжетімсіз";
+      $("#weatherUpdated").textContent=cached?`Соңғы онлайн дерек: ${new Date(cached.fetchedAt).toLocaleString("kk-KZ")}`:"Онлайн болжам әлі кэштелмеген.";
+      $("#weatherOfflineNote").textContent=offline
+        ?"Интернет жоқ немесе сұрау сәтсіз. Көрсетілген бағалау GPS координатасы, жергілікті уақыт пен маусымға негізделген және нақты метеорологиялық болжам емес."
+        :"Онлайн дерек Open-Meteo қызметінен алынады. Желіден ажырасаңыз, соңғы кэш пен GPS/маусымдық офлайн бағалау көрсетіледі.";
+      const current=$("#weatherCurrent");
+      current.innerHTML=offline
+        ?`<div class="quote-result"><strong>Офлайн бағалау · ${escapeHtml(estimate.season)}</strong><div class="weather-reading"><div><strong class="weather-temp">${estimate.temperature}°C</strong><span>Шамамен температура</span></div><div><strong>${escapeHtml(estimate.condition)}</strong><span>Маусымдық бағалау</span></div><div><strong>Дерек жоқ</strong><span>Жауын-шашын / жел</span></div></div></div>`
+        :cached?`<div class="quote-result"><strong>Қазір · ${escapeHtml(weatherCodeLabel(cached.current.weatherCode))}</strong><div class="weather-reading"><div><strong class="weather-temp">${Math.round(cached.current.temperature)}°C</strong><span>Температура</span></div><div><strong>${Math.round(cached.current.apparentTemperature)}°C</strong><span>Сезіледі</span></div><div><strong>${Math.round(cached.current.windSpeed)} км/сағ</strong><span>Жел</span></div></div></div>`
+        :'<div class="quote-result">Онлайн болжамды алу мүмкін болмады. Офлайн бағалауды көрсету үшін «Болжамды жаңарту» батырмасын басыңыз.</div>';
+      const forecast=$("#weatherForecast");
+      forecast.innerHTML="";
+      if(offline&&cached){
+        const heading=document.createElement("div");heading.className="list-item";
+        heading.innerHTML=`<strong>Кэштелген онлайн болжам · ${new Date(cached.fetchedAt).toLocaleString("kk-KZ")}</strong><span>Координата: ${Number(cached.location.lat).toFixed(5)}, ${Number(cached.location.lng).toFixed(5)}</span>`;
+        forecast.appendChild(heading);
+        cached.daily.forEach(day=>{
+          const item=document.createElement("div");item.className="list-item";
+          item.innerHTML=`<strong>${new Date(day.date+"T12:00:00").toLocaleDateString("kk-KZ",{weekday:"long",day:"numeric",month:"long"})} · ${escapeHtml(weatherCodeLabel(day.weatherCode))}</strong><span>${Math.round(day.min)}° / ${Math.round(day.max)}° · Жел ${Math.round(day.windSpeed)} км/сағ</span>`;
+          forecast.appendChild(item);
+        });
+      }else if(!offline&&cached){
+        cached.daily.forEach(day=>{
+          const item=document.createElement("div");item.className="list-item";
+          item.innerHTML=`<strong>${new Date(day.date+"T12:00:00").toLocaleDateString("kk-KZ",{weekday:"long",day:"numeric",month:"long"})} · ${escapeHtml(weatherCodeLabel(day.weatherCode))}</strong><span>${Math.round(day.min)}° / ${Math.round(day.max)}° · Жел ${Math.round(day.windSpeed)} км/сағ</span>`;
+          forecast.appendChild(item);
+        });
+      }
+      if(offline){
+        const item=document.createElement("div");item.className="list-item";
+        item.innerHTML=`<strong>Офлайн маусымдық бағалау · ${escapeHtml(estimate.season)}</strong><span>Бүгін шамамен ${estimate.temperature}°C · ${escapeHtml(estimate.condition)} · координата ${location.lat.toFixed(4)}, ${location.lng.toFixed(4)}</span>`;
+        forecast.appendChild(item);
+        for(let offset=1;offset<=3;offset++){
+          const dayDate=new Date();dayDate.setDate(dayDate.getDate()+offset);
+          const dayEstimate=offlineWeatherEstimate(location,dayDate);
+          const day=document.createElement("div");day.className="list-item";
+          day.innerHTML=`<strong>${dayDate.toLocaleDateString("kk-KZ",{weekday:"long",day:"numeric",month:"long"})}</strong><span>Шамамен ${dayEstimate.temperature-2}° / ${dayEstimate.temperature+2}°C · ${escapeHtml(dayEstimate.condition)}</span>`;
+          forecast.appendChild(day);
+        }
+      }
+      if(!forecast.children.length)forecast.innerHTML='<div class="muted">Болжам әлі жоқ. Желі қосылғанда жаңартыңыз.</div>';
+    }
+    async function refreshWeather() {
+      renderWeather();
+      if(navigator.onLine===false){weatherOfflineMode=true;renderWeather();return;}
+      const button=$("#refreshWeather");button.disabled=true;
+      $("#weatherMode").textContent="Онлайн дерек жүктелуде…";
+      const location=Number.isFinite(geoLocation?.lat)&&Number.isFinite(geoLocation?.lng)?geoLocation:DEFAULT_LOCATION;
+      weatherLastRequestedAt=Date.now();weatherRequestedLocation={...location};
+      const controller=new AbortController();
+      const timeout=setTimeout(()=>controller.abort(),10000);
+      try{
+        const params=new URLSearchParams({latitude:String(location.lat),longitude:String(location.lng),current:"temperature_2m,apparent_temperature,relative_humidity_2m,precipitation,weather_code,wind_speed_10m",daily:"weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max",timezone:"auto",forecast_days:"4"});
+        const response=await fetch("https://api.open-meteo.com/v1/forecast?"+params,{signal:controller.signal});
+        if(!response.ok)throw new Error(`Ауа райы қызметі HTTP ${response.status} қатесін қайтарды.`);
+        const data=await response.json();
+        if(!data.current||!data.daily)throw new Error("Ауа райы жауабында болжам дерегі жоқ.");
+        const report={
+          fetchedAt:new Date().toISOString(),location:{lat:location.lat,lng:location.lng},
+          current:{temperature:data.current.temperature_2m,apparentTemperature:data.current.apparent_temperature,humidity:data.current.relative_humidity_2m,precipitation:data.current.precipitation,weatherCode:data.current.weather_code,windSpeed:data.current.wind_speed_10m},
+          daily:data.daily.time.map((date,index)=>({date,min:data.daily.temperature_2m_min[index],max:data.daily.temperature_2m_max[index],weatherCode:data.daily.weather_code[index],windSpeed:data.daily.wind_speed_10m_max[index]}))
+        };
+        if(!Number.isFinite(report.current.temperature)||!report.daily.length)throw new Error("Ауа райы дерегінің форматы жарамсыз.");
+        if(!store.set(WEATHER_CACHE_KEY,report))throw new Error("Болжамды құрылғыда кэштеу мүмкін болмады.");
+        weatherOfflineMode=false;
+        renderWeather();
+      }catch(error){
+        weatherOfflineMode=true;
+        renderWeather();
+        $("#weatherMode").textContent="Офлайн · GPS локация және кэш";
+        $("#homeWeatherMode").textContent="Офлайн · GPS локация және кэш";
+        $("#weatherOfflineNote").textContent=`Онлайн дерек жаңартылмады: ${error.name==="AbortError"?"сұрау уақыты аяқталды":error.message||"желі қатесі"}. Кэш пен офлайн бағалау көрсетілді.`;
+      }finally{
+        clearTimeout(timeout);button.disabled=false;
+      }
+    }
+    function maybeRefreshWeatherForLocation() {
+      const moved=!weatherRequestedLocation||Math.abs(weatherRequestedLocation.lat-geoLocation.lat)>0.02||Math.abs(weatherRequestedLocation.lng-geoLocation.lng)>0.02;
+      if(!weatherGpsLocationRefreshed){
+        weatherGpsLocationRefreshed=true;
+        refreshWeather();
+      }else if(moved&&Date.now()-weatherLastRequestedAt>60000)refreshWeather();
+      else renderWeather();
+    }
 
     function toast(text,notifyDevice=false) {
       const el=document.createElement("div"); el.className="toast"; el.textContent=text;
@@ -836,6 +1021,7 @@
       const success=pos=>{
         geoLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
         store.set("zhairemLocation",geoLocation);
+        maybeRefreshWeatherForLocation();
         updatePermissionStatus("location","granted");
         $("#locationStatus").textContent=`GPS: ${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)} · Жайрем`;
         $("#homeStatus").textContent="GPS қосулы";
@@ -896,17 +1082,21 @@
       $("#historyTrips").innerHTML="";
       trips.forEach(t=>{
         const el=document.createElement("div");el.className="list-item";
-        el.innerHTML=`<strong>${escapeHtml(t.from)} → ${escapeHtml(t.to)}</strong><span>${new Date(t.createdAt).toLocaleString("kk-KZ")} · 400 ₸ (350 ₸ / 50 ₸) · ${escapeHtml(t.status)}</span><span>Төлем: ${escapeHtml(t.payment)}</span>`;
+        const driverShare=Number.isSafeInteger(t.driverShare)?t.driverShare:DRIVER_SHARE;
+        const adminShare=Number.isSafeInteger(t.adminShare)?t.adminShare:ADMIN_SHARE;
+        el.innerHTML=`<strong>${escapeHtml(t.from)} → ${escapeHtml(t.to)}</strong><span>${new Date(t.createdAt).toLocaleString("kk-KZ")} · ${escapeHtml(t.price||PRICE)} ₸ · ${escapeHtml(t.status)}</span><span>Жүргізушіге: ${escapeHtml(driverShare)} ₸ · Платформаға: ${escapeHtml(adminShare)} ₸</span><span>Төлем: ${escapeHtml(t.payment)}</span>`;
         $("#historyTrips").appendChild(el);
       });
       const intercityTrips=store.get("zhairemIntercityTrips",[]).filter(t=>t.accountId===account?.id&&t.role===account?.role);
       intercityTrips.forEach(t=>{
         const el=document.createElement("div");el.className="list-item";
         const status=t.status==="completed"?"Аяқталды":"WhatsApp-та сұралды";
-        el.innerHTML=`<strong>${escapeHtml(t.from)} → ${escapeHtml(t.to)}</strong><span>${new Date(t.createdAt).toLocaleString("kk-KZ")} · ${escapeHtml(t.serviceName)} · ${escapeHtml(status)}</span><span>${escapeHtml(t.gross)} ₸ − ${escapeHtml(t.bonus)} ₸ бонус = ${escapeHtml(t.net)} ₸</span>`;
+        const split=intercityOrderSplit(t);
+        el.innerHTML=`<strong>${escapeHtml(t.from)} → ${escapeHtml(t.to)}</strong><span>${new Date(t.createdAt).toLocaleString("kk-KZ")} · ${escapeHtml(t.serviceName)} · ${escapeHtml(status)}</span><span>${escapeHtml(t.gross)} ₸ − ${escapeHtml(t.bonus)} ₸ бонус = ${escapeHtml(t.net)} ₸</span><span>Жүргізуші табысы: ${escapeHtml(split.driverEarnings)} ₸ · Платформа үлесі (${escapeHtml(split.commissionPercent)}%): ${escapeHtml(split.platformShare)} ₸</span>`;
         $("#historyTrips").appendChild(el);
       });
       if(!trips.length&&!intercityTrips.length)$("#historyTrips").innerHTML='<div class="muted">Сапар тарихы жоқ.</div>';
+      renderRevenue();
       const thanks=store.get("zhairemThanks",[]);
       $("#historyThanks").innerHTML=thanks.map(x=>`<div class="list-item"><strong>${escapeHtml(x.text)}</strong><span>${new Date(x.time).toLocaleString("kk-KZ")}</span></div>`).join("")||'<div class="muted">Әлі алғыс жоқ.</div>';
       const violations=store.get("zhairemViolations",[]);
@@ -917,6 +1107,29 @@
         const label=x.type==="earned"?"Берілуі":"Жұмсалуы";
         return `<div class="list-item"><strong>${label}: ${sign}${escapeHtml(x.amount)} ₸</strong><span>${escapeHtml(x.reason)} · Баланс: ${escapeHtml(x.balanceAfter)} ₸</span><span>${new Date(x.time).toLocaleString("kk-KZ")}</span></div>`;
       }).join("")||'<div class="muted">Бонус қозғалысы әзірге жоқ.</div>';
+    }
+    function renderRevenue() {
+      const localTrips=store.get("zhairemTrips",[]).filter(order=>order.status==="completed");
+      const intercityTrips=store.get("zhairemIntercityTrips",[]).filter(order=>order.status==="completed");
+      const localRevenue=localTrips.reduce((sum,order)=>sum+(Number.isSafeInteger(order.adminShare)?order.adminShare:ADMIN_SHARE),0);
+      const intercityRevenue=intercityTrips.reduce((sum,order)=>sum+intercityOrderSplit(order).platformShare,0);
+      const total=localRevenue+intercityRevenue;
+      const summary=`<p>Кент ішіндегі тапсырыстар: <strong>${localRevenue.toLocaleString("kk-KZ")} ₸</strong> · ${localTrips.length} аяқталған</p><p>Қалааралық тапсырыстар: <strong>${intercityRevenue.toLocaleString("kk-KZ")} ₸</strong> · ${intercityTrips.length} аяқталған</p><p class="quote-total">Жиынтық платформа үлесі: ${total.toLocaleString("kk-KZ")} ₸</p>`;
+      ["historyRevenueSummary","settingsRevenueSummary"].forEach(id=>{const el=$("#"+id);if(el)el.innerHTML=summary;});
+      const completed=[
+        ...localTrips.map(order=>({order,kind:"Жайрем кенті",driver:Number.isSafeInteger(order.driverShare)?order.driverShare:DRIVER_SHARE,platform:Number.isSafeInteger(order.adminShare)?order.adminShare:ADMIN_SHARE,amount:Number(order.price)||PRICE})),
+        ...intercityTrips.map(order=>{const split=intercityOrderSplit(order);return {order,kind:"Қалааралық",driver:split.driverEarnings,platform:split.platformShare,amount:Number(order.net)||0};})
+      ].sort((a,b)=>new Date(b.order.completedAt||b.order.createdAt)-new Date(a.order.completedAt||a.order.createdAt));
+      ["historyRevenueOrders","settingsRevenueOrders"].forEach(id=>{
+        const box=$("#"+id);if(!box)return;
+        box.innerHTML="";
+        if(!completed.length){box.innerHTML='<div class="muted">Әзірге аяқталған тапсырыс жоқ.</div>';return;}
+        completed.forEach(({order,kind,driver,platform,amount})=>{
+          const item=document.createElement("div");item.className="list-item";
+          item.innerHTML=`<strong>${escapeHtml(kind)} · ${escapeHtml(order.from)} → ${escapeHtml(order.to)}</strong><span>${new Date(order.completedAt||order.createdAt).toLocaleString("kk-KZ")} · Тапсырыс сомасы: ${amount.toLocaleString("kk-KZ")} ₸</span><span>Жүргізуші табысы: ${driver.toLocaleString("kk-KZ")} ₸ · Сізге / платформаға: ${platform.toLocaleString("kk-KZ")} ₸</span>`;
+          box.appendChild(item);
+        });
+      });
     }
     function renderIntercityQuote() {
       const from=$("#intercityFrom").value.trim();
@@ -948,6 +1161,7 @@
       if(!Number.isSafeInteger(gross)||gross<1)return invalid("Бағаны есептеу мүмкін болмады. Енгізілген сомаларды тексеріңіз.");
       if(requestedBonus>gross)return invalid("Қолданылатын бонус сапар бағасынан артық болмауы керек.");
       const net=gross-requestedBonus;
+      const split=intercitySplit(net);
       const serviceName={passengers:"Жолаушылармен бірге",parcel:"Сәлемдеме / Доставка",cabin:"Бүкіл салон"}[service];
       const originNote=from.toLocaleLowerCase("kk-KZ")==="жайрем кенті"?"":'<p class="field-help">Қалалардың бастапқы бағалары Жайремнен есептелген. Басқа жерден шықсаңыз, бастапқы бағаны қолмен өзгертіңіз.</p>';
       result.innerHTML=`<p><strong>Бағыт:</strong> ${escapeHtml(from)} → ${escapeHtml(to)}</p>
@@ -958,8 +1172,9 @@
         <p><strong>Жалпы баға:</strong> ${gross.toLocaleString("kk-KZ")} ₸</p>
         <p><strong>Бонус жеңілдігі:</strong> −${requestedBonus.toLocaleString("kk-KZ")} ₸</p>
         <p class="quote-total">Төленетін сома: ${net.toLocaleString("kk-KZ")} ₸</p>
+        <p>Жүргізуші табысы: ${split.driverEarnings.toLocaleString("kk-KZ")} ₸ · Платформа үлесі (${split.commissionPercent}%): ${split.platformShare.toLocaleString("kk-KZ")} ₸</p>
         <p>Қолданылған бонус: ${requestedBonus.toLocaleString("kk-KZ")} ₸ · Қалған бонус: ${(balance-requestedBonus).toLocaleString("kk-KZ")} ₸</p>`;
-      return {from,to,base,service,serviceName,quantity:service==="passengers"?quantity:1,gross,bonus:requestedBonus,net,formula};
+      return {from,to,base,service,serviceName,quantity:service==="passengers"?quantity:1,gross,bonus:requestedBonus,net,formula,...split};
     }
     function updateIntercityDestination() {
       const destination=$("#intercityDestination").value;
@@ -989,6 +1204,8 @@
         `Жалпы баға: ${quote.gross} ₸`,
         `Сұралған бонус жеңілдігі: −${quote.bonus} ₸ (сапар аяқталғаны расталғанда қолданылады)`,
         `Төленетін сома: ${quote.net} ₸`,
+        `Жүргізуші табысы: ${quote.driverEarnings} ₸`,
+        `Платформа үлесі (${quote.commissionPercent}%): ${quote.platformShare} ₸`,
         "Баға мен бағытты растауыңызды сұраймын."
       ].filter(Boolean).join("\n");
       const whatsappUrl="https://wa.me/"+ADMIN_PHONE.replace(/\D/g,"")+"?text="+encodeURIComponent(message);
@@ -1021,7 +1238,8 @@
         const title=document.createElement("strong");
         title.textContent=order.from+" → "+order.to;
         const detail=document.createElement("span");
-        detail.textContent=order.serviceName+" · "+order.net.toLocaleString("kk-KZ")+" ₸ · "+(order.status==="completed"?"Аяқталды":"WhatsApp-та сұралды");
+        const split=intercityOrderSplit(order);
+        detail.textContent=order.serviceName+" · "+order.net.toLocaleString("kk-KZ")+" ₸ · жүргізуші "+split.driverEarnings.toLocaleString("kk-KZ")+" ₸ / платформа "+split.platformShare.toLocaleString("kk-KZ")+" ₸ · "+(order.status==="completed"?"Аяқталды":"WhatsApp-та сұралды");
         item.append(title,detail);
         if(order.status==="requested"){
           const button=document.createElement("button");button.className="button primary full";button.type="button";
@@ -1044,6 +1262,8 @@
         return;
       }
       if(!window.confirm("Сапар немесе жеткізу аяқталғанын растайсыз ба? Қолданылған бонус есептен алынып, аяқталған сапар бонусы қосылады."))return;
+      const split=intercityOrderSplit(order);
+      order.platformShare=split.platformShare;order.driverEarnings=split.driverEarnings;order.commissionPercent=split.commissionPercent;
       order.status="completed";order.completedAt=new Date().toISOString();
       store.set("zhairemIntercityTrips",orders);
       $("#intercityBonus").value="0";
@@ -1329,6 +1549,18 @@
       const settings={theme:$("#themeSelect").value,accent:$("#accentSelect").value,font:$("#fontSelect").value};
       store.set("zhairemDesign",settings);applyTheme();toast("Дизайн баптаулары сақталды.");
     });
+    $("#adminCommissionPercent").value=String(adminCommissionPercent());
+    $("#saveCommission").addEventListener("click",()=>{
+      const value=$("#adminCommissionPercent").valueAsNumber;
+      if(!Number.isFinite(value)||value<0||value>100){
+        toast("Қалааралық үлес 0–100% аралығындағы сан болуы керек.");
+        $("#adminCommissionPercent").focus();
+        return;
+      }
+      if(!store.set("zhairemAdminCommissionPercent",value))return;
+      renderIntercityQuote();renderIntercityOrders();renderHistory();
+      toast(`Қалааралық үлес ${value}% болып сақталды. Бұл үлес тек жаңа тапсырыстарға қолданылады.`);
+    });
     $("#locateMe").addEventListener("click",()=>{
       if(!window.confirm("Геолокация картада орналасқан жерді көрсету және сапар бағытын жүргізушіге беру үшін қолданылады. Рұқсат бермесеңіз, Жайремнің әдепкі орны пайдаланылады. GPS-ті қосасыз ба?"))return;
       startLocation();
@@ -1355,6 +1587,9 @@
       const button=e.target.closest("[data-complete-intercity]");
       if(button)completeIntercityOrder(button.dataset.completeIntercity);
     });
+    $("#refreshWeather").addEventListener("click",refreshWeather);
+    window.addEventListener("online",()=>{weatherOfflineMode=false;refreshWeather();});
+    window.addEventListener("offline",()=>{weatherOfflineMode=true;renderWeather();});
     $("#deleteAccount").addEventListener("click",()=>{
       if(!window.confirm("Аккаунтты және осы браузердегі барлық Zhairem Taxi деректерін біржола өшіресіз бе? Бұл әрекетті қайтару мүмкін емес."))return;
       try{
@@ -1366,6 +1601,8 @@
         account=null;currentOrder=null;locationWatch=null;
         smsCode="";lastAiAnswer="";
         geoLocation={...DEFAULT_LOCATION};
+        weatherRequestedLocation=null;weatherGpsLocationRefreshed=false;weatherLastRequestedAt=0;
+        weatherOfflineMode=navigator.onLine===false;
         ["authName","carModel","carPlate","iin","docPhoto","licenseNumber","licensePhoto","authPhoto","rideName","ridePhone","rideTo","intercityCustomDestination","intercityCabinPrice","profileName","profilePhone","profilePhoto","chatInput","aiInput"].forEach(id=>$("#"+id).value="");
         $("#authPhone").value="+7 ";
         $("#rideFrom").value="Жайрем кенті";
@@ -1375,6 +1612,7 @@
         $("#intercityPassengers").value="1";
         $("#intercityBonus").value="0";
         $("#rideComment").value="";
+        $("#adminCommissionPercent").value="10";
         $("#accountPhoto").removeAttribute("src");$("#accountPhoto").hidden=true;
         $("#accountName").textContent="";$("#accountStatus").textContent="";$("#accountRole").textContent="";
         $("#accountBonusBalance").textContent="0 ₸";$("#driverBonusBalance").textContent="0 ₸";
@@ -1386,7 +1624,7 @@
         $("#driverLocationStatus").textContent="GPS бағыт күтілуде";
         $("#driverVehicle").textContent="";
         $("#aiMessages").innerHTML='<div class="message">Сәлеметсіз бе! Жайрем тарифі, Kaspi төлемі, құжаттар және бағыттар туралы сұраңыз.</div>';
-        renderChat();renderHistory();renderNotifications();renderIntercityOrders();updateIntercityDestination();updateIntercityService();applyTheme();
+        renderChat();renderHistory();renderNotifications();renderIntercityOrders();updateIntercityDestination();updateIntercityService();renderWeather();applyTheme();
         $("#toastWrap").innerHTML='<div class="toast">Аккаунт пен қолданба деректері осы браузерден өшірілді.</div>';
         setTimeout(()=>{$("#toastWrap").innerHTML="";},4200);
         updateAccountUi();
@@ -1406,6 +1644,8 @@
     currentOrder=store.get("zhairemCurrentOrder",null);
     renderDriverOrder();
     renderRideActions();
+    renderWeather();
+    refreshWeather();
     startMovingCar();
     if(currentOrder)announceTripStatus(false);
     if(!("speechSynthesis" in window)||typeof window.SpeechSynthesisUtterance!=="function"){
