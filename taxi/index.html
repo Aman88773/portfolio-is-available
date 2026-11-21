@@ -12,11 +12,11 @@
     :root {
       --bg:#111315; --surface:#1b1e20; --surface2:#25292b; --text:#f4f6f1;
       --muted:#a8aea5; --accent:#c1f11d; --line:#34393b; --danger:#ff6961;
-      --font-size:16px;
+      --font-size:16px; --font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
     }
     * { box-sizing:border-box; }
     html { font-size:var(--font-size); }
-    body { margin:0; background:var(--bg); color:var(--text); font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif; }
+    body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font-family); }
     button,input,select,textarea { font:inherit; }
     button,a { -webkit-tap-highlight-color:transparent; }
     button { cursor:pointer; }
@@ -51,7 +51,7 @@
     .map-point { position:absolute; z-index:2; display:flex; align-items:center; gap:7px; max-width:210px; border:1px solid var(--line); border-radius:999px; background:var(--surface); padding:6px 9px; box-shadow:0 5px 14px #0006; font-size:.72rem; }
     .map-point span { font-size:1rem; }
     .passenger-point { left:53%; top:58%; border-color:#4a91ff; }
-    .car-point { left:18%; top:23%; border-color:var(--accent); transition:left 1.2s ease,top 1.2s ease; }
+    .car-point { left:50%; top:50%; border-color:var(--accent); transition:left 1.2s ease,top 1.2s ease; }
     .map-status { position:absolute; z-index:3; bottom:9px; left:9px; border-radius:999px; background:#111315dd; padding:7px 10px; color:var(--muted); font-size:.72rem; }
     .network-indicator { display:inline-flex; align-items:center; gap:6px; min-height:36px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--muted); padding:7px 10px; font-size:.72rem; font-weight:800; }
     .network-indicator:before { content:""; width:8px; height:8px; border-radius:50%; background:#50df78; }
@@ -92,7 +92,7 @@
     .screen-head h1 { margin:0; font-size:1.35rem; }
     .auth { max-width:560px; margin:24px auto; }
     .auth-choice { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
-    .auth-choice button { min-height:70px; }
+    .auth-choice button { min-height:76px; font-size:1rem; }
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
     .auth-step { display:none; }
     .auth-step.active { display:grid; }
@@ -239,11 +239,11 @@
                 <div class="field"><label for="authPhone">Телефон нөмірі</label><input id="authPhone" type="tel" autocomplete="tel" value="+7 " placeholder="+7 ..."></div>
               </div>
               <div id="driverAuthFields" class="form-grid" hidden>
-                <div class="field"><label for="carModel">Көлік маркасы және моделі</label><input id="carModel" placeholder="Chevrolet Cobalt"></div>
-                <div class="field"><label for="carPlate">Мемлекеттік нөмір</label><input id="carPlate" placeholder="123 ABC 13"></div>
-                <div class="field"><label for="iin">ИИН / құжат нөмірі</label><input id="iin" placeholder="ИИН немесе құжат нөмірі"></div>
+                <div class="field"><label for="carModel">Көлік маркасы және моделі</label><input id="carModel" autocomplete="off" placeholder="Chevrolet Cobalt"></div>
+                <div class="field"><label for="carPlate">Мемлекеттік нөмір</label><input id="carPlate" autocomplete="off" placeholder="123 ABC 13"></div>
+                <div class="field"><label for="iin">ИИН / құжат нөмірі</label><input id="iin" autocomplete="off" placeholder="ИИН немесе құжат нөмірі"></div>
                 <div class="field"><label for="docPhoto">Жеке куәлік фотосы</label><p class="field-help">Камера/галерея тек жүргізуші құжатын тіркеу үшін ашылады.</p><input id="docPhoto" type="file" accept="image/*" capture="environment"></div>
-                <div class="field"><label for="licenseNumber">Жүргізуші куәлігі нөмірі</label><input id="licenseNumber" placeholder="Куәлік нөмірі"></div>
+                <div class="field"><label for="licenseNumber">Жүргізуші куәлігі нөмірі</label><input id="licenseNumber" autocomplete="off" placeholder="Куәлік нөмірі"></div>
                 <div class="field"><label for="licensePhoto">Жүргізуші куәлігі фотосы</label><p class="field-help">Камера/галерея тек жүргізуші куәлігін тіркеу үшін ашылады.</p><input id="licensePhoto" type="file" accept="image/*" capture="environment"></div>
               </div>
               <div class="field">
@@ -254,7 +254,7 @@
               <button class="button primary full" id="sendSms">SMS-код жіберу</button>
             </div>
             <div class="auth-step" id="authSms">
-              <p>SMS-кодты имитациялау үшін экранға жіберілген тестік кодты енгізіңіз.</p>
+              <p>Бұл веб-нұсқада SMS жіберілмейді: тестік код экранда көрсетіледі. Нақты SMS растауы үшін серверлік SMS провайдері қажет.</p>
               <div class="field"><label for="smsCode">SMS-код</label><input id="smsCode" inputmode="numeric" maxlength="6" placeholder="1234"></div>
               <button class="button primary full" id="verifySms">Растау және кіру</button>
             </div>
@@ -280,8 +280,9 @@
             </svg>
             <div class="map-road"></div>
             <div class="map-point passenger-point" id="passengerMapPoint"><span>●</span><span id="passengerMapName">Сіздің мекенжайыңыз</span></div>
-            <div class="map-point car-point" id="carPoint"><span>🚕</span><span id="carMapInfo">Жүргізушіні іздеу</span></div>
+            <div class="map-point car-point" id="carPoint" hidden><span>🚕</span><span id="carMapInfo">GPS күтілуде</span></div>
             <span class="map-status" id="locationStatus">GPS өшірулі · Әдепкі: Жайрем · 48.0061, 67.5964</span>
+            <span class="field-help" style="position:absolute;z-index:3;top:8px;left:8px;max-width:90%;background:#111315dd;padding:5px 8px;border-radius:8px">Бұл демо-нұсқада GPS осы құрылғыда ғана; жүргізуші орны басқа құрылғылармен бөлісілмейді.</span>
             <button class="button secondary" id="locateMe" style="position:absolute;z-index:4;right:9px;bottom:9px">GPS қосу</button>
           </div>
         </section>
@@ -318,7 +319,7 @@
             <div><strong id="gpsLatLng">48.0061, 67.5964</strong><span>GPS широта, бойлық</span></div>
             <div><strong id="gpsSpeed">0 км/сағ</strong><span>Жылдамдық</span></div>
             <div><strong id="gpsHeading">—</strong><span>Қозғалыс бағыты</span></div>
-            <div><strong id="gpsDistanceEta">—</strong><span>Қашықтық / орындалу уақыты</span></div>
+            <div><strong id="gpsDistanceEta">—</strong><span>Түзу қашықтық / болжам уақыты</span></div>
           </div>
           <div class="navigator-message" id="navigatorMessage" aria-live="polite">Жайрем кенті: әдепкі бағыт · 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге).</div>
           <div class="settings-row">
@@ -400,7 +401,8 @@
             <h2>Kaspi төлемі</h2>
             <p class="muted">Төлем сомасы: <strong>400 ₸</strong></p>
             <a class="button full" id="kaspiPay" href="https://kaspi.kz/pay" target="_blank" rel="noopener">Kaspi.kz арқылы төлеу</a>
-            <button class="button primary full" id="confirmPayment" style="margin-top:8px">400 ₸ төлемді растау</button>
+            <p class="field-help">Төлемді белгілеу тек осы құрылғыдағы жазбаға әсер етеді; Kaspi төлемі серверден тексерілмейді.</p>
+            <button class="button primary full" id="confirmPayment" style="margin-top:8px">400 ₸ төлемді белгілеу</button>
             <hr style="border:0;border-top:1px solid var(--line)">
             <div id="activeRideActions"></div>
             <button class="button danger full" id="cancelRide">Тапсырыстан бас тарту / Отказ беру</button>
@@ -562,7 +564,7 @@
       <section id="aiScreen" class="screen">
         <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>AI-көмекші</h1></div>
         <article class="card">
-          <p class="field-help">Микрофон сұрақты дауыспен енгізуге ғана қажет; рұқсат бермесеңіз, мәтінді қолмен жазыңыз.</p>
+          <p class="field-help">Микрофон сұрақты дауыспен енгізуге ғана қажет; рұқсат бермесеңіз, мәтінді қолмен жазыңыз. Жауаптар осы құрылғыдағы анықтамалық ережелерден беріледі, сыртқы генеративті AI қызметі қосылмаған.</p>
           <div class="chat" id="aiMessages"><div class="message">Сәлеметсіз бе! Жайрем тарифі, Kaspi төлемі, құжаттар және бағыттар туралы сұраңыз.</div></div>
           <div class="chat-tools"><input id="aiInput" placeholder="Сұрағыңызды жазыңыз"><button class="icon-btn" id="micAi">🎙️</button><button class="icon-btn" id="sendAi">➤</button><button class="icon-btn" id="speakAi">🔊</button></div>
         </article>
@@ -577,6 +579,17 @@
             <div class="list-item"><strong>Қалай төлеуге болады?</strong><span>Kaspi.kz немесе WhatsApp әкімшісі арқылы расталады.</span></div>
             <div class="list-item"><strong>Жүргізушіге қандай құжат қажет?</strong><span>ИИН/құжат нөмірі мен фотосы, жүргізуші куәлігі нөмірі мен фотосы.</span></div>
           </div>
+          <div class="field" style="margin-top:12px">
+            <label for="helpQuestion">Сұрақ</label>
+            <input id="helpQuestion" placeholder="Тариф, төлем, GPS немесе тіркелу">
+          </div>
+          <div class="call-controls" style="margin-top:8px">
+            <button class="button primary" id="askHelp" type="button">Жауап алу</button>
+            <button class="button secondary" id="micHelp" type="button">Дауыспен сұрау</button>
+            <button class="button secondary" id="readHelp" type="button">Анықтаманы дауыстап оқу</button>
+            <button class="button secondary" id="searchHelp" type="button">Интернеттен іздеу</button>
+          </div>
+          <div class="navigator-message" id="helpAnswer" aria-live="polite" style="margin-top:10px">Сұрағыңызды жазыңыз немесе дауыспен енгізіңіз.</div>
           <button class="button whatsapp" id="helpWhatsApp" style="margin-top:12px">WhatsApp қолдауы</button>
         </article>
       </section>
@@ -587,6 +600,7 @@
           <div class="settings-row"><strong>Фон тақырыбы</strong><select id="themeSelect"><option value="dark">Қараңғы #111315</option><option value="light">Ашық</option><option value="night">Көкшіл түн</option></select></div>
           <div class="settings-row"><strong>Негізгі екпін түсі</strong><select id="accentSelect"><option value="#c1f11d">Жасыл</option><option value="#f2c94c">Алтын</option><option value="#57a5ff">Көк</option><option value="#ff8a4c">Қызғылт сары</option></select></div>
           <div class="settings-row"><strong>Қаріп өлшемі</strong><select id="fontSelect"><option value="14px">Кішкентай</option><option value="16px" selected>Орташа</option><option value="18px">Үлкен</option></select></div>
+          <div class="settings-row"><strong>Қаріп түрі</strong><select id="fontFamilySelect"><option value="system">Жүйелік</option><option value="serif">Serif</option><option value="mono">Monospace</option></select></div>
           <button class="button primary" id="saveSettings" style="margin-top:12px">Дизайнды сақтау</button>
         </article>
         <article class="card" style="margin-top:14px">
@@ -634,7 +648,7 @@
           <h2>Қандай деректер өңделеді</h2>
           <p>Қолданба профиль аты-жөнін, телефон нөмірін, рөлді, жүргізуші енгізген көлік/құжат деректері мен фотоларын, GPS координаттарын, тапсырыстарды, төлем күйін, чат пен рейтингті және бонус қозғалысын өңдеуі мүмкін.</p>
           <h2>Сақтау және бөлісу</h2>
-          <p>Осы веб-нұсқада деректер осы құрылғының браузеріндегі жергілікті жадта сақталады; серверге синхрондау қарастырылмаған. WhatsApp-қа жібергенде хабарлама мазмұны WhatsApp-қа, ал Kaspi төлемі Kaspi.kz қызметіне беріледі және олардың өз саясаты қолданылады. Сыртқы қызметтерге жіберілетін ақпаратты тексеріңіз.</p>
+          <p>Осы веб-нұсқада деректер осы құрылғының браузеріндегі жергілікті жадта сақталады; серверге синхрондау қарастырылмаған және жергілікті жад шифрланбайды. Жүргізуші құжаттарының суреттерін ортақ құрылғыда сақтамаңыз. WhatsApp-қа жібергенде хабарлама мазмұны WhatsApp-қа, ал Kaspi төлемі Kaspi.kz қызметіне беріледі және олардың өз саясаты қолданылады. Сыртқы қызметтерге жіберілетін ақпаратты тексеріңіз.</p>
           <h2>Рұқсаттар мен таңдау</h2>
           <p>GPS тек карта/бағыт үшін, камера немесе суреттер профиль/жүргізуші құжаттары үшін, микрофон дауысты мәтінге енгізу үшін, ал хабарламалар сапар жаңартулары үшін пайдаланылады. Рұқсаттар тиісті функцияны таңдағанда ғана сұралады. Рұқсатты бермеу осы функцияны шектейді, бірақ қолмен мекенжай енгізу, Жайремнің әдепкі орны және қолданба ішіндегі мәтіндік чат/хабарламалар лентасы қолжетімді болып қалады.</p>
           <h2>Сақтау мерзімі және өшіру</h2>
@@ -649,7 +663,7 @@
           <p>Қолданбаны пайдалану арқылы сіз енгізген ақпараттың дұрыстығына және құрылғы рұқсаттарын өз таңдауыңызбен беруге жауаптысыз. Жүргізуші сапар/жеткізу шартын, мерзімін және соңғы бағасын WhatsApp-та жолаушымен келіседі.</p>
           <p>Қалааралық калькулятор тек бастапқы бағалау береді; бағыт, қолжетімді орын, жеткізу және түпкілікті сома жүргізушімен расталады. Бонус — осы нұсқада жергілікті түрде есептелетін бағдарлама; оны қолма-қол ақшаға айырбастауға болмайды және ол тек пайдаланушы растаған жеңілдікке қолданылады.</p>
           <p>Жайрем ішіндегі стандартты сапар тарифі өзгеріссіз: 400 ₸ (350 ₸ жүргізушіге, 50 ₸ әкімшіге). Төлем Kaspi арқылы немесе әкімшімен WhatsApp-та келісіліп, қолданбада бөлек расталады.</p>
-          <p>Қолданба осы нұсқада демонстрациялық жергілікті веб-қызмет: SMS растауы мен аккаунттар серверлік тексеруден өтпейді. Қолданба заңсыз, алдамшы немесе басқа адамның құқықтарын бұзатын мақсатта пайдаланылмауы керек.</p>
+          <p>Қолданба осы нұсқада демонстрациялық жергілікті веб-қызмет: экранда көрсетілетін тестік код SMS емес, аккаунттар мен жүргізуші құжаттары серверлік тексеруден өтпейді, Kaspi төлемі қолданбадан тәуелсіз расталады. Қосымша ішілік VoIP қоңырауы сервері жоқ; телефон және WhatsApp сілтемелері қолжетімді. Қолданба заңсыз, алдамшы немесе басқа адамның құқықтарын бұзатын мақсатта пайдаланылмауы керек.</p>
           <p class="field-help">Бұл ақпараттық шарттар үлгісі. Қызметтің нақты иесі, төлем қайтару тәртібі, жауапкершілік және қолдау байланысы production жарияланымына дейін заңгермен тексерілуі қажет.</p>
         </article>
       </section>
@@ -695,9 +709,15 @@
     };
     let authRole="passenger";
     let smsCode="";
+    let smsPhone="";
+    let smsRole="";
     let lastAiAnswer="";
     let locationWatch=null;
-    let geoLocation=store.get("zhairemLocation",DEFAULT_LOCATION);
+    const savedLocation=store.get("zhairemLocation",DEFAULT_LOCATION);
+    let geoLocation=Number.isFinite(Number(savedLocation?.lat))&&Number.isFinite(Number(savedLocation?.lng))
+      &&Math.abs(Number(savedLocation.lat))<=90&&Math.abs(Number(savedLocation.lng))<=180
+      ?{lat:Number(savedLocation.lat),lng:Number(savedLocation.lng)}
+      :{...DEFAULT_LOCATION};
     let currentOrder=store.get("zhairemCurrentOrder",null);
     let account=store.get("zhairemAccount",null);
     let navigatorMessage="Жайрем кенті: әдепкі бағыт · 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге).";
@@ -942,6 +962,14 @@
       $("#drawerBackdrop").hidden=!open;
     }
     function showScreen(name) {
+      if(!account&&!["auth","permissions","privacy","terms"].includes(name)){
+        toast("Жалғастыру үшін алдымен аккаунтқа кіріңіз.");
+        name="auth";
+      }
+      if(account&&name==="driver"&&account.role!=="driver"){
+        toast("Жүргізуші кабинеті жүргізуші аккаунтына ғана қолжетімді.");
+        name="home";
+      }
       $$(".screen").forEach(s=>s.classList.remove("active"));
       const target=$("#"+name+"Screen");
       if(target) target.classList.add("active");
@@ -959,7 +987,7 @@
       $$(`[data-permission-status="${name}"]`).forEach(el=>{
         el.textContent=name==="chat"?"Қосымша рұқсаты қажет емес":permissionLabel(state);
         const card=el.closest(".list-item");
-        if((name==="location"||name==="microphone")&&card){
+        if((name==="location"||name==="microphone"||name==="notifications")&&card){
           let button=card.querySelector("[data-permission-settings]");
           if(!button){
             button=document.createElement("button");
@@ -969,7 +997,7 @@
             button.textContent="Баптаулардан (Настройка) рұқсат беру";
             card.appendChild(button);
           }
-          button.hidden=state!=="denied";
+          button.hidden=state!=="denied"&&state!=="unsupported";
         }
       });
       if(name==="notifications"){
@@ -978,8 +1006,8 @@
     }
     function showPermissionSettings(name) {
       const dialog=$("#permissionSettingsDialog");
-      const title=name==="location"?"Локация (GPS)":"Микрофон";
-      const permission=name==="location"?"Геопозиция / Локация":"Микрофон";
+      const title=name==="location"?"Локация (GPS)":name==="notifications"?"Хабарламалар":"Микрофон";
+      const permission=name==="location"?"Геопозиция / Локация":name==="notifications"?"Хабарламалар":"Микрофон";
       const userAgent=navigator.userAgent||"";
       const isIOS=/iPhone|iPad|iPod/i.test(userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
       const isAndroid=/Android/i.test(userAgent);
@@ -1070,8 +1098,9 @@
         toast("Микрофон рұқсаты берілді. Ол тек дауысты мәтінге енгізу үшін қолданылады.");
         return true;
       }catch(error){
-        updatePermissionStatus("microphone","denied");
-        const reason=error.name==="NotAllowedError"?"Микрофонға рұқсат берілмеді немесе ол шектелген.":"Микрофон қолжетімсіз.";
+        const denied=error.name==="NotAllowedError"||error.name==="SecurityError";
+        updatePermissionStatus("microphone",denied?"denied":"unsupported");
+        const reason=denied?"Микрофонға рұқсат берілмеді немесе ол шектелген.":"Микрофон қолжетімсіз.";
         toast(reason+" Мәтінді қолмен енгізе аласыз.");
         return false;
       }
@@ -1140,7 +1169,23 @@
         if(!file)return resolve("");
         if(file.type&&!file.type.startsWith("image/"))return reject(new Error("Тек сурет файлдарын таңдауға болады."));
         const reader=new FileReader();
-        reader.onload=()=>resolve(String(reader.result));
+        reader.onload=()=>{
+          const image=new Image();
+          image.onload=()=>{
+            const maxDimension=1600;
+            const scale=Math.min(1,maxDimension/Math.max(image.width,image.height));
+            const canvas=document.createElement("canvas");
+            canvas.width=Math.max(1,Math.round(image.width*scale));
+            canvas.height=Math.max(1,Math.round(image.height*scale));
+            const context=canvas.getContext("2d");
+            if(!context){reject(new Error("Суретті өңдеу мүмкін болмады."));return;}
+            context.drawImage(image,0,0,canvas.width,canvas.height);
+            try{resolve(canvas.toDataURL("image/jpeg",0.82));}
+            catch(error){reject(new Error("Суретті сақтау үшін дайындау мүмкін болмады: "+error.message));}
+          };
+          image.onerror=()=>reject(new Error("Сурет файлын ашу мүмкін болмады."));
+          image.src=String(reader.result);
+        };
         reader.onerror=()=>reject(new Error("Сурет файлын оқу мүмкін болмады."));
         reader.readAsDataURL(file);
       });
@@ -1209,6 +1254,7 @@
       }
       $("#profileRating").textContent="★ "+ratingFor(account).toFixed(1);
       $("#profileLevel").textContent="Мәртебе: "+statusFor(account);
+      $("#carPoint").hidden=account.role!=="driver";
       if(account.role==="driver"){
         $("#driverName").textContent=account.name;
         $("#driverVehicle").textContent=(account.carModel||"Көлік")+" · "+(account.carPlate||"Нөмірсіз");
@@ -1225,17 +1271,20 @@
       if(!navigator.onLine)renderWeather();
     }
     function applyTheme() {
-      const settings=store.get("zhairemDesign",{theme:"dark",accent:"#c1f11d",font:"16px"});
+      const settings=store.get("zhairemDesign",{theme:"dark",accent:"#c1f11d",font:"16px",fontFamily:"system"});
       const themes={
         dark:{bg:"#111315",surface:"#1b1e20",surface2:"#25292b",text:"#f4f6f1",muted:"#a8aea5",line:"#34393b"},
         light:{bg:"#f4f6f4",surface:"#ffffff",surface2:"#edf0ec",text:"#20251f",muted:"#687067",line:"#d8ded6"},
         night:{bg:"#081326",surface:"#11203a",surface2:"#172a49",text:"#edf4ff",muted:"#a9bbd8",line:"#294266"}
       };
       const t=themes[settings.theme]||themes.dark;
+      const fontFamilies={system:'Inter,system-ui,-apple-system,"Segoe UI",sans-serif',serif:'Georgia,"Times New Roman",serif',mono:'ui-monospace,SFMono-Regular,Consolas,monospace'};
       Object.entries(t).forEach(([k,v])=>document.documentElement.style.setProperty("--"+k,v));
       document.documentElement.style.setProperty("--accent",settings.accent);
       document.documentElement.style.setProperty("--font-size",settings.font);
+      document.documentElement.style.setProperty("--font-family",fontFamilies[settings.fontFamily]||fontFamilies.system);
       $("#themeSelect").value=settings.theme;$("#accentSelect").value=settings.accent;$("#fontSelect").value=settings.font;
+      $("#fontFamilySelect").value=fontFamilies[settings.fontFamily]?settings.fontFamily:"system";
     }
     function startLocation() {
       if(!navigator.geolocation){updatePermissionStatus("location","unsupported");$("#locationStatus").textContent="GPS қолжетімсіз · Жайрем әдепкі орны";toast("Бұл браузер GPS-ті қолдамайды. Жайремнің әдепкі орны қолданылады.");return;}
@@ -1250,15 +1299,28 @@
         $("#locationStatus").textContent=`GPS: ${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)} · Жайрем`;
         $("#homeStatus").textContent="GPS қосулы";
         $("#driverLocationStatus").textContent=`Жолаушы бағыты: ${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)}`;
+        const carLeft=Math.max(2,Math.min(92,50+(geoLocation.lng-DEFAULT_LOCATION.lng)*1.2));
+        const carTop=Math.max(2,Math.min(82,50-(geoLocation.lat-DEFAULT_LOCATION.lat)*1.2));
+        $("#carPoint").hidden=account?.role!=="driver";
+        $("#carPoint").style.left=carLeft+"%";
+        $("#carPoint").style.top=carTop+"%";
+        $("#carMapInfo").textContent=account?.role==="driver"
+          ?(account.carModel+" · "+account.carPlate)
+          :"GPS көлігі";
         if(account){
           account.location=`${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)}`;
           store.set("zhairemAccount",account);
-          $("#passengerMapName").textContent=account.name+" · GPS";
+          $("#passengerMapName").textContent=currentOrder?.to||account.name+" · GPS";
         }
       };
       const error=err=>{
         const reason=err.code===1?"Рұқсат берілмеді":err.code===2?"Орналасқан жер анықталмады":"GPS жауабы күтілген уақытта келмеді";
-        if(err.code===1)updatePermissionStatus("location","denied");
+        if(err.code===1){
+          updatePermissionStatus("location","denied");
+          if(locationWatch!==null)navigator.geolocation.clearWatch(locationWatch);
+          locationWatch=null;
+          updateNetworkIndicator();
+        }
         $("#locationStatus").textContent=reason+" · Жайрем әдепкі орны";
         $("#homeStatus").textContent="GPS қолжетімсіз";
         toast(reason+". Мекенжайды қолмен енгізе аласыз.");
@@ -1275,23 +1337,18 @@
         toast("GPS іске қосылмады: "+(error.message||"браузер рұқсат бермеді."));
       }
     }
-    function startMovingCar() {
-      const car=$("#carPoint");
-      if(!currentOrder)return;
-      let step=0;
-      const positions=[[18,23],[25,28],[33,34],[42,42],[48,50]];
-      setInterval(()=>{
-        step=(step+1)%positions.length;
-        car.style.left=positions[step][0]+"%";car.style.top=positions[step][1]+"%";
-      },1800);
-      car.style.left="48%";car.style.top="50%";
-    }
     function createOrder() {
+      if(!account){toast("Тапсырыс беру үшін алдымен аккаунтқа кіріңіз.");return null;}
+      if(account.role!=="passenger"){toast("Сапарға тапсырысты жолаушы аккаунты бере алады.");return null;}
+      if(currentOrder&&!["completed","cancelled"].includes(currentOrder.status)){
+        toast("Алдыңғы тапсырыс аяқталмайынша жаңасын бере алмайсыз.");
+        return null;
+      }
       const from=$("#rideFrom").value.trim(),to=$("#rideTo").value.trim();
       if(!to){toast("Қайда баратыныңызды енгізіңіз.");return null;}
       const history=store.get("zhairemTrips",[]);
       const order={id:"ZT-"+Date.now(),from,to,name:$("#rideName").value.trim(),phone:$("#ridePhone").value.trim(),comment:$("#rideComment").value.trim(),
-        location:geoLocation,status:"searching",payment:"pending",price:PRICE,driverShare:DRIVER_SHARE,adminShare:ADMIN_SHARE,createdAt:new Date().toISOString()};
+        accountId:account.id,role:account.role,location:geoLocation,status:"searching",payment:"pending",price:PRICE,driverShare:DRIVER_SHARE,adminShare:ADMIN_SHARE,createdAt:new Date().toISOString()};
       history.unshift(order);store.set("zhairemTrips",history);
       store.set("zhairemCurrentOrder",order);currentOrder=order;
       renderHistory();renderDriverOrder();
@@ -1299,7 +1356,7 @@
       toast("Тапсырыс қабылданды. Жүргізуші ізделуде.",true);
       addNotification("Тапсырыс қабылданды");
       announceTripStatus();
-      startMovingCar();
+      $("#passengerMapName").textContent=to;
       return order;
     }
     function renderHistory() {
@@ -1505,7 +1562,8 @@
     function renderDriverOrder() {
       const box=$("#driverOrder");
       if(!currentOrder){box.innerHTML='<div class="muted">Белсенді тапсырыс жоқ.</div>';return;}
-      box.innerHTML=`<div class="list-item"><strong>${escapeHtml(currentOrder.name||"Жолаушы")}</strong><span>${escapeHtml(currentOrder.from)} → ${escapeHtml(currentOrder.to)}</span><span>400 ₸ · ${escapeHtml(currentOrder.phone)}</span><span>GPS: ${escapeHtml(currentOrder.location.lat+", "+currentOrder.location.lng)}</span></div>`;
+      const location=currentOrder.location||DEFAULT_LOCATION;
+      box.innerHTML=`<div class="list-item"><strong>${escapeHtml(currentOrder.name||"Жолаушы")}</strong><span>${escapeHtml(currentOrder.from)} → ${escapeHtml(currentOrder.to)}</span><span>400 ₸ · ${escapeHtml(currentOrder.phone)}</span><span>GPS: ${escapeHtml(location.lat+", "+location.lng)}</span></div>`;
       $("#carMapInfo").textContent=account?.role==="driver"?(account.carModel+" · "+account.carPlate):"Жүргізуші";
     }
     function updateCurrentOrder(changes) {
@@ -1530,7 +1588,7 @@
       }
     }
     function completeRide() {
-      if(!currentOrder)return;
+      if(!currentOrder||currentOrder.status!=="arrived")return;
       if(currentOrder.bonusAwarded)return;
       updateCurrentOrder({status:"completed",completedAt:new Date().toISOString(),bonusAwarded:true});
       if(account&&account.role in BONUS_REWARDS){
@@ -1546,7 +1604,8 @@
       updateAccountUi();
     }
     function cancelRide() {
-      if(!currentOrder){toast("Белсенді тапсырыс жоқ.");return;}
+      if(!currentOrder||["completed","cancelled"].includes(currentOrder.status)){toast("Бас тартуға болатын белсенді тапсырыс жоқ.");return;}
+      if(account?.role!=="passenger"){toast("Тапсырыстан жолаушы аккаунты ғана бас тарта алады.");return;}
       const reason=prompt("Бас тарту себебі:\n1 — Жолда жедел іс\n2 — Кешігіп жатырмын\n3 — Жүргізушіні күте алмаймын\n4 — Басқа себебі","3");
       if(reason===null)return;
       const labels={1:"Жолда жедел іс",2:"Кешігіп жатырмын",3:"Жүргізушіні күте алмаймын",4:"Басқа себебі"};
@@ -1558,10 +1617,11 @@
       toast("Тапсырыстан бас тартылды. Себебі тарихқа жазылды.",true);
     }
     function confirmPayment() {
-      if(!currentOrder){toast("Алдымен тапсырыс беріңіз.");return;}
+      if(!currentOrder||["completed","cancelled"].includes(currentOrder.status)){toast("Төлем белгілеу үшін белсенді тапсырыс қажет.");return;}
+      if(currentOrder.payment==="paid"){toast("Бұл тапсырыс төленген деп белгіленген.");return;}
       updateCurrentOrder({payment:"paid"});
-      toast("400 ₸ төлем расталды: 350 ₸ жүргізушіге / 50 ₸ әкімшіге.",true);
-      addNotification("400 ₸ төлем расталды");
+      toast("Төлем осы құрылғыда белгіленді. Kaspi төлемі серверден расталған жоқ.",true);
+      addNotification("400 ₸ төлем қолданбада белгіленді");
     }
     function sendChat(text) {
       const value=text.trim();if(!value)return;
@@ -1612,8 +1672,9 @@
         stream=await navigator.mediaDevices.getUserMedia({audio:true});
         updatePermissionStatus("microphone","granted");
       }catch(error){
-        updatePermissionStatus("microphone","denied");
-        toast((error.name==="NotAllowedError"?"Микрофонға рұқсат берілмеді.":"Микрофон қолжетімсіз.")+" Мәтінді қолмен енгізе аласыз.");
+        const denied=error.name==="NotAllowedError"||error.name==="SecurityError";
+        updatePermissionStatus("microphone",denied?"denied":"unsupported");
+        toast((denied?"Микрофонға рұқсат берілмеді.":"Микрофон қолжетімсіз.")+" Мәтінді қолмен енгізе аласыз.");
         return;
       }
       const releaseMicrophone=()=>stream?.getTracks().forEach(track=>track.stop());
@@ -1631,7 +1692,30 @@
       }catch(error){releaseMicrophone();toast("Микрофон іске қосылмады: "+(error.message||"рұқсат жоқ."));}
     }
     function openGoogleSearch(query) {
-      window.open("https://www.google.com/search?q="+encodeURIComponent(query),"_blank","noopener");
+      const popup=window.open("https://www.google.com/search?q="+encodeURIComponent(query),"_blank");
+      if(!popup)toast("Іздеу беті ашылмады. Браузердің қалқымалы терезелерге рұқсатын қосыңыз.");
+      else popup.opener=null;
+    }
+    function speakText(text) {
+      if(!("speechSynthesis" in window)||typeof window.SpeechSynthesisUtterance!=="function"){
+        toast("Бұл құрылғыда дауыстап оқу қолжетімсіз.");
+        return false;
+      }
+      try{
+        window.speechSynthesis.cancel();
+        const utterance=new SpeechSynthesisUtterance(text);
+        utterance.lang="kk-KZ";
+        window.speechSynthesis.speak(utterance);
+        return true;
+      }catch(error){
+        toast("Дауыстап оқу мүмкін болмады: "+(error.message||"құрылғы қолдамайды."));
+        return false;
+      }
+    }
+    function answerHelp() {
+      const question=$("#helpQuestion").value.trim();
+      if(!question){toast("Алдымен сұрақ жазыңыз.");return;}
+      $("#helpAnswer").textContent=aiAnswer(question);
     }
 
     $("#openDrawer").addEventListener("click",()=>openDrawer(true));
@@ -1652,6 +1736,9 @@
       else if(button.dataset.permissionAction==="notifications")requestNotificationPermission();
     }));
     $("#drawerLogout").addEventListener("click",()=>{
+      if(locationWatch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(locationWatch);
+      locationWatch=null;
+      updateNetworkIndicator();
       localStorage.removeItem("zhairemAccount");account=null;$("#bottomNav").hidden=true;showScreen("auth");toast("Аккаунттан шықты.");
     });
 
@@ -1660,7 +1747,7 @@
       $("#authSteps").hidden=false;
       $("#driverAuthFields").hidden=authRole==="passenger";
       $("#authInfo").classList.add("active");$("#authSms").classList.remove("active");
-      btn.classList.add("primary");
+      $$("[data-auth-role]").forEach(roleButton=>roleButton.classList.toggle("primary",roleButton===btn));
     }));
     ["authPhoto","docPhoto","licensePhoto","profilePhoto"].forEach(id=>{
       const input=$("#"+id);
@@ -1675,33 +1762,55 @@
     });
     $("#sendSms").addEventListener("click",async()=>{
       const name=$("#authName").value.trim(),phone=$("#authPhone").value.trim();
-      if(!name||phone.length<6){toast("Аты-жөні және телефон нөмірін толтырыңыз.");return;}
-      if(authRole==="passenger"){}
-      else{
-        if(!$("#carModel").value.trim()||!$("#carPlate").value.trim()||!$("#iin").value.trim()||!$("#licenseNumber").value.trim()){toast("Жүргізуші құжаттарын толтырыңыз.");return;}
+      const phoneDigits=phone.replace(/\D/g,"");
+      if(phoneDigits.length<10||phoneDigits.length>15){toast("Телефон нөмірін халықаралық форматта дұрыс енгізіңіз.");return;}
+      if(authRole==="driver"){
+        if(!name){toast("Жүргізушінің аты-жөнін толтырыңыз.");return;}
+        if(!$("#carModel").value.trim()||!$("#carPlate").value.trim()||!$("#iin").value.trim()||!$("#licenseNumber").value.trim()){
+          toast("Көлік, жеке куәлік және жүргізуші куәлігінің деректерін толтырыңыз.");
+          return;
+        }
+        if(!$("#docPhoto").files[0]||!$("#licensePhoto").files[0]){
+          toast("Жеке куәлік пен жүргізуші куәлігінің фотоларын таңдаңыз.");
+          return;
+        }
       }
       smsCode=String(Math.floor(1000+Math.random()*9000));
-      toast("SMS имитациясы: кодыңыз "+smsCode);
+      smsPhone=phone;
+      smsRole=authRole;
+      $("#smsCode").value="";
+      toast("Тестік растау коды (SMS жіберілмейді): "+smsCode);
       $("#authInfo").classList.remove("active");$("#authSms").classList.add("active");
     });
     $("#verifySms").addEventListener("click",async()=>{
-      if($("#smsCode").value!==smsCode){toast("SMS-код қате.");return;}
+      if($("#smsCode").value!==smsCode||!smsCode){toast("Растау коды қате немесе мерзімі өткен.");return;}
+      if($("#authPhone").value.trim()!==smsPhone||authRole!==smsRole){
+        toast("Телефон немесе тіркелу рөлі өзгерген. Кодты қайта алыңыз.");
+        $("#authSms").classList.remove("active");$("#authInfo").classList.add("active");
+        smsCode="";return;
+      }
       try{
         const existing=store.get("zhairemAccount",null);
+        const sameAccount=existing?.phone===smsPhone&&existing?.role===authRole;
         const accountData={
-          id:existing?.id||("A-"+Date.now()),role:authRole,name:$("#authName").value.trim(),phone:$("#authPhone").value.trim(),
+          id:sameAccount?existing.id:("A-"+Date.now()),role:authRole,name:$("#authName").value.trim()||"Жолаушы",phone:smsPhone,
           location:"Жайрем кенті",photo:await fileToDataUrl($("#authPhoto").files[0]),carModel:"",carPlate:"",
           iin:"",licenseNumber:"",documentsVerified:authRole==="driver",createdAt:new Date().toISOString(),
-          bonusBalances:existing?.bonusBalances||(existing?{[existing.role]:Math.max(0,Number(existing.bonusBalance)||0)}:{})
+          bonusBalances:sameAccount?(existing.bonusBalances||{[existing.role]:Math.max(0,Number(existing.bonusBalance)||0)}):{}
         };
         if(authRole==="driver"){
           accountData.carModel=$("#carModel").value.trim();accountData.carPlate=$("#carPlate").value.trim();
           accountData.iin=$("#iin").value.trim();accountData.licenseNumber=$("#licenseNumber").value.trim();
           accountData.docPhoto=await fileToDataUrl($("#docPhoto").files[0]);accountData.licensePhoto=await fileToDataUrl($("#licensePhoto").files[0]);
         }
-        store.set("zhairemAccount",accountData);account=accountData;
-        updateAccountUi();showScreen("permissions");refreshPermissionStatuses();
-        toast((authRole==="driver"?"Жүргізуші тіркелді: Тексерілген жүргізуші мәртебесі берілді.":"Жолаушы тіркелді.")+" Құрылғы рұқсаттарын осы экраннан баптай аласыз.");
+        if(!store.set("zhairemAccount",accountData))throw new Error("Аккаунтты құрылғыда сақтау мүмкін болмады.");
+        account=accountData;
+        smsCode="";$("#smsCode").value="";
+        updateAccountUi();showScreen("home");
+        startLocation();
+        void requestNotificationPermission();
+        void refreshPermissionStatuses();
+        toast((authRole==="driver"?"Жүргізуші тіркелді: жергілікті веб-нұсқада құжаттары енгізілген, бірақ серверлік тексеру жоқ.":"Жолаушы тіркелді.")+" Басты бет ашылды.");
       }catch(error){
         toast("Аккаунтты сақтау немесе суретті оқу мүмкін болмады: "+(error.message||"файлға қолжетімсіз."));
       }
@@ -1710,31 +1819,52 @@
     $("#rideForm").addEventListener("submit",e=>{e.preventDefault();createOrder();});
     $("#swapRoute").addEventListener("click",()=>{const a=$("#rideFrom").value,b=$("#rideTo").value;$("#rideFrom").value=b||"Жайрем кенті";$("#rideTo").value=a;});
     $("#bookingWhatsApp").addEventListener("click",()=>{
-      const text=`ZHAIREM TAXI — ТАПСЫРЫС\nҚайдан: ${$("#rideFrom").value}\nҚайда: ${$("#rideTo").value}\nАты: ${$("#rideName").value}\nТелефон: ${$("#ridePhone").value}\nБаға: 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге)\nGPS: ${geoLocation.lat}, ${geoLocation.lng}`;
-      window.open("https://wa.me/"+ADMIN_PHONE.replace(/\D/g,"")+"?text="+encodeURIComponent(text),"_blank","noopener");
+      const from=$("#rideFrom").value.trim(),to=$("#rideTo").value.trim();
+      if(!to){toast("WhatsApp-қа жібермес бұрын баратын мекенжайды енгізіңіз.");return;}
+      let order=currentOrder;
+      if(order&&!["completed","cancelled"].includes(order.status)&&order.accountId&&order.accountId!==account?.id){
+        toast("Белсенді тапсырыс басқа аккаунтқа тиесілі.");
+        return;
+      }
+      if(order&&!["completed","cancelled"].includes(order.status)&&(order.from!==from||order.to!==to)){
+        toast("Басқа белсенді тапсырыс бар. Алдымен оны аяқтаңыз немесе бас тартыңыз.");
+        return;
+      }
+      if(!order||["completed","cancelled"].includes(order.status))order=createOrder();
+      if(!order)return;
+      const location=order.location||DEFAULT_LOCATION;
+      const text=`ZHAIREM TAXI — ТАПСЫРЫС\nҚайдан: ${order.from}\nҚайда: ${order.to}\nАты: ${order.name}\nТелефон: ${order.phone}\nБаға: 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге)\nGPS: ${location.lat}, ${location.lng}`;
+      const popup=window.open("https://wa.me/"+ADMIN_PHONE.replace(/\D/g,"")+"?text="+encodeURIComponent(text),"_blank");
+      if(!popup){toast("WhatsApp ашылмады. Браузердің қалқымалы терезелерге рұқсатын қосыңыз.");return;}
+      popup.opener=null;
+      toast("Тапсырыс жергілікті тарихқа сақталып, WhatsApp-қа жіберілді.");
     });
     $("#confirmPayment").addEventListener("click",confirmPayment);
     $("#cancelRide").addEventListener("click",cancelRide);
     $("#acceptOrder").addEventListener("click",()=>{
-      if(!currentOrder){toast("Белсенді тапсырыс жоқ.");return;}
+      if(account?.role!=="driver"){toast("Тапсырысты жүргізуші аккаунты қабылдай алады.");return;}
+      if(!currentOrder||currentOrder.status!=="searching"){toast("Қабылдауға болатын жаңа тапсырыс жоқ.");return;}
       updateCurrentOrder({status:"onWay"});
       toast("Тапсырыс қабылданды",true);
       addNotification("Тапсырыс қабылданды");
     });
     $("#arrivedOrder").addEventListener("click",()=>{
-      if(!currentOrder){toast("Белсенді тапсырыс жоқ.");return;}
+      if(account?.role!=="driver"){toast("Бұл әрекетті жүргізуші аккаунты орындай алады.");return;}
+      if(!currentOrder||currentOrder.status!=="onWay"){toast("Алдымен жүргізуші тапсырысты қабылдауы керек.");return;}
       updateCurrentOrder({status:"arrived"});
       toast("Көлік келді",true);
       addNotification("Көлік келді");
     });
-    $("#driverOnline").addEventListener("change",e=>toast(e.target.checked?"Жүргізуші желіде.":"Жүргізуші желіден шықты."));
+    $("#driverOnline").addEventListener("change",e=>{
+      if(account?.role!=="driver"){e.currentTarget.checked=false;toast("Желі күйін жүргізуші аккаунты ғана өзгерте алады.");return;}
+      toast(e.target.checked?"Жүргізуші желіде.":"Жүргізуші желіден шықты.");
+    });
 
     $("#sendChat").addEventListener("click",()=>sendChat($("#chatInput").value));
     $("#chatInput").addEventListener("keydown",e=>{if(e.key==="Enter")sendChat(e.currentTarget.value);});
     $("#micChat").addEventListener("click",()=>startSpeech(text=>sendChat(text)));
     $("#inAppCall").addEventListener("click",()=>{
-      toast("Қосымша ішілік қоңырау іске қосылды — 400 ₸ сапар шеңберінде.");
-      addNotification("Қоңырау басталды");
+      toast("Қосымша ішілік қоңырау веб-нұсқада қолдау таппайды. Телефон немесе WhatsApp қоңырауын пайдаланыңыз.");
     });
 
     $("#sendAi").addEventListener("click",()=>askAi($("#aiInput").value));
@@ -1742,7 +1872,21 @@
     $("#micAi").addEventListener("click",()=>startSpeech(text=>askAi(text)));
     $("#speakAi").addEventListener("click",()=>{
       if(!lastAiAnswer){toast("Алдымен сұрақ қойыңыз.");return;}
-      if("speechSynthesis" in window){speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(lastAiAnswer));}
+      speakText(lastAiAnswer);
+    });
+    $("#askHelp").addEventListener("click",answerHelp);
+    $("#helpQuestion").addEventListener("keydown",event=>{if(event.key==="Enter")answerHelp();});
+    $("#micHelp").addEventListener("click",()=>startSpeech(text=>{
+      $("#helpQuestion").value=text;
+      answerHelp();
+    }));
+    $("#readHelp").addEventListener("click",()=>{
+      const faq=$$("#helpScreen .list-item").map(item=>item.innerText).join(". ");
+      speakText(faq+" "+$("#helpAnswer").textContent);
+    });
+    $("#searchHelp").addEventListener("click",()=>{
+      const query=$("#helpQuestion").value.trim()||"Zhairem Taxi Жайрем такси";
+      openGoogleSearch(query);
     });
     $("#helpWhatsApp").addEventListener("click",()=>window.open("https://wa.me/"+ADMIN_PHONE.replace(/\D/g,"")+"?text="+encodeURIComponent("Zhairem Taxi — анықтамалық орталық сұрағы"),"_blank","noopener"));
 
@@ -1757,7 +1901,7 @@
     $$("[data-rating]").forEach(btn=>btn.addEventListener("click",()=>{
       if(!account){toast("Алдымен кіру керек.");return;}
       const ratings=store.get("zhairemRatings",[]);
-      const trip=(store.get("zhairemTrips",[]).find(t=>t.status==="completed"));
+      const trip=(store.get("zhairemTrips",[]).find(t=>t.status==="completed"&&(!t.accountId||t.accountId===account.id)));
       if(!trip){toast("Баға қою үшін аяқталған сапар қажет.");return;}
       if(ratings.some(r=>r.accountId===account.id&&r.orderId===trip.id)){toast("Бұл сапарға баға қойылған.");return;}
       ratings.push({accountId:account.id,orderId:trip.id,value:Number(btn.dataset.rating),time:new Date().toISOString()});
@@ -1777,8 +1921,8 @@
       }catch(error){toast("Профильді сақтау немесе суретті оқу мүмкін болмады: "+(error.message||"файлға қолжетімсіз."));}
     });
     $("#saveSettings").addEventListener("click",()=>{
-      const settings={theme:$("#themeSelect").value,accent:$("#accentSelect").value,font:$("#fontSelect").value};
-      store.set("zhairemDesign",settings);applyTheme();toast("Дизайн баптаулары сақталды.");
+      const settings={theme:$("#themeSelect").value,accent:$("#accentSelect").value,font:$("#fontSelect").value,fontFamily:$("#fontFamilySelect").value};
+      if(store.set("zhairemDesign",settings)){applyTheme();toast("Дизайн баптаулары сақталды.");}
     });
     $("#adminCommissionPercent").value=String(adminCommissionPercent());
     $("#saveCommission").addEventListener("click",()=>{
@@ -1861,6 +2005,7 @@
         $("#passengerMapName").textContent="Сіздің мекенжайыңыз";
         $("#locationStatus").textContent="GPS өшірулі · Әдепкі: Жайрем · 48.0061, 67.5964";
         $("#driverLocationStatus").textContent="GPS бағыт күтілуде";
+        updateNetworkIndicator();
         $("#driverVehicle").textContent="";
         $("#aiMessages").innerHTML='<div class="message">Сәлеметсіз бе! Жайрем тарифі, Kaspi төлемі, құжаттар және бағыттар туралы сұраңыз.</div>';
         renderChat();renderHistory();renderNotifications();renderIntercityOrders();updateIntercityDestination();updateIntercityService();renderWeather();applyTheme();
@@ -1895,12 +2040,12 @@
         });
       });
     }
-    startMovingCar();
     if(currentOrder)announceTripStatus(false);
     if(!("speechSynthesis" in window)||typeof window.SpeechSynthesisUtterance!=="function"){
       $("#navigatorVoiceSupport").textContent="Бұл құрылғыда дауыстық синтез жоқ. Навигатор хабарламасы мәтін түрінде көрсетіледі.";
     }
     refreshPermissionStatuses();
+    showScreen(account?"home":"auth");
   })();
   </script>
 </body>
