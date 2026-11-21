@@ -271,6 +271,82 @@
     .footer a { color: var(--green-dark); font-weight: 800; }
     .toast { position: fixed; z-index: 9; right: 18px; bottom: 18px; max-width: min(360px, calc(100% - 36px)); transform: translateY(20px); opacity: 0; pointer-events: none; border-radius: 13px; padding: 12px 16px; background: var(--ink); color: #fff; box-shadow: var(--shadow); transition: .2s ease; }
     .toast.show { transform: translateY(0); opacity: 1; }
+    [hidden] { display: none !important; }
+    .menu-button {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      flex: 0 0 auto;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 13px;
+      background: #fff;
+      color: var(--ink);
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+    .drawer-backdrop {
+      position: fixed;
+      z-index: 19;
+      inset: 0;
+      background: rgba(15, 23, 32, .44);
+    }
+    .drawer {
+      position: fixed;
+      z-index: 20;
+      inset: 0 auto 0 0;
+      display: flex;
+      width: min(350px, calc(100% - 46px));
+      flex-direction: column;
+      overflow-y: auto;
+      padding: 20px 16px 16px;
+      background: #fff;
+      box-shadow: 14px 0 45px rgba(20, 26, 32, .2);
+      transform: translateX(-105%);
+      transition: transform .2s ease;
+    }
+    .drawer.open { transform: translateX(0); }
+    .drawer-head { display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 0 3px 17px; }
+    .drawer-head strong { font-size: 1.12rem; }
+    .drawer-close { width: 38px; height: 38px; border: 0; border-radius: 11px; background: #f2f3f5; color: var(--ink); font-size: 1.25rem; }
+    .drawer-profile { margin-bottom: 12px; border-radius: 16px; padding: 14px; background: #f5f6f7; }
+    .drawer-profile strong, .drawer-profile span { display: block; }
+    .drawer-profile span { margin-top: 3px; color: var(--muted); font-size: .8rem; }
+    .drawer-nav { display: grid; gap: 4px; }
+    .drawer-nav button { display: flex; min-height: 46px; align-items: center; gap: 12px; border: 0; border-radius: 11px; padding: 9px 11px; background: transparent; color: var(--ink); text-align: left; font-weight: 700; }
+    .drawer-nav button:hover, .drawer-nav button:focus-visible { background: #f2f3f5; }
+    .drawer-nav button span:first-child { width: 24px; text-align: center; font-size: 1.05rem; }
+    .drawer-driver { width: 100%; margin-top: auto; }
+    .home-booking-bar { display: block; width: 100%; margin: 14px 0 12px; border: 0; border-radius: 17px; padding: 16px 18px; background: #fff; color: var(--ink); box-shadow: 0 9px 28px rgba(32,33,36,.1); text-align: left; }
+    .home-booking-bar strong, .home-booking-bar span { display: block; }
+    .home-booking-bar strong { font-size: 1.05rem; }
+    .home-booking-bar span { margin-top: 2px; color: var(--muted); font-size: .78rem; }
+    .service-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; }
+    .service-tile { min-height: 90px; border: 1px solid var(--line); border-radius: 16px; padding: 11px 8px; background: #fff; color: var(--ink); text-align: left; }
+    .service-tile span, .service-tile strong { display: block; }
+    .service-tile span { margin-bottom: 7px; font-size: 1.25rem; }
+    .service-tile strong { font-size: .75rem; line-height: 1.25; }
+    .service-tile small { display: block; margin-top: 3px; color: var(--muted); font-size: .68rem; }
+    .screen-heading { display: flex; align-items: center; gap: 12px; margin: 4px 0 18px; }
+    .screen-heading button { min-height: 42px; border: 0; border-radius: 12px; padding: 8px 12px; background: #fff; color: var(--ink); box-shadow: 0 3px 12px rgba(32,33,36,.07); font-weight: 800; white-space: nowrap; }
+    .screen-heading h1 { margin: 0; font-size: 1.3rem; letter-spacing: -.035em; line-height: 1.15; }
+    .page-content { margin: 0 0 16px; }
+    .page-card { margin-bottom: 14px; }
+    .profile-summary { display: flex; align-items: center; gap: 13px; }
+    .profile-avatar { display: grid; width: 52px; height: 52px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: #fff1a6; font-size: 1.45rem; }
+    .profile-summary p { margin: 2px 0 0; color: var(--muted); font-size: .84rem; }
+    .service-note { color: var(--muted); }
+    .history-list, .saved-address-list { display: grid; gap: 9px; margin: 13px 0 0; padding: 0; list-style: none; }
+    .history-item, .saved-address-item { border: 1px solid var(--line); border-radius: 13px; padding: 12px; background: #fff; }
+    .history-item strong, .history-item span { display: block; }
+    .history-item span { color: var(--muted); font-size: .8rem; }
+    .saved-address-form { display: flex; gap: 8px; }
+    .saved-address-form input { min-width: 0; margin: 0; }
+    .saved-address-form .button { flex: 0 0 auto; }
+    .safety-call { width: 100%; margin-top: 12px; background: #b42318; }
+    .safety-warning { border-left: 4px solid #e5484d; padding-left: 12px; color: var(--muted); }
+    .drawer-open { overflow: hidden; }
+    #mainView { margin-top: 0; padding-block: 16px 54px; }
     @media (max-width: 820px) {
       .hero { grid-template-columns: 1fr; }
       .hero-price { justify-self: start; width: min(100%, 290px); }
@@ -280,6 +356,7 @@
       .community-grid { grid-template-columns: 1fr; }
       .driver-dashboard, .release-grid { grid-template-columns: 1fr; }
       .route-points { grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .service-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 560px) {
       .wrap { width: min(100% - 24px, 1120px); }
@@ -430,6 +507,7 @@
     .button.call-taxi-button { width: 100%; min-height: 56px; justify-content: center; gap: 10px; margin-top: 15px; border: 0; border-radius: 14px; background: #ffda00; color: #202124; font-size: .96rem; box-shadow: 0 5px 13px rgba(180,153,0,.15); }
     .button.call-taxi-button:hover { background: #f2ce00; box-shadow: 0 8px 18px rgba(180,153,0,.22); }
     .call-taxi-button strong { font-size: 1rem; }
+    .ride-card #copyGroupOrder { width: 100%; margin: 8px 0 0; }
     .ride-hint { margin-top: 7px; }
     .ride-details { margin-top: 15px; border-top: 1px solid var(--line); padding-top: 12px; }
     .ride-details summary { color: #555b60; font-size: .8rem; font-weight: 750; cursor: pointer; }
@@ -448,6 +526,9 @@
     @media (max-width: 560px) {
       .wrap { width: calc(100% - 20px); }
       .topbar { min-height: 60px; gap: 7px; padding-block: 9px; }
+      .menu-button { width: 38px; height: 38px; }
+      .brand { min-width: 0; }
+      .header-tariff { display: none; }
       .brand { gap: 7px; font-size: .9rem; }
       .brand-mark { width: 34px; height: 34px; border-radius: 11px; }
       .brand small { font-size: .61rem; }
@@ -477,12 +558,16 @@
       .route-line label { font-size: .72rem; }
       .route-swap { width: 34px; height: 47px; }
       .ride-card { padding: 16px; }
+      .screen-heading { align-items: flex-start; }
+      .screen-heading h1 { padding-top: 8px; }
+      .saved-address-form { align-items: stretch; flex-direction: column; }
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="topbar">
+      <button type="button" class="menu-button" id="openDrawer" aria-label="Мәзірді ашу" data-i18n-aria-label="openMenuLabel" aria-expanded="false" aria-controls="appDrawer">☰</button>
       <a class="brand" href="#home" aria-label="Jairem Taxi">
         <span class="brand-mark" aria-hidden="true">↗</span>
         <span>Zhairem Taxi<small data-i18n="brandSubtitle">Жайрем ішіндегі сапар</small></span>
@@ -493,6 +578,32 @@
       </nav>
       <a class="header-tariff" href="#booking"><span data-i18n="townFare">Кент ішінде</span><strong>400 ₸</strong></a>
     </header>
+
+    <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+    <aside class="drawer" id="appDrawer" aria-label="Қосымша мәзірі" data-i18n-aria-label="drawerLabel" aria-hidden="true" inert>
+      <div class="drawer-head">
+        <strong>Zhairem Taxi</strong>
+        <button type="button" class="drawer-close" id="closeDrawer" aria-label="Мәзірді жабу" data-i18n-aria-label="closeMenuLabel">×</button>
+      </div>
+      <div class="drawer-profile">
+      <strong id="drawerProfileName">Жолаушы профилі</strong>
+        <span data-i18n="profileRating">Рейтинг әлі есептелмеді</span>
+      </div>
+      <nav class="drawer-nav" aria-label="Бөлімдер" data-i18n-aria-label="menuSectionsLabel">
+        <button type="button" data-open-screen="profile"><span aria-hidden="true">👤</span><span data-i18n="menuProfile">Профиль / рейтинг</span></button>
+        <button type="button" data-open-screen="town"><span aria-hidden="true">📍</span><span data-i18n="menuTown">Кент · Жайрем</span></button>
+        <button type="button" data-open-screen="orders"><span aria-hidden="true">🧾</span><span data-i18n="menuOrders">Тапсырыстар тарихы</span></button>
+        <button type="button" data-open-screen="courier"><span aria-hidden="true">📦</span><span data-i18n="menuCourier">Курьер</span></button>
+        <button type="button" data-open-screen="intercity"><span aria-hidden="true">🛣️</span><span data-i18n="menuIntercity">Қалааралық</span></button>
+        <button type="button" data-open-screen="addresses"><span aria-hidden="true">🏠</span><span data-i18n="menuAddresses">Менің мекенжайларым</span></button>
+        <button type="button" data-open-screen="cargo"><span aria-hidden="true">🚚</span><span data-i18n="menuCargo">Жүк тасымалы</span></button>
+        <button type="button" data-open-screen="notifications"><span aria-hidden="true">🔔</span><span data-i18n="menuNotifications">Хабарландырулар</span></button>
+        <button type="button" data-open-screen="group"><span aria-hidden="true">💬</span><span data-i18n="menuGroup">WhatsApp тобы</span></button>
+        <button type="button" data-open-screen="safety"><span aria-hidden="true">🛡️</span><span data-i18n="menuSafety">Қауіпсіздік · 112</span></button>
+        <button type="button" data-open-screen="settings"><span aria-hidden="true">⚙️</span><span data-i18n="menuSettings">Баптаулар</span></button>
+      </nav>
+      <button type="button" class="button drawer-driver" data-open-screen="driverSignup" data-i18n="becomeDriver">Жүргізуші болу</button>
+    </aside>
 
     <section class="hero map-hero" id="home" aria-label="Жайрем картасы" data-i18n-aria-label="mapLabel">
       <div class="map-heading">
@@ -526,12 +637,29 @@
       </div>
     </section>
 
-    <main>
-      <nav class="role-switch" aria-label="Қолданушы түрі" data-i18n-aria-label="roleLabel">
+    <section class="home-actions" id="homeActions" aria-label="Сапар қызметтері" data-i18n-aria-label="servicesLabel">
+      <button type="button" class="home-booking-bar" data-open-screen="booking">
+        <strong data-i18n="homeSearch">Қайда және қаншаға?</strong>
+        <span data-i18n="homeSearchHint">Бағытыңызды енгізіп, сапарға тапсырыс беріңіз</span>
+      </button>
+      <div class="service-grid">
+        <button type="button" class="service-tile" data-open-screen="booking"><span aria-hidden="true">🚕</span><strong data-i18n="serviceEconomy">Эконом</strong><small>400 ₸</small></button>
+        <button type="button" class="service-tile" data-open-screen="intercity"><span aria-hidden="true">🛣️</span><strong data-i18n="menuIntercity">Қалааралық</strong></button>
+        <button type="button" class="service-tile" data-open-screen="cargo"><span aria-hidden="true">🚚</span><strong data-i18n="menuCargo">Жүк тасымалы</strong></button>
+        <button type="button" class="service-tile" data-open-screen="courier"><span aria-hidden="true">📦</span><strong data-i18n="menuCourier">Курьер</strong></button>
+      </div>
+    </section>
+
+    <main id="mainView" hidden>
+      <div class="screen-heading" id="screenHeading" hidden>
+        <button type="button" id="backHome" data-i18n="backHome">← Артқа</button>
+        <h1 id="screenTitle"></h1>
+      </div>
+      <nav class="role-switch" aria-label="Қолданушы түрі" data-i18n-aria-label="roleLabel" data-screen-content="booking driver">
         <button type="button" data-app-role="passenger" aria-pressed="true" data-i18n="passengerRole">Жолаушы бөлімі</button>
         <button type="button" data-app-role="driver" aria-pressed="false" data-i18n="driverRole">Жүргізуші бөлімі</button>
       </nav>
-      <section id="passengerPanel" class="role-panel">
+      <section id="passengerPanel" class="role-panel" data-screen-content="booking">
       <div class="booking-layout" id="booking">
         <form class="card ride-card" id="rideForm" novalidate>
           <h3 class="ride-card-title" data-i18n="routeTitle">Қайда барамыз?</h3>
@@ -574,6 +702,8 @@
             <p class="muted-note" id="countHint" data-i18n="countHint">Ең аз саны — 1 сапар.</p>
           </div>
           <button type="submit" class="button call-taxi-button"><span aria-hidden="true">➤</span><span data-i18n="sendRide">Такси шақыру</span><strong id="callPrice">400 ₸</strong></button>
+          <button type="button" class="button secondary" id="copyGroupOrder" data-i18n="copyGroupOrder">Толтырылған тапсырысты топқа көшіру</button>
+          <p class="fine-print" data-i18n="groupCopyHint">Алдымен тапсырыс пішінін толтырыңыз. Хабарлама көшірілген соң топты ашып, оны өзіңіз жібересіз.</p>
           <p class="fine-print ride-hint" data-i18n="waNote">WhatsApp ашылғанда хабарламаны өзіңіз жіберіп растайсыз.</p>
           <details class="ride-details" id="rideDetails">
             <summary data-i18n="moreRideDetails">Байланыс және төлем мәліметтері</summary>
@@ -643,7 +773,7 @@
           <p class="fine-print" data-i18n="paymentDisclaimer">Бұл бет Kaspi төлемін қабылдамайды немесе тексермейді. Белгі WhatsApp өтініміндегі растауыңызды көрсетеді.</p>
         </aside>
       </div>
-      <article class="card order-status-card" aria-labelledby="orderStatusTitle">
+      <article class="card order-status-card" id="orderStatusCard" aria-labelledby="orderStatusTitle">
         <h3 id="orderStatusTitle" data-i18n="orderStatusTitle">Тапсырыс күйі</h3>
         <ol class="order-status-list" aria-label="Тапсырыс кезеңдері" data-i18n-aria-label="orderStagesLabel">
           <li data-order-step="new" aria-current="step"><span class="order-status-number">1</span><span data-i18n="statusNew">Жаңа</span></li>
@@ -657,7 +787,7 @@
       </article>
       </section>
 
-      <section id="driverPanel" class="role-panel" hidden>
+      <section id="driverPanel" class="role-panel" data-screen-content="driver" hidden>
         <div class="section-heading">
           <div>
             <p class="eyebrow" data-i18n="driverPanelEyebrow">ЖҮРГІЗУШІ ЖҰМЫС ОРНЫ</p>
@@ -677,7 +807,7 @@
               <div><span data-i18n="msgCount">Сапар саны</span><strong id="driverOrderCount"></strong></div>
               <div><span data-i18n="msgTotal">Жалпы сома</span><strong id="driverOrderTotal"></strong></div>
               <div><span data-i18n="msgDriverShare">Жүргізуші үлесі</span><strong id="driverOrderDriverShare"></strong></div>
-              <div><span data-i18n="msgProjectShare">Жоба үлесі</span><strong id="driverOrderAdminShare"></strong></div>
+              <div><span data-i18n="msgProjectShare">Әкімші үлесі</span><strong id="driverOrderAdminShare"></strong></div>
               <div><span data-i18n="msgPayType">Төлем түрі</span><strong id="driverOrderPayment"></strong></div>
               <div><span data-i18n="msgPhone">Телефон</span><strong id="driverOrderPhone"></strong></div>
             </div>
@@ -712,7 +842,7 @@
         </div>
       </section>
 
-      <section aria-labelledby="benefitsTitle">
+      <section id="townBenefits" aria-labelledby="benefitsTitle" data-screen-content="town">
         <div class="section-heading">
           <div>
             <p class="eyebrow" data-i18n="benefitsEyebrow">АШЫҚ ЕСЕП</p>
@@ -759,11 +889,11 @@
         </div>
         <div class="benefits-explainer">
           <h3 data-i18n="explainTitle">Есеп қалай жасалады?</h3>
-          <p data-i18n="explainCopy">Әр сапардың 400 ₸ тарифінен 50 ₸ жоба/серіктестік үлесі, 350 ₸ жүргізуші үлесі деп есептеледі. Бұл — осы беттің ашық есеп үлгісі; нақты төлем тәртібін сапар алдында жүргізушімен растаңыз. Күніне 20 сапар болса жоба үлесі 1 000 ₸, 50 сапар болса 2 500 ₸ болады. Бұл болжам, кепілдендірілген табыс емес.</p>
+          <p data-i18n="explainCopy">Әр сапардың 400 ₸ тарифінен 350 ₸ жүргізушіге, 50 ₸ әкімшіге есептеледі. Күніне 20 сапар болса әкімші үлесі 1 000 ₸, 50 сапар болса 2 500 ₸ болады. Бұл есептік үлгі; төлем тәртібін жүргізушімен растаңыз.</p>
         </div>
       </section>
 
-      <section aria-labelledby="incomeReleaseTitle">
+      <section id="incomeRelease" aria-labelledby="incomeReleaseTitle" data-screen-content="settings">
         <div class="section-heading">
           <div>
             <p class="eyebrow" data-i18n="incomeReleaseEyebrow">ЖОБА ТАБЫСЫ ЖӘНЕ ЖАРИЯЛАУ</p>
@@ -805,7 +935,7 @@
         </div>
       </section>
 
-      <section aria-labelledby="communityTitle">
+      <section id="community" aria-labelledby="communityTitle" data-screen-content="group">
         <div class="section-heading">
           <div>
             <p class="eyebrow" data-i18n="communityEyebrow">ЖАЙРЕМ TAXI ҚАУЫМДАСТЫҒЫ</p>
@@ -824,7 +954,6 @@
             </ul>
             <div class="community-actions">
               <a class="button whatsapp" id="groupLink" href="https://chat.whatsapp.com/BWrWRS63CfN9B5i9irs5su?s=cl&amp;p=i&amp;mlu=4&amp;ilr=4&amp;iam=2" target="_blank" rel="noopener noreferrer" data-i18n="joinGroup">Жайрем Taxi — 400 ₸</a>
-              <button type="button" class="button secondary" id="copyGroupOrder" data-i18n="copyGroupOrder">Толтырылған тапсырысты топқа көшіру</button>
               <button type="button" class="button secondary" id="copyGroupInvite" data-i18n="copyGroupInvite">Топқа орналастыратын сілтеме мен ережені көшіру</button>
             </div>
             <p class="muted-note" data-i18n="groupCopyHint">Алдымен тапсырыс пішінін толтырыңыз. Хабарлама көшірілген соң топты ашып, оны өзіңіз жібересіз.</p>
@@ -832,7 +961,7 @@
         </div>
       </section>
 
-      <section aria-labelledby="placesTitle">
+      <section id="placesSection" aria-labelledby="placesTitle" data-screen-content="town">
         <div class="section-heading">
           <div>
             <p class="eyebrow" data-i18n="localEyebrow">ЖАЙРЕМ ІШІНДЕ</p>
@@ -843,7 +972,7 @@
         <div class="route-points" id="routePoints"></div>
       </section>
 
-      <section id="partners" aria-labelledby="partnersTitle">
+      <section id="partners" aria-labelledby="partnersTitle" data-screen-content="driverSignup">
         <div class="section-heading">
           <div>
             <p class="eyebrow" data-i18n="partnerEyebrow">БІРГЕ ДАМЫТАЙЫҚ</p>
@@ -854,7 +983,7 @@
         <div class="card partner-card">
           <aside class="partner-aside">
             <h3 data-i18n="partnerOfferTitle">Жайремге пайдалы қызмет құрамыз</h3>
-            <p data-i18n="partnerOfferCopy">Жүргізуші болсаңыз — көлігіңіз бен қатынайтын уақытыңызды жазыңыз. Серіктес болсаңыз — қосылатын нүктеңіз бен үлес шартын ұсыныңыз. Үлгі есеп: 400 ₸ тарифтің 50 ₸-ы жоба/серіктестікке, 350 ₸-ы жүргізушіге.</p>
+            <p data-i18n="partnerOfferCopy">Жүргізуші болсаңыз — көлігіңіз бен қатынайтын уақытыңызды жазыңыз. Серіктес болсаңыз — қосылатын нүктеңіз бен ұсынысыңызды жазыңыз. Есеп үлгісі: 400 ₸ сапардан 350 ₸ жүргізушіге, 50 ₸ әкімшіге.</p>
           </aside>
           <form class="partner-form" id="partnerForm">
             <div class="field-grid">
@@ -888,7 +1017,7 @@
         </div>
       </section>
 
-      <section aria-labelledby="installTitle">
+      <section id="install" aria-labelledby="installTitle" data-screen-content="settings">
         <div class="section-heading">
           <div>
             <p class="eyebrow" data-i18n="installEyebrow">ТЕЛЕФОНҒА САҚТАУ</p>
@@ -916,7 +1045,71 @@
         </div>
       </section>
 
-      <footer class="footer">
+      <section class="card page-content" id="ordersScreen" data-screen-content="orders">
+        <h2 data-i18n="menuOrders">Тапсырыстар тарихы</h2>
+        <p class="card-intro" data-i18n="historyIntro">Осы құрылғыда жасалған тапсырыстар мен олардың күйлері.</p>
+        <ul class="history-list" id="orderHistory" aria-live="polite"></ul>
+      </section>
+
+      <section class="card page-content" id="profileScreen" data-screen-content="profile">
+        <div class="profile-summary">
+          <span class="profile-avatar" aria-hidden="true">👤</span>
+          <div><h2 id="profileDisplayName">Жолаушы профилі</h2><p data-i18n="profileRating">Рейтинг әлі есептелмеді</p></div>
+        </div>
+        <label for="profileNameInput" data-i18n="nameLabel">Атыңыз</label>
+        <input id="profileNameInput" autocomplete="name" data-i18n-placeholder="namePlaceholder" placeholder="Атыңыз">
+        <button type="button" class="button" id="saveProfileName" data-i18n="saveProfile">Сақтау</button>
+      </section>
+
+      <section class="card page-content" id="addressesScreen" data-screen-content="addresses">
+        <h2 data-i18n="savedAddressesTitle">Менің мекенжайларым</h2>
+        <p class="card-intro" data-i18n="savedAddressesIntro">Мекенжайды сақтап, тапсырысқа бір түртумен қосыңыз.</p>
+        <form class="saved-address-form" id="savedAddressForm">
+          <input id="savedAddressInput" required data-i18n-placeholder="addressPlaceholder" placeholder="Мекенжайды енгізіңіз">
+          <button type="submit" class="button" data-i18n="addAddress">Қосу</button>
+        </form>
+        <ul class="saved-address-list" id="savedAddressList"></ul>
+      </section>
+
+      <section class="card page-content" data-screen-content="courier">
+        <h2 data-i18n="menuCourier">Курьер</h2>
+        <p class="service-note" data-i18n="courierInfo">Жайрем ішіндегі шағын сәлемдемені жеткізуге өтінім қалдырыңыз. Қызмет бағасы мен шартын орындаушымен алдын ала келісіңіз.</p>
+        <button type="button" class="button" data-contact-service="courier" data-i18n="contactService">WhatsApp арқылы сұрау</button>
+      </section>
+
+      <section class="card page-content" data-screen-content="intercity">
+        <h2 data-i18n="menuIntercity">Қалааралық</h2>
+        <p class="service-note" data-i18n="intercityInfo">Қалааралық бағыттың бағасы мен уақытын жүргізушімен бөлек келісіңіз. Жайрем ішіндегі 400 ₸ тариф бұл бағытқа қолданылмайды.</p>
+        <button type="button" class="button" data-contact-service="intercity" data-i18n="contactService">WhatsApp арқылы сұрау</button>
+      </section>
+
+      <section class="card page-content" data-screen-content="cargo">
+        <h2 data-i18n="menuCargo">Жүк тасымалы</h2>
+        <p class="service-note" data-i18n="cargoInfo">Жүк көлемі, алып кету орны және уақытын хабарлаңыз. Бағасы жүк пен бағытқа қарай бөлек келісіледі.</p>
+        <button type="button" class="button" data-contact-service="cargo" data-i18n="contactService">WhatsApp арқылы сұрау</button>
+      </section>
+
+      <section class="card page-content" data-screen-content="safety">
+        <h2 data-i18n="menuSafety">Қауіпсіздік · 112</h2>
+        <p class="safety-warning" data-i18n="safetyInfo">Шұғыл қауіп төнсе, Қазақстандағы бірыңғай жедел қызмет нөміріне қоңырау шалыңыз.</p>
+        <a class="button safety-call" href="tel:112" data-i18n="call112">112 нөміріне қоңырау шалу</a>
+      </section>
+
+      <section class="card page-content" data-screen-content="notifications">
+        <h2 data-i18n="menuNotifications">Хабарландырулар</h2>
+        <p class="service-note" data-i18n="notificationsEmpty">Әзірге жаңа хабарландыру жоқ.</p>
+      </section>
+
+      <section class="card page-content" data-screen-content="settings">
+        <h2 data-i18n="menuSettings">Баптаулар</h2>
+        <p class="card-intro" data-i18n="settingsLanguage">Қолданба тілін таңдаңыз.</p>
+        <nav class="language" aria-label="Тілді таңдау" data-i18n-aria-label="languageLabel">
+          <button type="button" data-language="kk" aria-pressed="true">ҚАЗ</button>
+          <button type="button" data-language="ru" aria-pressed="false">РУС</button>
+        </nav>
+      </section>
+
+      <footer class="footer" data-screen-content="settings">
         <span data-i18n="footerText">Jairem Taxi · Жайрем кенті ішіндегі тұрақты 400 ₸ тариф</span>
         <a href="https://wa.me/77478632459" target="_blank" rel="noopener noreferrer">WhatsApp · +7 747 863 24 59</a>
       </footer>
@@ -944,6 +1137,27 @@
         kk: {
           htmlTitle: "Jairem Taxi — Жайрем ішіндегі сапар", metaDescription: "Жайрем ішіндегі ыңғайлы такси: әр сапар 400 ₸.",
           languageLabel: "Тілді таңдау", roleLabel: "Қолданушы түрі",
+          openMenuLabel: "Мәзірді ашу", closeMenuLabel: "Мәзірді жабу",
+          drawerLabel: "Қосымша мәзірі", menuSectionsLabel: "Бөлімдер", servicesLabel: "Сапар қызметтері",
+          menuProfile: "Профиль / рейтинг", menuTown: "Кент · Жайрем", menuOrders: "Тапсырыстар тарихы",
+          menuCourier: "Курьер", menuIntercity: "Қалааралық", menuAddresses: "Менің мекенжайларым",
+          menuCargo: "Жүк тасымалы", menuNotifications: "Хабарландырулар", menuGroup: "WhatsApp тобы", menuSafety: "Қауіпсіздік · 112",
+          menuSettings: "Баптаулар", becomeDriver: "Жүргізуші болу", backHome: "← Артқа",
+          homeSearch: "Қайда және қаншаға?", homeSearchHint: "Бағытыңызды енгізіп, сапарға тапсырыс беріңіз",
+          serviceEconomy: "Эконом", profileName: "Жолаушы профилі", profileRating: "Рейтинг әлі есептелмеді",
+          profileSaved: "Профиль сақталды.",
+          notificationsEmpty: "Әзірге жаңа хабарландыру жоқ.",
+          historyIntro: "Осы ашық сеанста жасалған тапсырыстар мен олардың күйлері.",
+          historyEmpty: "Әзірге тапсырыс тарихы жоқ.", savedAddressesTitle: "Менің мекенжайларым",
+          savedAddressesIntro: "Мекенжайды сақтап, тапсырысқа бір түртумен қосыңыз.",
+          addressPlaceholder: "Мекенжайды енгізіңіз", addAddress: "Қосу", saveProfile: "Сақтау",
+          courierInfo: "Жайрем ішіндегі шағын сәлемдемені жеткізуге өтінім қалдырыңыз. Қызмет бағасы мен шартын орындаушымен алдын ала келісіңіз.",
+          intercityInfo: "Қалааралық бағыттың бағасы мен уақытын жүргізушімен бөлек келісіңіз. Жайрем ішіндегі 400 ₸ тариф бұл бағытқа қолданылмайды.",
+          cargoInfo: "Жүк көлемі, алып кету орны және уақытын хабарлаңыз. Бағасы жүк пен бағытқа қарай бөлек келісіледі.",
+          contactService: "WhatsApp арқылы сұрау", serviceRequestTitle: "ЖАЙРЕМ TAXI — ҚЫЗМЕТ СҰРАУЫ",
+          serviceRequestNote: "Бағыт, уақыт және қызмет шарттарын осы чатта нақтылаңыз.",
+          settingsLanguage: "Қолданба тілін таңдаңыз.", safetyInfo: "Шұғыл қауіп төнсе, Қазақстандағы бірыңғай жедел қызмет нөміріне қоңырау шалыңыз.",
+          call112: "112 нөміріне қоңырау шалу",
           townFare: "Кент ішінде", mapLabel: "Жайрем картасы", mapTitle: "Жайрем картасы",
           mapPointsLabel: "Жайремдегі бағыт нүктелері", mapAreaNorth: "Орталық", mapAreaSouth: "Жайрем",
           mapCaption: "Жайрем кенті · интерактивті схема", statusNotActive: "Сапар күтілуде",
@@ -980,7 +1194,7 @@
           peopleTitle: "Халыққа пайдасы", peopleDesc: "Қарапайым тариф пен алдын ала белгілі есеп.",
           perRideFixed: "бір сапарға тұрақты баға", fastOrder: "Тез шақыру", fastOrderValue: "WhatsApp арқылы",
           openCalc: "Ашық есеп", openCalcValue: "400 = 50 + 350 ₸", easyPay: "Ыңғайлы төлем", easyPayValue: "Kaspi QR / қолма-қол",
-          explainTitle: "Есеп қалай жасалады?", explainCopy: "Әр сапардың 400 ₸ тарифінен 50 ₸ жоба/серіктестік үлесі, 350 ₸ жүргізуші үлесі деп есептеледі. Бұл — осы беттің ашық есеп үлгісі; нақты төлем тәртібін сапар алдында жүргізушімен растаңыз. Күніне 20 сапар болса жоба үлесі 1 000 ₸, 50 сапар болса 2 500 ₸ болады. Бұл болжам, кепілдендірілген табыс емес.",
+          explainTitle: "Есеп қалай жасалады?", explainCopy: "Әр сапардың 400 ₸ тарифінен 350 ₸ жүргізушіге, 50 ₸ әкімшіге есептеледі. Күніне 20 сапар болса әкімші үлесі 1 000 ₸, 50 сапар болса 2 500 ₸ болады. Бұл есептік үлгі; төлем тәртібін жүргізушімен растаңыз.",
           communityEyebrow: "ЖАЙРЕМ TAXI ҚАУЫМДАСТЫҒЫ", communityTitle: "Әкімші, жүргізушілер және тұрғындар бір топта",
           communityIntro: "Топқа қосылып, сапар туралы хабарламаны толтырғаннан кейін бір түртумен көшіріп, топқа жіберіңіз.",
           groupRulesTitle: "Жайрем Taxi тобының ережесі", groupRulesIntro: "Топтағы тәртіп пен жеке деректерді қорғау үшін:",
@@ -1013,7 +1227,7 @@
           androidStep3: "«Басты экранға қосу» немесе «Қолданбаны орнату» тармағын таңдап, растаңыз.",
           localEyebrow: "ЖАЙРЕМ ІШІНДЕ", placesTitle: "Жиі баратын нүктелер", placesIntro: "Тізімнен таңдаңыз немесе өз мекенжайыңызды қолмен жазыңыз.",
           partnerEyebrow: "БІРГЕ ДАМЫТАЙЫҚ", partnerTitle: "Жүргізуші немесе серіктес болып қосылыңыз", partnerIntro: "Өтініміңіз WhatsApp-та дайын хабарлама ретінде ашылады.",
-          partnerOfferTitle: "Жайремге пайдалы қызмет құрамыз", partnerOfferCopy: "Жүргізуші болсаңыз — көлігіңіз бен қатынайтын уақытыңызды жазыңыз. Серіктес болсаңыз — қосылатын нүктеңіз бен үлес шартын ұсыныңыз. Үлгі есеп: 400 ₸ тарифтің 50 ₸-ы жоба/серіктестікке, 350 ₸-ы жүргізушіге.",
+          partnerOfferTitle: "Жайремге пайдалы қызмет құрамыз", partnerOfferCopy: "Жүргізуші болсаңыз — көлігіңіз бен қатынайтын уақытыңызды жазыңыз. Серіктес болсаңыз — қосылатын нүктеңіз бен ұсынысыңызды жазыңыз. Есеп үлгісі: 400 ₸ сапардан 350 ₸ жүргізушіге, 50 ₸ әкімшіге.",
           partnerName: "Аты-жөні", partnerNamePlaceholder: "Аты-жөніңіз", partnerPhone: "Байланыс телефоны",
           partnerRole: "Қосылу түрі", driverOption: "Жүргізуші", partnerOption: "Серіктес",
           vehiclePoint: "Көлігіңіз / нүктеңіз", vehiclePlaceholder: "Көлік маркасы немесе нүкте",
@@ -1028,7 +1242,7 @@
           ],
           msgRideTitle: "ЖАЙРЕМ TAXI — САПАР ТАПСЫРЫСЫ", msgName: "Аты", msgPhone: "Телефон", msgRoute: "Бағыт",
           msgFrom: "Қайдан", msgTo: "Қайда", msgTime: "Уақыты", msgNow: "Қазір", msgCount: "Сапар саны",
-          msgTotal: "Жалпы сома", msgEach: "Әр сапар", msgProjectShare: "Жоба үлесі", msgDriverShare: "Жүргізуші үлесі",
+          msgTotal: "Жалпы сома", msgEach: "Әр сапар", msgProjectShare: "Әкімші үлесі", msgDriverShare: "Жүргізуші үлесі",
           msgPayType: "Төлем түрі", msgKaspi: "Kaspi QR", msgCash: "Қолма-қол", msgConfirmed: "Kaspi төлемін растады",
           yes: "Иә", no: "Жоқ", msgNote: "Ескерту",
           msgDisclaimer: "400 ₸ тарифі тек Жайрем кенті ішінде қолданылады; кенттен тыс бағыттың бағасы бөлек келісіледі. Сома мен уақытты жүргізушімен растаңыз.",
@@ -1066,6 +1280,27 @@
         ru: {
           htmlTitle: "Jairem Taxi — поездки по Жайрему", metaDescription: "Удобное такси по Жайрему: 400 ₸ за поездку.",
           languageLabel: "Выбор языка", roleLabel: "Роль пользователя",
+          openMenuLabel: "Открыть меню", closeMenuLabel: "Закрыть меню",
+          drawerLabel: "Меню приложения", menuSectionsLabel: "Разделы", servicesLabel: "Услуги поездки",
+          menuProfile: "Профиль / рейтинг", menuTown: "Посёлок · Жайрем", menuOrders: "История заказов",
+          menuCourier: "Курьер", menuIntercity: "Межгород", menuAddresses: "Мои адреса",
+          menuCargo: "Грузоперевозки", menuNotifications: "Уведомления", menuGroup: "Группа WhatsApp", menuSafety: "Безопасность · 112",
+          menuSettings: "Настройки", becomeDriver: "Стать водителем", backHome: "← Назад",
+          homeSearch: "Куда и за сколько?", homeSearchHint: "Укажите маршрут и закажите поездку",
+          serviceEconomy: "Эконом", profileName: "Профиль пассажира", profileRating: "Рейтинг пока не рассчитан",
+          profileSaved: "Профиль сохранён.",
+          notificationsEmpty: "Новых уведомлений пока нет.",
+          historyIntro: "Заказы и их статусы, созданные в этом открытом сеансе.",
+          historyEmpty: "История заказов пока пуста.", savedAddressesTitle: "Мои адреса",
+          savedAddressesIntro: "Сохраните адрес, чтобы добавить его в заказ одним нажатием.",
+          addressPlaceholder: "Введите адрес", addAddress: "Добавить", saveProfile: "Сохранить",
+          courierInfo: "Оставьте запрос на доставку небольшой посылки по Жайрему. Стоимость и условия заранее согласуйте с исполнителем.",
+          intercityInfo: "Стоимость и время поездки между городами согласуйте отдельно с водителем. Тариф 400 ₸ по Жайрему на этот маршрут не распространяется.",
+          cargoInfo: "Укажите объём груза, место и время подачи. Стоимость согласуется отдельно с учётом груза и маршрута.",
+          contactService: "Запросить в WhatsApp", serviceRequestTitle: "JAIREM TAXI — ЗАПРОС УСЛУГИ",
+          serviceRequestNote: "Уточните маршрут, время и условия услуги в этом чате.",
+          settingsLanguage: "Выберите язык приложения.", safetyInfo: "При непосредственной угрозе звоните по единому номеру экстренных служб Казахстана.",
+          call112: "Позвонить по номеру 112",
           townFare: "По посёлку", mapLabel: "Карта Жайрема", mapTitle: "Карта Жайрема",
           mapPointsLabel: "Точки маршрута в Жайреме", mapAreaNorth: "Центр", mapAreaSouth: "Жайрем",
           mapCaption: "Посёлок Жайрем · интерактивная схема", statusNotActive: "Ожидает поездку",
@@ -1102,7 +1337,7 @@
           peopleTitle: "Выгода для жителей", peopleDesc: "Понятный тариф и сумма известна заранее.",
           perRideFixed: "фиксированная цена за поездку", fastOrder: "Быстрый вызов", fastOrderValue: "через WhatsApp",
           openCalc: "Прозрачный расчёт", openCalcValue: "400 = 50 + 350 ₸", easyPay: "Удобная оплата", easyPayValue: "Kaspi QR / наличные",
-          explainTitle: "Как считается сумма?", explainCopy: "Из тарифа 400 ₸ за каждую поездку 50 ₸ учитываются как доля проекта/партнёрства, 350 ₸ — как доля водителя. Это открытая расчётная модель этой страницы; условия оплаты подтвердите с водителем до поездки. При 20 поездках в день доля проекта составит 1 000 ₸, при 50 — 2 500 ₸. Это прогноз, а не гарантированный доход.",
+          explainTitle: "Как считается сумма?", explainCopy: "Из тарифа 400 ₸ за поездку 350 ₸ начисляется водителю, 50 ₸ — администратору. При 20 поездках в день доля администратора составит 1 000 ₸, при 50 — 2 500 ₸. Это расчётная модель; порядок оплаты подтвердите с водителем.",
           communityEyebrow: "СООБЩЕСТВО JAIREM TAXI", communityTitle: "Администратор, водители и жители в одной группе",
           communityIntro: "Вступите в группу, заполните заказ и скопируйте готовое сообщение одним нажатием, чтобы отправить его в группу.",
           groupRulesTitle: "Правила группы Jairem Taxi", groupRulesIntro: "Чтобы поддерживать порядок и беречь личные данные:",
@@ -1135,7 +1370,7 @@
           androidStep3: "Выберите «Добавить на главный экран» или «Установить приложение» и подтвердите действие.",
           localEyebrow: "ВНУТРИ ЖАЙРЕМА", placesTitle: "Популярные точки", placesIntro: "Выберите точку из списка или введите свой адрес вручную.",
           partnerEyebrow: "РАЗВИВАЕМ ВМЕСТЕ", partnerTitle: "Присоединяйтесь как водитель или партнёр", partnerIntro: "Заявка откроется в WhatsApp как готовое сообщение.",
-          partnerOfferTitle: "Создаём полезный сервис для Жайрема", partnerOfferCopy: "Если вы водитель — укажите автомобиль и время работы. Если партнёр — предложите свою точку и условия доли. Пример расчёта: из тарифа 400 ₸ — 50 ₸ проекту/партнёрству и 350 ₸ водителю.",
+          partnerOfferTitle: "Создаём полезный сервис для Жайрема", partnerOfferCopy: "Если вы водитель — укажите автомобиль и время работы. Если партнёр — предложите свою точку и идею. Пример расчёта: из 400 ₸ за поездку 350 ₸ водителю и 50 ₸ администратору.",
           partnerName: "Имя и фамилия", partnerNamePlaceholder: "Ваше имя и фамилия", partnerPhone: "Контактный телефон",
           partnerRole: "Формат участия", driverOption: "Водитель", partnerOption: "Партнёр",
           vehiclePoint: "Ваш автомобиль / точка", vehiclePlaceholder: "Марка авто или точка",
@@ -1150,7 +1385,7 @@
           ],
           msgRideTitle: "JAIREM TAXI — ЗАКАЗ ПОЕЗДКИ", msgName: "Имя", msgPhone: "Телефон", msgRoute: "Маршрут",
           msgFrom: "Откуда", msgTo: "Куда", msgTime: "Время", msgNow: "Сейчас", msgCount: "Количество поездок",
-          msgTotal: "Итого", msgEach: "За поездку", msgProjectShare: "Доля проекта", msgDriverShare: "Доля водителя",
+          msgTotal: "Итого", msgEach: "За поездку", msgProjectShare: "Доля администратора", msgDriverShare: "Доля водителя",
           msgPayType: "Способ оплаты", msgKaspi: "Kaspi QR", msgCash: "Наличные", msgConfirmed: "Подтверждает оплату Kaspi",
           yes: "Да", no: "Нет", msgNote: "Примечание",
           msgDisclaimer: "Тариф 400 ₸ действует только в пределах посёлка Жайрем; стоимость поездки за его пределы согласуется отдельно. Подтвердите сумму и время с водителем.",
@@ -1190,13 +1425,116 @@
       let language = "kk";
       let toastTimer;
       let currentOrder = null;
+      const orderHistory = [];
+      const savedAddresses = [];
       let orderCreationPending = false;
+      let activeScreen = "home";
       const $ = (selector, root = document) => root.querySelector(selector);
       const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
       const t = (key) => translations[language][key] ?? translations.kk[key] ?? key;
       const formatMoney = (value) => `${new Intl.NumberFormat(language === "kk" ? "kk-KZ" : "ru-RU").format(value)} ₸`;
       const countInput = $("#rideCount");
       const locale = () => translations[language];
+      const screenTitleKeys = {
+        booking: "routeTitle", profile: "menuProfile", town: "menuTown", orders: "menuOrders",
+        courier: "menuCourier", intercity: "menuIntercity", addresses: "menuAddresses",
+        cargo: "menuCargo", notifications: "menuNotifications", group: "communityTitle", safety: "menuSafety",
+        settings: "menuSettings", driver: "driverPanelTitle", driverSignup: "partnerTitle"
+      };
+      let profileName = "";
+
+      $("#ordersScreen").append($("#orderStatusCard"));
+
+      function showScreen(screen) {
+        const isHome = screen === "home";
+        activeScreen = screen;
+        $("#home").hidden = !isHome;
+        $("#homeActions").hidden = !isHome;
+        $("#mainView").hidden = isHome;
+        $("#screenHeading").hidden = isHome;
+        if (!isHome) {
+          $("#screenTitle").textContent = t(screenTitleKeys[screen] ?? "menuSettings");
+          $$("[data-screen-content]", $("#mainView")).forEach((element) => {
+            element.hidden = !element.dataset.screenContent.split(/\s+/).includes(screen);
+          });
+        }
+        $$("[data-app-role]").forEach((button) => {
+          button.setAttribute("aria-pressed", button.dataset.appRole === (screen === "driver" ? "driver" : "passenger") ? "true" : "false");
+        });
+        closeDrawer();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function closeDrawer() {
+        const drawer = $("#appDrawer");
+        const wasOpen = drawer.classList.contains("open");
+        drawer.classList.remove("open");
+        drawer.setAttribute("aria-hidden", "true");
+        drawer.inert = true;
+        $("#drawerBackdrop").hidden = true;
+        $("#openDrawer").setAttribute("aria-expanded", "false");
+        document.body.classList.remove("drawer-open");
+        if (wasOpen) $("#openDrawer").focus();
+      }
+
+      function openDrawer() {
+        const drawer = $("#appDrawer");
+        drawer.inert = false;
+        drawer.classList.add("open");
+        drawer.setAttribute("aria-hidden", "false");
+        $("#drawerBackdrop").hidden = false;
+        $("#openDrawer").setAttribute("aria-expanded", "true");
+        document.body.classList.add("drawer-open");
+        $("#closeDrawer").focus();
+      }
+
+      function renderOrderHistory() {
+        const list = $("#orderHistory");
+        list.replaceChildren();
+        if (orderHistory.length === 0) {
+          const empty = document.createElement("li");
+          empty.className = "history-item";
+          empty.textContent = t("historyEmpty");
+          list.append(empty);
+          return;
+        }
+        [...orderHistory].reverse().forEach((order) => {
+          const item = document.createElement("li");
+          item.className = "history-item";
+          const route = document.createElement("strong");
+          route.textContent = `${order.from} → ${order.to}`;
+          const details = document.createElement("span");
+          details.textContent = `${formatDateTime(order.createdAt)} · ${t(ORDER_STATUS_KEYS[order.status])} · ${formatMoney(order.total)}`;
+          item.append(route, details);
+          list.append(item);
+        });
+      }
+
+      function renderSavedAddresses() {
+        const list = $("#savedAddressList");
+        list.replaceChildren();
+        savedAddresses.forEach((address) => {
+          const item = document.createElement("li");
+          item.className = "saved-address-item";
+          const select = document.createElement("button");
+          select.type = "button";
+          select.className = "button secondary";
+          select.textContent = address;
+          select.addEventListener("click", () => {
+            $("#to").value = address;
+            refreshMapSelection();
+            showScreen("booking");
+          });
+          item.append(select);
+          list.append(item);
+        });
+      }
+
+      function renderProfileName() {
+        const displayName = profileName || t("profileName");
+        $("#drawerProfileName").textContent = displayName;
+        $("#profileDisplayName").textContent = displayName;
+      }
 
       function normalizedCount(updateField = false) {
         const parsed = Number(countInput.value);
@@ -1280,11 +1618,10 @@
 
       function setAppRole(role) {
         const isDriver = role === "driver";
-        $("#passengerPanel").hidden = isDriver;
-        $("#driverPanel").hidden = !isDriver;
         $$("[data-app-role]").forEach((button) => {
           button.setAttribute("aria-pressed", button.dataset.appRole === role ? "true" : "false");
         });
+        showScreen(isDriver ? "driver" : "booking");
       }
 
       function renderOrderWorkflow() {
@@ -1304,6 +1641,7 @@
         $("#passengerOrderSummary").textContent = currentOrder
           ? `${currentOrder.from} → ${currentOrder.to} · ${t("msgCount")}: ${currentOrder.count} · ${formatMoney(currentOrder.total)}`
           : "";
+        renderOrderHistory();
 
         $("#driverOrderEmpty").hidden = Boolean(currentOrder);
         $("#driverOrderDetails").hidden = !currentOrder;
@@ -1365,12 +1703,14 @@
         $("#swapRoute").setAttribute("aria-label", t("swapLabel"));
         $("#swapRoute").title = t("swapTitle");
         $("#groupLink").href = WHATSAPP_GROUP_LINK;
+        renderProfileName();
         refreshPlaces();
         refreshMapSelection();
         updateAmounts();
         updateDriverReport();
         renderOrderWorkflow();
         updatePartnerPointIncome();
+        if (activeScreen !== "home") $("#screenTitle").textContent = t(screenTitleKeys[activeScreen] ?? "menuSettings");
       }
 
       function showToast(message) {
@@ -1413,6 +1753,27 @@
       }
 
       $$(".language button").forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.language)));
+      $("#openDrawer").addEventListener("click", openDrawer);
+      $("#closeDrawer").addEventListener("click", closeDrawer);
+      $("#drawerBackdrop").addEventListener("click", closeDrawer);
+      $("#backHome").addEventListener("click", () => showScreen("home"));
+      $(".brand").addEventListener("click", (event) => {
+        event.preventDefault();
+        showScreen("home");
+      });
+      $(".header-tariff").addEventListener("click", (event) => {
+        event.preventDefault();
+        showScreen("booking");
+      });
+      $$("[data-open-screen]").forEach((button) => {
+        button.addEventListener("click", () => showScreen(button.dataset.openScreen));
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape" && !$("#drawerBackdrop").hidden) {
+          closeDrawer();
+          $("#openDrawer").focus();
+        }
+      });
       $$(".trip-choice").forEach((button) => button.addEventListener("click", () => {
         countInput.value = button.dataset.count;
         updateAmounts(true);
@@ -1436,6 +1797,37 @@
       $$("[data-map-place], [data-place-choice]").forEach((button) => {
         button.addEventListener("click", () => {
           selectDestination(Number(button.dataset.mapPlace ?? button.dataset.placeChoice));
+          if (button.hasAttribute("data-map-place")) showScreen("booking");
+        });
+      });
+      $("#savedAddressForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const address = $("#savedAddressInput").value.trim();
+        if (!address) return;
+        if (!savedAddresses.includes(address)) savedAddresses.push(address);
+        $("#savedAddressInput").value = "";
+        renderSavedAddresses();
+      });
+      $("#saveProfileName").addEventListener("click", () => {
+        const name = $("#profileNameInput").value.trim();
+        if (!name) {
+          showToast(t("fillRequired"));
+          $("#profileNameInput").focus();
+          return;
+        }
+        profileName = name;
+        $("#rideName").value = name;
+        renderProfileName();
+        showToast(t("profileSaved"));
+      });
+      $$("[data-contact-service]").forEach((button) => {
+        button.addEventListener("click", () => {
+          const serviceKey = {
+            courier: "menuCourier",
+            intercity: "menuIntercity",
+            cargo: "menuCargo"
+          }[button.dataset.contactService];
+          openWhatsApp([t("serviceRequestTitle"), t(serviceKey), t("serviceRequestNote")]);
         });
       });
       $("#copyAmount").addEventListener("click", async () => {
@@ -1518,7 +1910,9 @@
 
       function startDriverSearch(order) {
         order.status = "new";
+        order.createdAt = new Date().toISOString();
         currentOrder = order;
+        orderHistory.push(order);
         renderOrderWorkflow();
         advanceOrderStatus("searching", "orderSearchingToast");
       }
@@ -1539,6 +1933,7 @@
         const order = captureRideOrder();
         startDriverSearch(order);
         openWhatsApp(buildRideMessage(order));
+        showScreen("orders");
       });
 
       $("#copyGroupOrder").addEventListener("click", async () => {
@@ -1558,6 +1953,7 @@
         }
         startDriverSearch(order);
         showToast(t("groupOrderCopied"));
+        showScreen("orders");
       });
 
       $("#acceptOrder").addEventListener("click", () => advanceOrderStatus("onWay", "orderAcceptedToast"));
@@ -1617,7 +2013,9 @@
         ]);
       });
 
+      $("#profileNameInput").value = $("#rideName").value;
       setLanguage("kk");
+      showScreen("home");
     })();
   </script>
 </body>
