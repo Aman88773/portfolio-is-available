@@ -117,6 +117,10 @@
     .split-payment { display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px; }
     .split-payment div { border:1px dashed var(--line); border-radius:12px; padding:10px; text-align:center; }
     .split-payment strong { color:var(--accent); display:block; }
+    .quote-result { margin-top:12px; border:1px solid var(--line); border-radius:12px; background:var(--surface2); padding:12px; }
+    .quote-result p { margin:5px 0; }
+    .quote-total { color:var(--accent); font-size:1.2rem; font-weight:900; }
+    .field-help { margin:0; color:var(--muted); font-size:.78rem; }
     @media(max-width:700px) {
       .app { width:min(100% - 16px,1120px); }
       .grid-2,.grid-3,.form-grid,.auth-choice { grid-template-columns:1fr; }
@@ -147,6 +151,7 @@
         <button data-screen="profile">🪪 Профиль</button>
         <button data-screen="chat">💬 Чат</button>
         <button data-screen="history">🧾 Тарих</button>
+        <button data-screen="intercity">🛣️ Қалааралық калькулятор</button>
         <button data-screen="notifications">🔔 Хабарламалар</button>
         <button data-screen="ai">🤖 AI-көмекші</button>
         <button data-screen="help">❓ Анықтамалық орталық</button>
@@ -176,12 +181,13 @@
                 <div class="field"><label for="carModel">Көлік маркасы және моделі</label><input id="carModel" placeholder="Chevrolet Cobalt"></div>
                 <div class="field"><label for="carPlate">Мемлекеттік нөмір</label><input id="carPlate" placeholder="123 ABC 13"></div>
                 <div class="field"><label for="iin">ИИН / құжат нөмірі</label><input id="iin" placeholder="ИИН немесе құжат нөмірі"></div>
-                <div class="field"><label for="docPhoto">Жеке куәлік фотосы</label><input id="docPhoto" type="file" accept="image/*" capture="environment"></div>
+                <div class="field"><label for="docPhoto">Жеке куәлік фотосы</label><p class="field-help">Камера/галерея тек жүргізуші құжатын тіркеу үшін ашылады.</p><input id="docPhoto" type="file" accept="image/*" capture="environment"></div>
                 <div class="field"><label for="licenseNumber">Жүргізуші куәлігі нөмірі</label><input id="licenseNumber" placeholder="Куәлік нөмірі"></div>
-                <div class="field"><label for="licensePhoto">Жүргізуші куәлігі фотосы</label><input id="licensePhoto" type="file" accept="image/*" capture="environment"></div>
+                <div class="field"><label for="licensePhoto">Жүргізуші куәлігі фотосы</label><p class="field-help">Камера/галерея тек жүргізуші куәлігін тіркеу үшін ашылады.</p><input id="licensePhoto" type="file" accept="image/*" capture="environment"></div>
               </div>
               <div class="field">
                 <label for="authPhoto">Профиль фотосы (камера/галерея)</label>
+                <p class="field-help">Сурет тек профильде көрсетіледі; таңдауды браузер өзі басқарады.</p>
                 <input id="authPhoto" type="file" accept="image/*" capture="environment">
               </div>
               <button class="button primary full" id="sendSms">SMS-код жіберу</button>
@@ -205,7 +211,8 @@
             <div class="map-road"></div>
             <div class="map-point passenger-point" id="passengerMapPoint"><span>●</span><span id="passengerMapName">Сіздің мекенжайыңыз</span></div>
             <div class="map-point car-point" id="carPoint"><span>🚕</span><span id="carMapInfo">Жүргізушіні іздеу</span></div>
-            <span class="map-status" id="locationStatus">Әдепкі: Жайрем · 48.0061, 67.5964</span>
+            <span class="map-status" id="locationStatus">GPS өшірулі · Әдепкі: Жайрем · 48.0061, 67.5964</span>
+            <button class="button secondary" id="locateMe" style="position:absolute;z-index:4;right:9px;bottom:9px">GPS қосу</button>
           </div>
         </section>
         <article class="card promo">
@@ -214,6 +221,7 @@
           <div class="call-controls">
             <a class="button whatsapp" target="_blank" rel="noopener" href="https://wa.me/77478632459">WhatsApp</a>
             <button class="button secondary" data-screen="booking">Тапсырыс беру</button>
+            <button class="button secondary" data-screen="intercity">Қалааралық баға</button>
           </div>
         </article>
         <div class="quick">
@@ -255,6 +263,61 @@
         </div>
       </section>
 
+      <section id="intercityScreen" class="screen">
+        <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Қалааралық баға калькуляторы</h1></div>
+        <div class="grid grid-2">
+          <article class="card">
+            <p class="muted">Жайрем бағыттарының бастапқы бағасы. Сома — алдын ала есеп; нақты сапар бағасын жүргізуші WhatsApp-та растайды.</p>
+            <div class="field"><label for="intercityFrom">Қайдан</label><input id="intercityFrom" value="Жайрем кенті"></div>
+            <div class="field" style="margin-top:12px"><label for="intercityDestination">Қайда</label>
+              <select id="intercityDestination">
+                <option value="zhezkazgan">Жезқазған</option>
+                <option value="karaganda">Қарағанды</option>
+                <option value="astana">Астана</option>
+                <option value="custom">Өз мекенжайым</option>
+              </select>
+            </div>
+            <div class="field" id="customDestinationField" style="margin-top:12px" hidden>
+              <label for="intercityCustomDestination">Қала / мекенжай</label><input id="intercityCustomDestination" placeholder="Қала немесе мекенжай">
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label for="intercityBasePrice">Бағыттың бастапқы бағасы (₸)</label>
+              <input id="intercityBasePrice" type="number" min="1" step="100" inputmode="numeric">
+              <p class="field-help">Бағаны осы өрісте қолмен өзгертуге болады.</p>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label for="intercityService">Қызмет түрі</label>
+              <select id="intercityService">
+                <option value="passengers">Жолаушылармен бірге</option>
+                <option value="parcel">Сәлемдеме / Доставка</option>
+                <option value="cabin">Бүкіл салон</option>
+              </select>
+            </div>
+            <div class="field" id="intercityPassengersField" style="margin-top:12px">
+              <label for="intercityPassengers">Жолаушы / орын саны</label>
+              <input id="intercityPassengers" type="number" min="1" max="4" value="1" step="1" inputmode="numeric">
+            </div>
+            <div class="field" id="intercityCabinField" style="margin-top:12px" hidden>
+              <label for="intercityCabinPrice">Бүкіл салон бағасы (₸, келісілген баға)</label>
+              <input id="intercityCabinPrice" type="number" min="1" step="100" inputmode="numeric" placeholder="Әдепкі: бастапқы баға × 3">
+            </div>
+            <div class="field" style="margin-top:12px">
+              <label for="intercityBonus">Қолданатын бонус (₸)</label>
+              <input id="intercityBonus" type="number" min="0" value="0" step="1" inputmode="numeric">
+              <p class="field-help" id="intercityBonusHelp">Бонус сапар WhatsApp-та сұралған кезде жұмсалады.</p>
+            </div>
+          </article>
+          <article class="card">
+            <h2>Есеп нәтижесі</h2>
+            <div class="quote-result" id="intercityResult" aria-live="polite"></div>
+            <button class="button whatsapp full" id="intercityWhatsApp" style="margin-top:12px">Есепті WhatsApp-қа жіберу</button>
+            <a class="button full" href="https://kaspi.kz/pay" target="_blank" rel="noopener" style="margin-top:8px">Kaspi.kz арқылы төлеу</a>
+            <h3 style="margin-top:18px">Сұралған сапарлар / жеткізулер</h3>
+            <div class="list" id="intercityOrders"></div>
+          </article>
+        </div>
+      </section>
+
       <section id="driverScreen" class="screen">
         <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Жүргізуші кабинеті</h1></div>
         <div class="grid grid-2">
@@ -274,6 +337,10 @@
             </div>
           </article>
         </div>
+        <article class="card" style="margin-top:14px">
+          <h2>Бонус балансы</h2><p><strong id="driverBonusBalance">0 ₸</strong></p>
+          <p class="muted">Уақытылы әрі сапалы аяқталған әр сапарға 50 ₸ бонус. Қозғалыс «Тарих / История» бөлімінде сақталады.</p>
+        </article>
       </section>
 
       <section id="accountScreen" class="screen">
@@ -281,6 +348,10 @@
         <article class="card">
           <div class="photo-row"><img id="accountPhoto" class="photo-preview" alt="Профиль фото" hidden><div><h2 id="accountName"></h2><p id="accountStatus" class="muted"></p></div></div>
           <p id="accountRole"></p>
+          <div class="quote-result">
+            <strong>Бонус балансы: <span id="accountBonusBalance">0 ₸</span></strong>
+            <p class="muted" id="accountBonusRule">Әр аяқталған сапарға бонус есептеледі. Бонустың берілуі мен жұмсалуы тарихта көрсетіледі.</p>
+          </div>
           <button class="button primary" data-screen="profile">Профильді басқару</button>
         </article>
       </section>
@@ -292,7 +363,7 @@
             <div class="field"><label for="profileName">Аты-жөні</label><input id="profileName"></div>
             <div class="field"><label for="profilePhone">Телефон</label><input id="profilePhone" type="tel"></div>
           </div>
-          <div class="field" style="margin-top:12px"><label for="profilePhoto">Профиль фотосы</label><input id="profilePhoto" type="file" accept="image/*" capture="environment"></div>
+          <div class="field" style="margin-top:12px"><label for="profilePhoto">Профиль фотосы</label><p class="field-help">Камера/галерея осы профиль суретін таңдау үшін ғана қолданылады.</p><input id="profilePhoto" type="file" accept="image/*" capture="environment"></div>
           <button class="button primary" id="saveProfile" style="margin-top:12px">Сақтау</button>
           <div style="margin-top:18px"><h3>Рейтинг: <span id="profileRating">★ 0,0</span></h3><p id="profileLevel" class="muted"></p></div>
           <div id="passengerRatingBox">
@@ -307,6 +378,7 @@
       <section id="chatScreen" class="screen">
         <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Жолаушы мен жүргізуші чаты</h1></div>
         <article class="card">
+          <p class="field-help">🎙️ Микрофон тек осы батырманы басып, рұқсат бергенде дауысты мәтінге айналдыру үшін қолданылады.</p>
           <div class="chat" id="chatMessages"></div>
           <div class="chat-tools">
             <input id="chatInput" placeholder="Хабарлама жазу">
@@ -324,8 +396,9 @@
       <section id="historyScreen" class="screen">
         <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Тарих / История</h1></div>
         <article class="card">
-          <div class="tabs"><button class="active" data-history-tab="trips">Сапарлар және төлемдер</button><button data-history-tab="thanks">Алғыстар</button><button data-history-tab="violations">Ереже бұзушылықтар</button></div>
+          <div class="tabs"><button class="active" data-history-tab="trips">Сапарлар және төлемдер</button><button data-history-tab="bonuses">Бонустар</button><button data-history-tab="thanks">Алғыстар</button><button data-history-tab="violations">Ереже бұзушылықтар</button></div>
           <div id="historyTrips" class="list"></div>
+          <div id="historyBonuses" class="list" hidden></div>
           <div id="historyThanks" class="list" hidden></div>
           <div id="historyViolations" class="list" hidden></div>
         </article>
@@ -339,6 +412,7 @@
       <section id="aiScreen" class="screen">
         <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>AI-көмекші</h1></div>
         <article class="card">
+          <p class="field-help">Микрофон сұрақты дауыспен енгізуге ғана қажет; рұқсат бермесеңіз, мәтінді қолмен жазыңыз.</p>
           <div class="chat" id="aiMessages"><div class="message">Сәлеметсіз бе! Жайрем тарифі, Kaspi төлемі, құжаттар және бағыттар туралы сұраңыз.</div></div>
           <div class="chat-tools"><input id="aiInput" placeholder="Сұрағыңызды жазыңыз"><button class="icon-btn" id="micAi">🎙️</button><button class="icon-btn" id="sendAi">➤</button><button class="icon-btn" id="speakAi">🔊</button></div>
         </article>
@@ -365,6 +439,47 @@
           <div class="settings-row"><strong>Қаріп өлшемі</strong><select id="fontSelect"><option value="14px">Кішкентай</option><option value="16px" selected>Орташа</option><option value="18px">Үлкен</option></select></div>
           <button class="button primary" id="saveSettings" style="margin-top:12px">Дизайнды сақтау</button>
         </article>
+        <article class="card" style="margin-top:14px">
+          <h2>Құқықтық ақпарат және деректер</h2>
+          <div class="call-controls">
+            <button class="button" data-screen="privacy">Құпиялылық саясаты</button>
+            <button class="button" data-screen="terms">Пайдалану шарттары</button>
+            <button class="button danger" id="deleteAccount">Деректер мен аккаунтты өшіру</button>
+          </div>
+          <h3 style="margin-top:18px">Құрылғы рұқсаттары</h3>
+          <div class="list">
+            <div class="list-item"><strong>Геолокация</strong><span>GPS сапарды картада көрсету және жүргізушіге бағытты беру үшін ғана қолданылады. Рұқсат бермесеңіз, Жайремнің әдепкі орны пайдаланылады.</span></div>
+            <div class="list-item"><strong>Камера / суреттер</strong><span>Профиль фотосы және жүргізуші құжаттарының суреттері үшін. Файл таңдау кезінде браузердің камера/сурет рұқсаты сұралуы мүмкін.</span></div>
+            <div class="list-item"><strong>Микрофон</strong><span>Чатқа немесе AI-көмекшіге дауыспен мәтін енгізу үшін ғана; браузер рұқсаты әр іске қосқанда сұралуы мүмкін.</span></div>
+          </div>
+        </article>
+      </section>
+
+      <section id="privacyScreen" class="screen">
+        <div class="screen-head"><button class="icon-btn" data-screen="settings">←</button><h1>Құпиялылық саясаты</h1></div>
+        <article class="card">
+          <p class="muted">Соңғы жаңарту: 2026 жылғы 21 қараша</p>
+          <h2>Қандай деректер өңделеді</h2>
+          <p>Қолданба профиль аты-жөнін, телефон нөмірін, рөлді, жүргізуші енгізген көлік/құжат деректері мен фотоларын, GPS координаттарын, тапсырыстарды, төлем күйін, чат пен рейтингті және бонус қозғалысын өңдеуі мүмкін.</p>
+          <h2>Сақтау және бөлісу</h2>
+          <p>Осы веб-нұсқада деректер осы құрылғының браузеріндегі жергілікті жадта сақталады; серверге синхрондау қарастырылмаған. WhatsApp-қа жібергенде хабарлама мазмұны WhatsApp-қа, ал Kaspi төлемі Kaspi.kz қызметіне беріледі және олардың өз саясаты қолданылады. Сыртқы қызметтерге жіберілетін ақпаратты тексеріңіз.</p>
+          <h2>Рұқсаттар мен таңдау</h2>
+          <p>GPS тек карта/бағыт үшін, камера немесе суреттер профиль/жүргізуші құжаттары үшін, микрофон дауысты мәтінге енгізу үшін пайдаланылады. Рұқсатты бермеу осы функцияны шектейді, бірақ қолмен мекенжай енгізуге болады.</p>
+          <h2>Сақтау мерзімі және өшіру</h2>
+          <p>Жергілікті жазбалар браузер жадында өшірілгенге дейін қалады. «Баптаулар → Деректер мен аккаунтты өшіру» пәрмені қолданбаның осы браузердегі деректерін жояды. Бұл әрекет WhatsApp немесе Kaspi-де бұрын жіберілген деректерді жоймайды.</p>
+          <p class="field-help">Жария өндірістік қолданбаға енгізер алдында деректерді бақылаушының заңды атауы, байланыс деректері, нақты өңдеу/сақтау мерзімі және шағым беру тәсілі көрсетілген ресми саясатпен толықтырыңыз.</p>
+        </article>
+      </section>
+
+      <section id="termsScreen" class="screen">
+        <div class="screen-head"><button class="icon-btn" data-screen="settings">←</button><h1>Пайдалану шарттары</h1></div>
+        <article class="card">
+          <p>Қолданбаны пайдалану арқылы сіз енгізген ақпараттың дұрыстығына және құрылғы рұқсаттарын өз таңдауыңызбен беруге жауаптысыз. Жүргізуші сапар/жеткізу шартын, мерзімін және соңғы бағасын WhatsApp-та жолаушымен келіседі.</p>
+          <p>Қалааралық калькулятор тек бастапқы бағалау береді; бағыт, қолжетімді орын, жеткізу және түпкілікті сома жүргізушімен расталады. Бонус — осы нұсқада жергілікті түрде есептелетін бағдарлама; оны қолма-қол ақшаға айырбастауға болмайды және ол тек пайдаланушы растаған жеңілдікке қолданылады.</p>
+          <p>Жайрем ішіндегі стандартты сапар тарифі өзгеріссіз: 400 ₸ (350 ₸ жүргізушіге, 50 ₸ әкімшіге). Төлем Kaspi арқылы немесе әкімшімен WhatsApp-та келісіліп, қолданбада бөлек расталады.</p>
+          <p>Қолданба осы нұсқада демонстрациялық жергілікті веб-қызмет: SMS растауы мен аккаунттар серверлік тексеруден өтпейді. Қолданба заңсыз, алдамшы немесе басқа адамның құқықтарын бұзатын мақсатта пайдаланылмауы керек.</p>
+          <p class="field-help">Бұл ақпараттық шарттар үлгісі. Қызметтің нақты иесі, төлем қайтару тәртібі, жауапкершілік және қолдау байланысы production жарияланымына дейін заңгермен тексерілуі қажет.</p>
+        </article>
       </section>
     </main>
   </div>
@@ -383,6 +498,8 @@
     "use strict";
     const ADMIN_PHONE = "+77478632459";
     const PRICE = 400, DRIVER_SHARE = 350, ADMIN_SHARE = 50;
+    const INTERCITY_RATES = { zhezkazgan:6000, karaganda:15000, astana:25000, custom:6000 };
+    const BONUS_REWARDS = { passenger:20, driver:50 };
     const DEFAULT_LOCATION = { lat:48.0061, lng:67.5964 };
     const $ = (s, p=document) => p.querySelector(s);
     const $$ = (s, p=document) => [...p.querySelectorAll(s)];
@@ -446,9 +563,10 @@
     function fileToDataUrl(file) {
       return new Promise((resolve,reject)=>{
         if(!file)return resolve("");
+        if(file.type&&!file.type.startsWith("image/"))return reject(new Error("Тек сурет файлдарын таңдауға болады."));
         const reader=new FileReader();
         reader.onload=()=>resolve(String(reader.result));
-        reader.onerror=reject;
+        reader.onerror=()=>reject(new Error("Сурет файлын оқу мүмкін болмады."));
         reader.readAsDataURL(file);
       });
     }
@@ -462,15 +580,48 @@
       if(user.role==="driver")return "Тексерілген жүргізуші";
       return ratingFor(user)>=4.5?"Сенімді жолаушы":"Жаңа қатысушы";
     }
+    function bonusBalance(user=account) {
+      const value=user?.bonusBalances?user.bonusBalances[user.role]:user?.bonusBalance;
+      return Math.max(0,Math.floor(Number(value)||0));
+    }
+    function recordBonusMovement(type,amount,reason,orderId) {
+      if(!account||!["earned","spent"].includes(type)||!Number.isInteger(amount)||amount<=0)return false;
+      const current=bonusBalance(account);
+      if(type==="spent"&&amount>current)return false;
+      const balanceAfter=current+(type==="earned"?amount:-amount);
+      const movements=store.get("zhairemBonusHistory",[]);
+      movements.unshift({id:"B-"+Date.now(),accountId:account.id,role:account.role,type,amount,reason,orderId,time:new Date().toISOString(),balanceAfter});
+      store.set("zhairemBonusHistory",movements.slice(0,200));
+      account.bonusBalances={...(account.bonusBalances||{}),[account.role]:balanceAfter};
+      account.bonusBalance=balanceAfter;
+      store.set("zhairemAccount",account);
+      renderHistory();
+      updateAccountUi();
+      renderIntercityQuote();
+      addNotification((type==="earned"?"Бонус берілді: +":"Бонус жұмсалды: −")+amount+" ₸");
+      return true;
+    }
     function updateAccountUi() {
       account=store.get("zhairemAccount",null);
       if(!account){showScreen("auth");$("#bottomNav").hidden=true;return;}
+      if(!account.bonusBalances)account.bonusBalances={[account.role]:Math.max(0,Math.floor(Number(account.bonusBalance)||0))};
+      if(!Object.prototype.hasOwnProperty.call(account.bonusBalances,account.role))account.bonusBalances[account.role]=0;
+      account.bonusBalance=bonusBalance(account);
+      store.set("zhairemAccount",account);
       $("#bottomNav").hidden=false;
       $("#drawerName").textContent=account.name;
       $("#drawerStatus").textContent=statusFor(account)+" · ★ "+ratingFor(account).toFixed(1);
       $("#accountName").textContent=account.name;
       $("#accountStatus").textContent=statusFor(account)+" · ★ "+ratingFor(account).toFixed(1);
       $("#accountRole").textContent=account.role==="driver"?"Рөл: Жүргізуші":"Рөл: Жолаушы";
+      $("#accountBonusBalance").textContent=account.bonusBalance+" ₸";
+      $("#accountBonusRule").textContent=account.role==="driver"
+        ?"Уақытылы әрі сапалы аяқталған әр сапарға 50 ₸ бонус."
+        :"Әр сәтті аяқталған сапарға 20 ₸ бонус.";
+      $("#driverBonusBalance").textContent=account.bonusBalance+" ₸";
+      $("#intercityBonus").max=String(account.bonusBalance);
+      $("#intercityBonusHelp").textContent="Қолжетімді бонус: "+account.bonusBalance+" ₸. Сұралған жеңілдік сапар/жеткізу аяқталғаны расталғанда ғана есептен алынады.";
+      renderIntercityOrders();
       $("#profileName").value=account.name||"";
       $("#profilePhone").value=account.phone||"";
       $("#rideName").value=account.name||"";
@@ -478,6 +629,8 @@
       $("#passengerMapName").textContent=account.name+" · "+(account.location||"Жайрем");
       if(account.photo){
         $("#accountPhoto").src=account.photo;$("#accountPhoto").hidden=false;
+      }else{
+        $("#accountPhoto").removeAttribute("src");$("#accountPhoto").hidden=true;
       }
       $("#profileRating").textContent="★ "+ratingFor(account).toFixed(1);
       $("#profileLevel").textContent="Мәртебе: "+statusFor(account);
@@ -500,7 +653,7 @@
       $("#themeSelect").value=settings.theme;$("#accentSelect").value=settings.accent;$("#fontSelect").value=settings.font;
     }
     function startLocation() {
-      if(!navigator.geolocation){$("#locationStatus").textContent="GPS қолжетімсіз · Жайрем әдепкі орны";return;}
+      if(!navigator.geolocation){$("#locationStatus").textContent="GPS қолжетімсіз · Жайрем әдепкі орны";toast("Бұл браузер GPS-ті қолдамайды. Жайремнің әдепкі орны қолданылады.");return;}
       const success=pos=>{
         geoLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
         store.set("zhairemLocation",geoLocation);
@@ -513,8 +666,20 @@
           $("#passengerMapName").textContent=account.name+" · GPS";
         }
       };
-      const error=()=>{$("#locationStatus").textContent="GPS рұқсат жоқ · Жайрем: 48.0061, 67.5964";};
-      locationWatch=navigator.geolocation.watchPosition(success,error,{enableHighAccuracy:true,timeout:10000,maximumAge:5000});
+      const error=err=>{
+        const reason=err.code===1?"Рұқсат берілмеді":err.code===2?"Орналасқан жер анықталмады":"GPS жауабы күтілген уақытта келмеді";
+        $("#locationStatus").textContent=reason+" · Жайрем әдепкі орны";
+        $("#homeStatus").textContent="GPS қолжетімсіз";
+        toast(reason+". Мекенжайды қолмен енгізе аласыз.");
+      };
+      try{
+        if(locationWatch!==null)navigator.geolocation.clearWatch(locationWatch);
+        locationWatch=navigator.geolocation.watchPosition(success,error,{enableHighAccuracy:true,timeout:10000,maximumAge:5000});
+        $("#locationStatus").textContent="GPS рұқсаты күтілуде…";
+      }catch(error){
+        $("#locationStatus").textContent="GPS іске қосылмады · Жайрем әдепкі орны";
+        toast("GPS іске қосылмады: "+(error.message||"браузер рұқсат бермеді."));
+      }
     }
     function startMovingCar() {
       const car=$("#carPoint");
@@ -550,11 +715,161 @@
         el.innerHTML=`<strong>${escapeHtml(t.from)} → ${escapeHtml(t.to)}</strong><span>${new Date(t.createdAt).toLocaleString("kk-KZ")} · 400 ₸ (350 ₸ / 50 ₸) · ${escapeHtml(t.status)}</span><span>Төлем: ${escapeHtml(t.payment)}</span>`;
         $("#historyTrips").appendChild(el);
       });
-      if(!trips.length)$("#historyTrips").innerHTML='<div class="muted">Сапар тарихы жоқ.</div>';
+      const intercityTrips=store.get("zhairemIntercityTrips",[]).filter(t=>t.accountId===account?.id&&t.role===account?.role);
+      intercityTrips.forEach(t=>{
+        const el=document.createElement("div");el.className="list-item";
+        const status=t.status==="completed"?"Аяқталды":"WhatsApp-та сұралды";
+        el.innerHTML=`<strong>${escapeHtml(t.from)} → ${escapeHtml(t.to)}</strong><span>${new Date(t.createdAt).toLocaleString("kk-KZ")} · ${escapeHtml(t.serviceName)} · ${escapeHtml(status)}</span><span>${escapeHtml(t.gross)} ₸ − ${escapeHtml(t.bonus)} ₸ бонус = ${escapeHtml(t.net)} ₸</span>`;
+        $("#historyTrips").appendChild(el);
+      });
+      if(!trips.length&&!intercityTrips.length)$("#historyTrips").innerHTML='<div class="muted">Сапар тарихы жоқ.</div>';
       const thanks=store.get("zhairemThanks",[]);
       $("#historyThanks").innerHTML=thanks.map(x=>`<div class="list-item"><strong>${escapeHtml(x.text)}</strong><span>${new Date(x.time).toLocaleString("kk-KZ")}</span></div>`).join("")||'<div class="muted">Әлі алғыс жоқ.</div>';
       const violations=store.get("zhairemViolations",[]);
       $("#historyViolations").innerHTML=violations.map(x=>`<div class="list-item"><strong>${escapeHtml(x.text)}</strong><span>${new Date(x.time).toLocaleString("kk-KZ")}</span></div>`).join("")||'<div class="muted">Ереже бұзушылық жоқ.</div>';
+      const movements=store.get("zhairemBonusHistory",[]).filter(x=>x.accountId===account?.id&&(!x.role||x.role===account?.role));
+      $("#historyBonuses").innerHTML=movements.map(x=>{
+        const sign=x.type==="earned"?"+":"−";
+        const label=x.type==="earned"?"Берілуі":"Жұмсалуы";
+        return `<div class="list-item"><strong>${label}: ${sign}${escapeHtml(x.amount)} ₸</strong><span>${escapeHtml(x.reason)} · Баланс: ${escapeHtml(x.balanceAfter)} ₸</span><span>${new Date(x.time).toLocaleString("kk-KZ")}</span></div>`;
+      }).join("")||'<div class="muted">Бонус қозғалысы әзірге жоқ.</div>';
+    }
+    function renderIntercityQuote() {
+      const from=$("#intercityFrom").value.trim();
+      const destination=$("#intercityDestination").value;
+      const to=destination==="custom"?$("#intercityCustomDestination").value.trim():$("#intercityDestination").selectedOptions[0].textContent;
+      const base=Number($("#intercityBasePrice").value);
+      const service=$("#intercityService").value;
+      const quantity=Number($("#intercityPassengers").value);
+      const requestedBonus=Number($("#intercityBonus").value);
+      const balance=bonusBalance();
+      const result=$("#intercityResult");
+      const invalid=message=>{result.textContent=message;return null;};
+      if(!from||!to)return invalid("Қайдан және қайда өрістерін толтырыңыз.");
+      if(!Number.isSafeInteger(base)||base<1)return invalid("Бастапқы баға бүтін оң сан болуы керек.");
+      if(!Number.isInteger(requestedBonus)||requestedBonus<0)return invalid("Бонус сомасы бүтін, теріс емес сан болуы керек.");
+      if(requestedBonus>balance)return invalid("Енгізілген бонус баланстан артық. Қолжетімді: "+balance+" ₸.");
+      let gross,formula;
+      if(service==="passengers"){
+        if(!Number.isInteger(quantity)||quantity<1||quantity>4)return invalid("Жолаушы саны 1–4 аралығында болуы керек.");
+        gross=base*quantity;formula=`${base} ₸ × ${quantity} орын`;
+      }else if(service==="parcel"){
+        gross=Math.max(1500,Math.round(base*0.4));formula=`${base} ₸ × 40% (ең азы 1 500 ₸)`;
+      }else{
+        const negotiated=Number($("#intercityCabinPrice").value);
+        if($("#intercityCabinPrice").value.trim()&&(!Number.isSafeInteger(negotiated)||negotiated<1))return invalid("Келісілген салон бағасы бүтін оң сан болуы керек.");
+        gross=$("#intercityCabinPrice").value.trim()?negotiated:base*3;
+        formula=$("#intercityCabinPrice").value.trim()?"келісілген баға":"бастапқы баға × 3";
+      }
+      if(!Number.isSafeInteger(gross)||gross<1)return invalid("Бағаны есептеу мүмкін болмады. Енгізілген сомаларды тексеріңіз.");
+      if(requestedBonus>gross)return invalid("Қолданылатын бонус сапар бағасынан артық болмауы керек.");
+      const net=gross-requestedBonus;
+      const serviceName={passengers:"Жолаушылармен бірге",parcel:"Сәлемдеме / Доставка",cabin:"Бүкіл салон"}[service];
+      const originNote=from.toLocaleLowerCase("kk-KZ")==="жайрем кенті"?"":'<p class="field-help">Қалалардың бастапқы бағалары Жайремнен есептелген. Басқа жерден шықсаңыз, бастапқы бағаны қолмен өзгертіңіз.</p>';
+      result.innerHTML=`<p><strong>Бағыт:</strong> ${escapeHtml(from)} → ${escapeHtml(to)}</p>
+        ${originNote}
+        <p><strong>Қызмет:</strong> ${serviceName}</p>
+        <p><strong>Бастапқы ставка:</strong> ${base.toLocaleString("kk-KZ")} ₸</p>
+        <p><strong>Есеп:</strong> ${formula} = ${gross.toLocaleString("kk-KZ")} ₸</p>
+        <p><strong>Жалпы баға:</strong> ${gross.toLocaleString("kk-KZ")} ₸</p>
+        <p><strong>Бонус жеңілдігі:</strong> −${requestedBonus.toLocaleString("kk-KZ")} ₸</p>
+        <p class="quote-total">Төленетін сома: ${net.toLocaleString("kk-KZ")} ₸</p>
+        <p>Қолданылған бонус: ${requestedBonus.toLocaleString("kk-KZ")} ₸ · Қалған бонус: ${(balance-requestedBonus).toLocaleString("kk-KZ")} ₸</p>`;
+      return {from,to,base,service,serviceName,quantity:service==="passengers"?quantity:1,gross,bonus:requestedBonus,net,formula};
+    }
+    function updateIntercityDestination() {
+      const destination=$("#intercityDestination").value;
+      $("#customDestinationField").hidden=destination!=="custom";
+      $("#intercityBasePrice").value=String(INTERCITY_RATES[destination]);
+      renderIntercityQuote();
+    }
+    function updateIntercityService() {
+      const service=$("#intercityService").value;
+      $("#intercityPassengersField").hidden=service!=="passengers";
+      $("#intercityCabinField").hidden=service!=="cabin";
+      renderIntercityQuote();
+    }
+    function sendIntercityQuote() {
+      const quote=renderIntercityQuote();
+      if(!quote){toast($("#intercityResult").textContent);return;}
+      const message=[
+        "ZHAIREM TAXI — ҚАЛААРАЛЫҚ САПАР ЕСЕБІ",
+        `Қайдан: ${quote.from}`,
+        `Қайда: ${quote.to}`,
+        `Аты: ${account?.name||"Қолданушы"}`,
+        `Телефон: ${account?.phone||"көрсетілмеген"}`,
+        `Қызмет: ${quote.serviceName}`,
+        quote.service==="passengers"?`Жолаушы / орын саны: ${quote.quantity}`:null,
+        `Бастапқы ставка: ${quote.base} ₸`,
+        `Есеп: ${quote.formula} = ${quote.gross} ₸`,
+        `Жалпы баға: ${quote.gross} ₸`,
+        `Сұралған бонус жеңілдігі: −${quote.bonus} ₸ (сапар аяқталғаны расталғанда қолданылады)`,
+        `Төленетін сома: ${quote.net} ₸`,
+        "Баға мен бағытты растауыңызды сұраймын."
+      ].filter(Boolean).join("\n");
+      const whatsappUrl="https://wa.me/"+ADMIN_PHONE.replace(/\D/g,"")+"?text="+encodeURIComponent(message);
+      let popup;
+      try{
+        popup=window.open("about:blank","_blank");
+        if(!popup){toast("WhatsApp ашылмады. Браузердің қалқымалы терезелерге рұқсатын қосыңыз.");return;}
+        popup.opener=null;
+        popup.location.href=whatsappUrl;
+      }catch(error){
+        if(popup)popup.close();
+        toast("WhatsApp ашылмады: "+(error.message||"браузер рұқсат бермеді."));
+        return;
+      }
+      const orders=store.get("zhairemIntercityTrips",[]);
+      orders.unshift({...quote,id:"IC-"+Date.now(),accountId:account?.id||null,role:account?.role||null,status:"requested",createdAt:new Date().toISOString()});
+      store.set("zhairemIntercityTrips",orders.slice(0,100));
+      renderIntercityOrders();
+      renderHistory();
+      toast("Қалааралық есеп WhatsApp-қа дайындалды.");
+    }
+    function renderIntercityOrders() {
+      const box=$("#intercityOrders");
+      const orders=store.get("zhairemIntercityTrips",[]).filter(order=>order.accountId===account?.id&&order.role===account?.role);
+      box.innerHTML="";
+      if(!orders.length){box.innerHTML='<div class="muted">Әзірге сұралған сапар немесе жеткізу жоқ.</div>';return;}
+      orders.forEach(order=>{
+        const item=document.createElement("div");item.className="list-item";
+        const title=document.createElement("strong");
+        title.textContent=order.from+" → "+order.to;
+        const detail=document.createElement("span");
+        detail.textContent=order.serviceName+" · "+order.net.toLocaleString("kk-KZ")+" ₸ · "+(order.status==="completed"?"Аяқталды":"WhatsApp-та сұралды");
+        item.append(title,detail);
+        if(order.status==="requested"){
+          const button=document.createElement("button");button.className="button primary full";button.type="button";
+          button.dataset.completeIntercity=order.id;button.textContent="Сапар / жеткізу аяқталды";
+          item.appendChild(button);
+        }
+        box.appendChild(item);
+      });
+    }
+    function completeIntercityOrder(id) {
+      if(!account){toast("Бонусты тіркеу үшін аккаунтқа кіріңіз.");return;}
+      const orders=store.get("zhairemIntercityTrips",[]);
+      const order=orders.find(item=>item.id===id);
+      if(!order||order.status!=="requested"||order.accountId!==account.id||order.role!==account.role){
+        toast("Бұл сапар осы аккаунтқа тиесілі емес немесе бұрын аяқталған.");
+        return;
+      }
+      if(order.bonus>bonusBalance(account)){
+        toast("Бонус балансы жеткіліксіз. Қолжетімді: "+bonusBalance(account)+" ₸.");
+        return;
+      }
+      if(!window.confirm("Сапар немесе жеткізу аяқталғанын растайсыз ба? Қолданылған бонус есептен алынып, аяқталған сапар бонусы қосылады."))return;
+      order.status="completed";order.completedAt=new Date().toISOString();
+      store.set("zhairemIntercityTrips",orders);
+      $("#intercityBonus").value="0";
+      if(order.bonus>0&&!recordBonusMovement("spent",order.bonus,"Қалааралық сапарға жеңілдік",order.id)){
+        order.status="requested";delete order.completedAt;store.set("zhairemIntercityTrips",orders);
+        toast("Бонусты есептен шығару мүмкін болмады. Балансыңызды тексеріңіз.");
+        return;
+      }
+      recordBonusMovement("earned",BONUS_REWARDS[account.role],"Аяқталған қалааралық сапар / жеткізу",order.id);
+      renderIntercityOrders();renderHistory();
+      toast("Сапар аяқталды. Бонус қозғалысы тарихқа сақталды.");
     }
     function renderDriverOrder() {
       const box=$("#driverOrder");
@@ -583,7 +898,12 @@
     }
     function completeRide() {
       if(!currentOrder)return;
-      updateCurrentOrder({status:"completed",completedAt:new Date().toISOString()});
+      if(currentOrder.bonusAwarded)return;
+      updateCurrentOrder({status:"completed",completedAt:new Date().toISOString(),bonusAwarded:true});
+      if(account&&account.role in BONUS_REWARDS){
+        const reward=BONUS_REWARDS[account.role];
+        recordBonusMovement("earned",reward,account.role==="driver"?"Уақытылы әрі сапалы аяқталған сапар":"Сәтті аяқталған сапар",currentOrder.id);
+      }
       const thanks=store.get("zhairemThanks",[]);
       thanks.unshift({text:"Сапар сәтті аяқталды · Әдептілік үшін алғыс",time:new Date().toISOString(),accountId:account?.id});
       store.set("zhairemThanks",thanks);
@@ -648,10 +968,14 @@
     function startSpeech(targetCallback) {
       const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
       if(!SpeechRecognition){toast("Бұл браузер дауыстық тануды қолдамайды.");return;}
+      if(!window.confirm("Микрофон дауысты мәтінге айналдыру үшін ғана пайдаланылады. Браузер рұқсат сұрауы мүмкін. Жалғастырасыз ба?"))return;
       const recognition=new SpeechRecognition();recognition.lang="kk-KZ";recognition.interimResults=false;
       recognition.onresult=e=>targetCallback(e.results[0][0].transcript);
-      recognition.onerror=()=>toast("Дауысты тану аяқталмады.");
-      recognition.start();
+      recognition.onerror=e=>{
+        const reason=e.error==="not-allowed"?"Микрофонға рұқсат берілмеді":e.error==="no-speech"?"Дауыс анықталмады":"Дауысты тану аяқталмады";
+        toast(reason+". Мәтінді қолмен енгізе аласыз.");
+      };
+      try{recognition.start();}catch(error){toast("Микрофон іске қосылмады: "+(error.message||"рұқсат жоқ."));}
     }
     function openGoogleSearch(query) {
       window.open("https://www.google.com/search?q="+encodeURIComponent(query),"_blank","noopener");
@@ -675,6 +999,17 @@
       $("#authInfo").classList.add("active");$("#authSms").classList.remove("active");
       btn.classList.add("primary");
     }));
+    ["authPhoto","docPhoto","licensePhoto","profilePhoto"].forEach(id=>{
+      const input=$("#"+id);
+      input.addEventListener("cancel",()=>toast("Сурет таңдалмады немесе камера/суреттерге рұқсат берілмеді. Қаласаңыз, кейін қайта көріңіз."));
+      input.addEventListener("change",()=>{
+        const file=input.files[0];
+        if(file&&file.type&&!file.type.startsWith("image/")){
+          input.value="";
+          toast("Тек сурет файлын таңдаңыз.");
+        }
+      });
+    });
     $("#sendSms").addEventListener("click",async()=>{
       const name=$("#authName").value.trim(),phone=$("#authPhone").value.trim();
       if(!name||phone.length<6){toast("Аты-жөні және телефон нөмірін толтырыңыз.");return;}
@@ -688,19 +1023,24 @@
     });
     $("#verifySms").addEventListener("click",async()=>{
       if($("#smsCode").value!==smsCode){toast("SMS-код қате.");return;}
-      const existing=store.get("zhairemAccount",null);
-      const accountData={
-        id:existing?.id||("A-"+Date.now()),role:authRole,name:$("#authName").value.trim(),phone:$("#authPhone").value.trim(),
-        location:"Жайрем кенті",photo:await fileToDataUrl($("#authPhoto").files[0]),carModel:"",carPlate:"",
-        iin:"",licenseNumber:"",documentsVerified:authRole==="driver",createdAt:new Date().toISOString()
-      };
-      if(authRole==="driver"){
-        accountData.carModel=$("#carModel").value.trim();accountData.carPlate=$("#carPlate").value.trim();
-        accountData.iin=$("#iin").value.trim();accountData.licenseNumber=$("#licenseNumber").value.trim();
-        accountData.docPhoto=await fileToDataUrl($("#docPhoto").files[0]);accountData.licensePhoto=await fileToDataUrl($("#licensePhoto").files[0]);
+      try{
+        const existing=store.get("zhairemAccount",null);
+        const accountData={
+          id:existing?.id||("A-"+Date.now()),role:authRole,name:$("#authName").value.trim(),phone:$("#authPhone").value.trim(),
+          location:"Жайрем кенті",photo:await fileToDataUrl($("#authPhoto").files[0]),carModel:"",carPlate:"",
+          iin:"",licenseNumber:"",documentsVerified:authRole==="driver",createdAt:new Date().toISOString(),
+          bonusBalances:existing?.bonusBalances||(existing?{[existing.role]:Math.max(0,Number(existing.bonusBalance)||0)}:{})
+        };
+        if(authRole==="driver"){
+          accountData.carModel=$("#carModel").value.trim();accountData.carPlate=$("#carPlate").value.trim();
+          accountData.iin=$("#iin").value.trim();accountData.licenseNumber=$("#licenseNumber").value.trim();
+          accountData.docPhoto=await fileToDataUrl($("#docPhoto").files[0]);accountData.licensePhoto=await fileToDataUrl($("#licensePhoto").files[0]);
+        }
+        store.set("zhairemAccount",accountData);account=accountData;
+        updateAccountUi();showScreen("home");toast(authRole==="driver"?"Жүргізуші тіркелді: Тексерілген жүргізуші мәртебесі берілді.":"Жолаушы тіркелді.");
+      }catch(error){
+        toast("Аккаунтты сақтау немесе суретті оқу мүмкін болмады: "+(error.message||"файлға қолжетімсіз."));
       }
-      store.set("zhairemAccount",accountData);account=accountData;
-      updateAccountUi();showScreen("home");toast(authRole==="driver"?"Жүргізуші тіркелді: Тексерілген жүргізуші мәртебесі берілді.":"Жолаушы тіркелді.");
     });
 
     $("#rideForm").addEventListener("submit",e=>{e.preventDefault();createOrder();});
@@ -746,6 +1086,7 @@
       const btn=e.target.closest("[data-history-tab]");if(!btn)return;
       $$("[data-history-tab]").forEach(b=>b.classList.toggle("active",b===btn));
       $("#historyTrips").hidden=btn.dataset.historyTab!=="trips";
+      $("#historyBonuses").hidden=btn.dataset.historyTab!=="bonuses";
       $("#historyThanks").hidden=btn.dataset.historyTab!=="thanks";
       $("#historyViolations").hidden=btn.dataset.historyTab!=="violations";
     });
@@ -765,15 +1106,69 @@
     }));
     $("#saveProfile").addEventListener("click",async()=>{
       if(!account)return;
-      account.name=$("#profileName").value.trim()||account.name;account.phone=$("#profilePhone").value.trim();
-      if($("#profilePhoto").files[0])account.photo=await fileToDataUrl($("#profilePhoto").files[0]);
-      store.set("zhairemAccount",account);updateAccountUi();toast("Профиль сақталды.");
+      try{
+        account.name=$("#profileName").value.trim()||account.name;account.phone=$("#profilePhone").value.trim();
+        if($("#profilePhoto").files[0])account.photo=await fileToDataUrl($("#profilePhoto").files[0]);
+        store.set("zhairemAccount",account);updateAccountUi();toast("Профиль сақталды.");
+      }catch(error){toast("Профильді сақтау немесе суретті оқу мүмкін болмады: "+(error.message||"файлға қолжетімсіз."));}
     });
     $("#saveSettings").addEventListener("click",()=>{
       const settings={theme:$("#themeSelect").value,accent:$("#accentSelect").value,font:$("#fontSelect").value};
       store.set("zhairemDesign",settings);applyTheme();toast("Дизайн баптаулары сақталды.");
     });
-    $("#locateMe")?.addEventListener("click",startLocation);
+    $("#locateMe").addEventListener("click",()=>{
+      if(!window.confirm("Геолокация картада орналасқан жерді көрсету және сапар бағытын жүргізушіге беру үшін қолданылады. Рұқсат бермесеңіз, Жайремнің әдепкі орны пайдаланылады. GPS-ті қосасыз ба?"))return;
+      startLocation();
+    });
+    $("#intercityDestination").addEventListener("change",updateIntercityDestination);
+    $("#intercityService").addEventListener("change",updateIntercityService);
+    ["intercityFrom","intercityCustomDestination","intercityBasePrice","intercityPassengers","intercityCabinPrice","intercityBonus"].forEach(id=>{
+      $("#"+id).addEventListener("input",renderIntercityQuote);
+    });
+    $("#intercityWhatsApp").addEventListener("click",sendIntercityQuote);
+    $("#intercityOrders").addEventListener("click",e=>{
+      const button=e.target.closest("[data-complete-intercity]");
+      if(button)completeIntercityOrder(button.dataset.completeIntercity);
+    });
+    $("#deleteAccount").addEventListener("click",()=>{
+      if(!window.confirm("Аккаунтты және осы браузердегі барлық Zhairem Taxi деректерін біржола өшіресіз бе? Бұл әрекетті қайтару мүмкін емес."))return;
+      try{
+        if(locationWatch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(locationWatch);
+        for(let i=localStorage.length-1;i>=0;i--){
+          const key=localStorage.key(i);
+          if(key&&key.startsWith("zhairem"))localStorage.removeItem(key);
+        }
+        account=null;currentOrder=null;locationWatch=null;
+        smsCode="";lastAiAnswer="";
+        geoLocation={...DEFAULT_LOCATION};
+        ["authName","carModel","carPlate","iin","docPhoto","licenseNumber","licensePhoto","authPhoto","rideName","ridePhone","rideTo","intercityCustomDestination","intercityCabinPrice","profileName","profilePhone","profilePhoto","chatInput","aiInput"].forEach(id=>$("#"+id).value="");
+        $("#authPhone").value="+7 ";
+        $("#rideFrom").value="Жайрем кенті";
+        $("#intercityFrom").value="Жайрем кенті";
+        $("#intercityDestination").value="zhezkazgan";
+        $("#intercityService").value="passengers";
+        $("#intercityPassengers").value="1";
+        $("#intercityBonus").value="0";
+        $("#rideComment").value="";
+        $("#accountPhoto").removeAttribute("src");$("#accountPhoto").hidden=true;
+        $("#accountName").textContent="";$("#accountStatus").textContent="";$("#accountRole").textContent="";
+        $("#accountBonusBalance").textContent="0 ₸";$("#driverBonusBalance").textContent="0 ₸";
+        $("#drawerName").textContent="Қонақ";$("#drawerStatus").textContent="Жаңа қатысушы · ★ 0,0";
+        $("#driverName").textContent="Жүргізуші";$("#driverVehicle").textContent="";$("#driverOnline").checked=false;
+        $("#homeStatus").textContent="GPS өшірулі";
+        $("#passengerMapName").textContent="Сіздің мекенжайыңыз";
+        $("#locationStatus").textContent="GPS өшірулі · Әдепкі: Жайрем · 48.0061, 67.5964";
+        $("#driverLocationStatus").textContent="GPS бағыт күтілуде";
+        $("#driverVehicle").textContent="";
+        $("#aiMessages").innerHTML='<div class="message">Сәлеметсіз бе! Жайрем тарифі, Kaspi төлемі, құжаттар және бағыттар туралы сұраңыз.</div>';
+        renderChat();renderHistory();renderNotifications();renderIntercityOrders();updateIntercityDestination();updateIntercityService();applyTheme();
+        $("#toastWrap").innerHTML='<div class="toast">Аккаунт пен қолданба деректері осы браузерден өшірілді.</div>';
+        setTimeout(()=>{$("#toastWrap").innerHTML="";},4200);
+        updateAccountUi();
+      }catch(error){
+        toast("Деректерді өшіру мүмкін болмады: "+(error.message||"браузер жадқа рұқсат бермеді."));
+      }
+    });
 
     // Initial render
     applyTheme();
@@ -781,10 +1176,11 @@
     renderChat();
     renderHistory();
     updateAccountUi();
+    updateIntercityDestination();
+    updateIntercityService();
     currentOrder=store.get("zhairemCurrentOrder",null);
     renderDriverOrder();
     renderRideActions();
-    startLocation();
     startMovingCar();
     requestNotificationPermission();
   })();
