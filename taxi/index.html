@@ -4,6 +4,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#111315">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="manifest" href="manifest.json">
   <title>Zhairem Taxi - Жайрем такси</title>
   <style>
     :root {
@@ -50,6 +53,19 @@
     .passenger-point { left:53%; top:58%; border-color:#4a91ff; }
     .car-point { left:18%; top:23%; border-color:var(--accent); transition:left 1.2s ease,top 1.2s ease; }
     .map-status { position:absolute; z-index:3; bottom:9px; left:9px; border-radius:999px; background:#111315dd; padding:7px 10px; color:var(--muted); font-size:.72rem; }
+    .network-indicator { display:inline-flex; align-items:center; gap:6px; min-height:36px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--muted); padding:7px 10px; font-size:.72rem; font-weight:800; }
+    .network-indicator:before { content:""; width:8px; height:8px; border-radius:50%; background:#50df78; }
+    .network-indicator.offline:before { background:#ff6961; }
+    .offline-map { position:absolute; z-index:1; inset:0; width:100%; height:100%; }
+    .offline-map text { fill:#cbd1c8; font-size:10px; font-family:system-ui,sans-serif; }
+    .gps-grid { stroke:#5d665f; stroke-width:.7; opacity:.35; }
+    .gps-route { stroke:#c1f11d; stroke-width:3; fill:none; stroke-dasharray:7 5; }
+    .gps-current { fill:#4a91ff; stroke:#dcecff; stroke-width:2; }
+    .gps-target { fill:#c1f11d; stroke:#111315; stroke-width:2; }
+    .nav-readout { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin:10px 0; }
+    .nav-readout div { border:1px solid var(--line); border-radius:12px; background:var(--surface2); padding:9px; }
+    .nav-readout strong,.nav-readout span { display:block; }
+    .nav-readout span { color:var(--muted); font-size:.72rem; }
     .promo { display:flex; justify-content:space-between; align-items:center; gap:12px; margin-top:12px; border:1px solid #414a2d; border-radius:16px; background:radial-gradient(circle at 90% 0,#c1f11d20,transparent 35%),var(--surface); padding:14px; }
     .promo strong { color:var(--accent); }
     .quick { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-top:12px; }
@@ -140,6 +156,7 @@
       .map { height:185px; }
       .brand small { display:none; }
       .weather-reading { grid-template-columns:1fr; }
+      .nav-readout { grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
   </style>
 </head>
@@ -149,6 +166,7 @@
       <button class="icon-btn" id="openDrawer" aria-label="Мәзір">☰</button>
       <a class="brand" href="#" data-screen="home"><span class="brand-mark">ZT</span><span>Zhairem Taxi<small>Жайрем · 400 ₸</small></span></a>
       <div class="top-actions">
+        <span class="network-indicator" id="networkIndicator">Онлайн + GPS спутник</span>
         <button class="icon-btn" id="openNotifications" aria-label="Хабарламалар">🔔</button>
       </div>
     </header>
@@ -235,6 +253,15 @@
             <span class="badge" id="homeStatus">GPS күтілуде</span>
           </div>
           <div class="map" id="map">
+            <svg class="offline-map" id="offlineMap" viewBox="0 0 100 100" preserveAspectRatio="none" aria-label="Офлайн GPS торлы карта">
+              <line class="gps-grid" x1="0" y1="25" x2="100" y2="25"/><line class="gps-grid" x1="0" y1="50" x2="100" y2="50"/><line class="gps-grid" x1="0" y1="75" x2="100" y2="75"/>
+              <line class="gps-grid" x1="25" y1="0" x2="25" y2="100"/><line class="gps-grid" x1="50" y1="0" x2="50" y2="100"/><line class="gps-grid" x1="75" y1="0" x2="75" y2="100"/>
+              <polyline class="gps-route" id="gpsRouteLine" points="18,23 48,50"/>
+              <circle class="gps-current" id="gpsCurrentPoint" cx="18" cy="23" r="2.8"/>
+              <circle class="gps-target" id="gpsTargetPoint" cx="48" cy="50" r="3.2"/>
+              <text id="gpsCurrentLabel" x="20" y="20">GPS: Жайрем</text>
+              <text id="gpsTargetLabel" x="50" y="47">Межелі: Жайрем</text>
+            </svg>
             <div class="map-road"></div>
             <div class="map-point passenger-point" id="passengerMapPoint"><span>●</span><span id="passengerMapName">Сіздің мекенжайыңыз</span></div>
             <div class="map-point car-point" id="carPoint"><span>🚕</span><span id="carMapInfo">Жүргізушіні іздеу</span></div>
@@ -262,6 +289,21 @@
         <article class="card" style="margin-top:12px">
           <h2>AI-навигатор</h2>
           <p class="field-help">Бағыт пен сапар/жеткізу мәртебесі жолаушыға да, жүргізушіге де мәтінмен көрсетіліп, дауыс қосылса дауыстап оқылады.</p>
+          <div class="field">
+            <label for="navigationDestination">Спутниктік навигация межелі қаласы</label>
+            <select id="navigationDestination">
+              <option value="zhairem">Жайрем кенті</option>
+              <option value="zhezkazgan">Жезқазған</option>
+              <option value="karaganda">Қарағанды</option>
+              <option value="astana">Астана</option>
+            </select>
+          </div>
+          <div class="nav-readout">
+            <div><strong id="gpsLatLng">48.0061, 67.5964</strong><span>GPS широта, бойлық</span></div>
+            <div><strong id="gpsSpeed">0 км/сағ</strong><span>Жылдамдық</span></div>
+            <div><strong id="gpsHeading">—</strong><span>Қозғалыс бағыты</span></div>
+            <div><strong id="gpsDistanceEta">—</strong><span>Қашықтық / орындалу уақыты</span></div>
+          </div>
           <div class="navigator-message" id="navigatorMessage" aria-live="polite">Жайрем кенті: әдепкі бағыт · 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге).</div>
           <div class="settings-row">
             <label for="navigatorVoice">Дауыспен хабарлауды қосу/өшіру</label>
@@ -289,7 +331,7 @@
       <section id="weatherScreen" class="screen">
         <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Ауа райы болжамы</h1></div>
         <article class="card">
-          <div class="settings-row"><div><strong id="weatherMode">Дерек жүктелуде…</strong><span class="field-help" id="weatherUpdated"></span></div><button class="button primary" id="refreshWeather" type="button">Болжамды жаңарту</button></div>
+          <div class="settings-row"><div><strong id="weatherMode">Дерек жүктелуде…</strong><span class="field-help" id="weatherUpdated"></span></div><button class="button primary" id="refreshWeather" type="button">Маршрут ауа райын офлайнға жүктеу</button></div>
           <p id="weatherLocation" class="muted">Локация: Жайрем · 48.0061, 67.5964</p>
           <div id="weatherCurrent" aria-live="polite"></div>
           <h2 style="margin-top:18px">Алдағы күндер</h2>
@@ -593,6 +635,12 @@
     const INTERCITY_RATES = { zhezkazgan:6000, karaganda:15000, astana:25000, custom:6000 };
     const BONUS_REWARDS = { passenger:20, driver:50 };
     const DEFAULT_LOCATION = { lat:48.0061, lng:67.5964 };
+    const ROUTE_POINTS = {
+      zhairem:{name:"Жайрем",lat:48.0061,lng:67.5964},
+      zhezkazgan:{name:"Жезқазған",lat:47.7833,lng:67.7667},
+      karaganda:{name:"Қарағанды",lat:49.8047,lng:73.1094},
+      astana:{name:"Астана",lat:51.1694,lng:71.4491}
+    };
     const WEATHER_CACHE_KEY = "zhairemWeatherCache";
     const $ = (s, p=document) => p.querySelector(s);
     const $$ = (s, p=document) => [...p.querySelectorAll(s)];
@@ -619,6 +667,12 @@
     let weatherRequestedLocation=null;
     let weatherGpsLocationRefreshed=false;
     let weatherOfflineMode=navigator.onLine===false;
+    let navigationDestination="zhairem";
+    let gpsSpeedKmh=0;
+    let gpsHeading=null;
+    let lastNavDistance=null;
+    let lastNav25Km=Math.floor(lastNavDistance||0);
+    let navArrivalAnnounced=false;
 
     function adminCommissionPercent() {
       const value=Number(store.get("zhairemAdminCommissionPercent",10));
@@ -639,6 +693,55 @@
       const labels={0:"Ашық",1:"Көбіне ашық",2:"Ала бұлтты",3:"Бұлтты",45:"Тұман",48:"Қыраулы тұман",51:"Сіркіреме",53:"Сіркіреме",55:"Қатты сіркіреме",61:"Жаңбыр",63:"Жаңбыр",65:"Қатты жаңбыр",71:"Қар",73:"Қар",75:"Қатты қар",80:"Нөсер",81:"Нөсер",82:"Қатты нөсер",95:"Найзағай",96:"Бұршақ аралас найзағай",99:"Қатты найзағай"};
       return labels[Number(code)]||"Ауа райы";
     }
+    function haversineKm(from,to) {
+      const radians=Math.PI/180;
+      const dLat=(to.lat-from.lat)*radians;
+      const dLng=(to.lng-from.lng)*radians;
+      const lat1=from.lat*radians,lat2=to.lat*radians;
+      const a=Math.sin(dLat/2)**2+Math.sin(dLng/2)**2*Math.cos(lat1)*Math.cos(lat2);
+      return 6371*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+    }
+    function headingText(degrees) {
+      if(!Number.isFinite(degrees))return "—";
+      const names=["Солтүстік","Солтүстік-шығыс","Шығыс","Оңтүстік-шығыс","Оңтүстік","Оңтүстік-батыс","Батыс","Солтүстік-батыс"];
+      return names[Math.round(degrees/45)%8]+" · "+Math.round(degrees)+"°";
+    }
+    function updateNavigationReadout() {
+      const target=ROUTE_POINTS[navigationDestination]||ROUTE_POINTS.zhairem;
+      const distance=haversineKm(geoLocation,target);
+      lastNavDistance=distance;
+      const averageSpeed=gpsSpeedKmh>5?gpsSpeedKmh:55;
+      const etaMinutes=Math.max(0,Math.round(distance/averageSpeed*60));
+      const hours=Math.floor(etaMinutes/60),minutes=etaMinutes%60;
+      $("#gpsLatLng").textContent=geoLocation.lat.toFixed(5)+", "+geoLocation.lng.toFixed(5);
+      $("#gpsSpeed").textContent=Math.round(gpsSpeedKmh)+" км/сағ";
+      $("#gpsHeading").textContent=headingText(gpsHeading);
+      $("#gpsDistanceEta").textContent=distance.toFixed(1)+" км / "+(hours?hours+" сағ ":"")+minutes+" мин";
+      $("#gpsCurrentLabel").textContent=`GPS: ${geoLocation.lat.toFixed(4)}, ${geoLocation.lng.toFixed(4)} · ${Math.round(gpsSpeedKmh)} км/сағ`;
+      $("#gpsTargetLabel").textContent=`Межелі: ${target.name} · ${distance.toFixed(1)} км`;
+      const currentX=50+(geoLocation.lng-DEFAULT_LOCATION.lng)*1.2;
+      const currentY=50-(geoLocation.lat-DEFAULT_LOCATION.lat)*1.2;
+      const targetX=50+(target.lng-DEFAULT_LOCATION.lng)*1.2;
+      const targetY=50-(target.lat-DEFAULT_LOCATION.lat)*1.2;
+      const cx=Math.max(2,Math.min(98,currentX)),cy=Math.max(2,Math.min(98,currentY));
+      const tx=Math.max(2,Math.min(98,targetX)),ty=Math.max(2,Math.min(98,targetY));
+      $("#gpsCurrentPoint").setAttribute("cx",cx);$("#gpsCurrentPoint").setAttribute("cy",cy);
+      $("#gpsTargetPoint").setAttribute("cx",tx);$("#gpsTargetPoint").setAttribute("cy",ty);
+      $("#gpsRouteLine").setAttribute("points",cx+","+cy+" "+tx+","+ty);
+      $("#gpsCurrentLabel").setAttribute("x",Math.min(72,cx+2));$("#gpsCurrentLabel").setAttribute("y",Math.max(8,cy-3));
+      $("#gpsTargetLabel").setAttribute("x",Math.min(72,tx+2));$("#gpsTargetLabel").setAttribute("y",Math.max(8,ty-3));
+      if(distance<=2&&!navArrivalAnnounced){
+        navArrivalAnnounced=true;
+        lastNav25Km=Math.floor(distance/25);
+        updateNavigator(target.name+" межелі қаласына жақындадыңыз. Қалған қашықтық "+distance.toFixed(1)+" км.");
+      }else{
+        const crossed=Math.floor(distance/25);
+        if(crossed!==lastNav25Km){
+          lastNav25Km=crossed;
+          updateNavigator("Қалааралық бағыт жаңартылды. "+target.name+" межелі қаласына қалған қашықтық "+distance.toFixed(1)+" км.");
+        }
+      }
+    }
     function offlineWeatherEstimate(location,date=new Date()) {
       const month=date.getMonth();
       const seasonalTemperature=month===11||month<=1?-12:month>=5&&month<=7?22:month>=2&&month<=4?7:5;
@@ -658,6 +761,10 @@
       const location=Number.isFinite(geoLocation?.lat)&&Number.isFinite(geoLocation?.lng)?geoLocation:DEFAULT_LOCATION;
       const offline=navigator.onLine===false||weatherOfflineMode;
       const estimate=offlineWeatherEstimate(location);
+      const nearestRoute=cached?.routes?Object.values(cached.routes).reduce((nearest,item)=>{
+        if(!nearest)return item;
+        return haversineKm(location,item)<haversineKm(location,nearest)?item:nearest;
+      },null):null;
       $("#weatherLocation").textContent=`Локация: ${location.lat===DEFAULT_LOCATION.lat&&location.lng===DEFAULT_LOCATION.lng?"Жайрем":"GPS"} · ${location.lat.toFixed(5)}, ${location.lng.toFixed(5)}`;
       $("#homeWeatherTemp").textContent=offline?`${estimate.temperature}°`:(cached?`${Math.round(cached.current.temperature)}°`:"—°");
       $("#homeWeatherMode").textContent=offline?"Офлайн · GPS локация және кэш":cached?"Онлайн дерек":"Дерек жүктелуде…";
@@ -669,7 +776,9 @@
         :"Онлайн дерек Open-Meteo қызметінен алынады. Желіден ажырасаңыз, соңғы кэш пен GPS/маусымдық офлайн бағалау көрсетіледі.";
       const current=$("#weatherCurrent");
       current.innerHTML=offline
-        ?`<div class="quote-result"><strong>Офлайн бағалау · ${escapeHtml(estimate.season)}</strong><div class="weather-reading"><div><strong class="weather-temp">${estimate.temperature}°C</strong><span>Шамамен температура</span></div><div><strong>${escapeHtml(estimate.condition)}</strong><span>Маусымдық бағалау</span></div><div><strong>Дерек жоқ</strong><span>Жауын-шашын / жел</span></div></div></div>`
+        ?nearestRoute
+          ?`<div class="quote-result"><strong>Кэш · ең жақын маршрут нүктесі: ${escapeHtml(nearestRoute.name)}</strong><div class="weather-reading"><div><strong class="weather-temp">${Math.round(nearestRoute.current.temperature)}°C</strong><span>Кэштелген температура</span></div><div><strong>${escapeHtml(weatherCodeLabel(nearestRoute.current.weatherCode))}</strong><span>Ауа райы күйі</span></div><div><strong>${Math.round(nearestRoute.current.windSpeed)} км/сағ</strong><span>Жел · жол қауіпсіздігін тексеріңіз</span></div></div></div>`
+          :`<div class="quote-result"><strong>Офлайн бағалау · ${escapeHtml(estimate.season)}</strong><div class="weather-reading"><div><strong class="weather-temp">${estimate.temperature}°C</strong><span>Шамамен температура</span></div><div><strong>${escapeHtml(estimate.condition)}</strong><span>Маусымдық бағалау</span></div><div><strong>Жел шамамен 15 км/сағ</strong><span>Жол қауіпсіздік бағалауы: абайлап жүріңіз</span></div></div></div>`
         :cached?`<div class="quote-result"><strong>Қазір · ${escapeHtml(weatherCodeLabel(cached.current.weatherCode))}</strong><div class="weather-reading"><div><strong class="weather-temp">${Math.round(cached.current.temperature)}°C</strong><span>Температура</span></div><div><strong>${Math.round(cached.current.apparentTemperature)}°C</strong><span>Сезіледі</span></div><div><strong>${Math.round(cached.current.windSpeed)} км/сағ</strong><span>Жел</span></div></div></div>`
         :'<div class="quote-result">Онлайн болжамды алу мүмкін болмады. Офлайн бағалауды көрсету үшін «Болжамды жаңарту» батырмасын басыңыз.</div>';
       const forecast=$("#weatherForecast");
@@ -724,6 +833,18 @@
           current:{temperature:data.current.temperature_2m,apparentTemperature:data.current.apparent_temperature,humidity:data.current.relative_humidity_2m,precipitation:data.current.precipitation,weatherCode:data.current.weather_code,windSpeed:data.current.wind_speed_10m},
           daily:data.daily.time.map((date,index)=>({date,min:data.daily.temperature_2m_min[index],max:data.daily.temperature_2m_max[index],weatherCode:data.daily.weather_code[index],windSpeed:data.daily.wind_speed_10m_max[index]}))
         };
+        const routeEntries=await Promise.all(Object.entries(ROUTE_POINTS).map(async([key,point])=>{
+          const routeParams=new URLSearchParams({latitude:String(point.lat),longitude:String(point.lng),current:"temperature_2m,weather_code,wind_speed_10m",daily:"weather_code,temperature_2m_max,temperature_2m_min,wind_speed_10m_max",timezone:"auto",forecast_days:"4"});
+          const routeResponse=await fetch("https://api.open-meteo.com/v1/forecast?"+routeParams,{signal:controller.signal});
+          if(!routeResponse.ok)throw new Error(point.name+" үшін ауа райы дерегі алына алмады.");
+          const routeData=await routeResponse.json();
+          return [key,{
+            name:point.name,lat:point.lat,lng:point.lng,
+            current:{temperature:routeData.current.temperature_2m,weatherCode:routeData.current.weather_code,windSpeed:routeData.current.wind_speed_10m},
+            daily:routeData.daily.time.map((date,index)=>({date,min:routeData.daily.temperature_2m_min[index],max:routeData.daily.temperature_2m_max[index],weatherCode:routeData.daily.weather_code[index],windSpeed:routeData.daily.wind_speed_10m_max[index]}))
+          }];
+        }));
+        report.routes=Object.fromEntries(routeEntries);
         if(!Number.isFinite(report.current.temperature)||!report.daily.length)throw new Error("Ауа райы дерегінің форматы жарамсыз.");
         if(!store.set(WEATHER_CACHE_KEY,report))throw new Error("Болжамды құрылғыда кэштеу мүмкін болмады.");
         weatherOfflineMode=false;
@@ -1003,6 +1124,16 @@
         $("#driverVehicle").textContent=(account.carModel||"Көлік")+" · "+(account.carPlate||"Нөмірсіз");
       }
     }
+    function updateNetworkIndicator() {
+      const indicator=$("#networkIndicator");
+      const gpsActive=locationWatch!==null;
+      indicator.classList.toggle("offline",!navigator.onLine);
+      indicator.textContent=navigator.onLine
+        ?(gpsActive?"Онлайн + GPS спутник":"Онлайн · GPS спутнигі күтілуде")
+        :"Байланыс жоқ · Тек GPS спутниктік режим";
+      weatherOfflineMode=!navigator.onLine;
+      if(!navigator.onLine)renderWeather();
+    }
     function applyTheme() {
       const settings=store.get("zhairemDesign",{theme:"dark",accent:"#c1f11d",font:"16px"});
       const themes={
@@ -1020,7 +1151,10 @@
       if(!navigator.geolocation){updatePermissionStatus("location","unsupported");$("#locationStatus").textContent="GPS қолжетімсіз · Жайрем әдепкі орны";toast("Бұл браузер GPS-ті қолдамайды. Жайремнің әдепкі орны қолданылады.");return;}
       const success=pos=>{
         geoLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
+        gpsSpeedKmh=Number.isFinite(pos.coords.speed)?Math.max(0,pos.coords.speed*3.6):0;
+        gpsHeading=Number.isFinite(pos.coords.heading)?pos.coords.heading:gpsHeading;
         store.set("zhairemLocation",geoLocation);
+        updateNavigationReadout();
         maybeRefreshWeatherForLocation();
         updatePermissionStatus("location","granted");
         $("#locationStatus").textContent=`GPS: ${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)} · Жайрем`;
@@ -1042,6 +1176,7 @@
       try{
         if(locationWatch!==null)navigator.geolocation.clearWatch(locationWatch);
         locationWatch=navigator.geolocation.watchPosition(success,error,{enableHighAccuracy:true,timeout:10000,maximumAge:5000});
+        updateNetworkIndicator();
         updatePermissionStatus("location","prompt");
         $("#locationStatus").textContent="GPS рұқсаты күтілуде…";
       }catch(error){
@@ -1577,6 +1712,14 @@
       if(event.currentTarget.checked)speakNavigatorMessage();
       else if(window.speechSynthesis)window.speechSynthesis.cancel();
     });
+    $("#navigationDestination").addEventListener("change",event=>{
+      navigationDestination=event.currentTarget.value;
+      lastNav25Km=null;
+      navArrivalAnnounced=false;
+      updateNavigationReadout();
+      const target=ROUTE_POINTS[navigationDestination];
+      updateNavigator("Бағыт өзгертілді: Жайремнен "+target.name+" межелі қаласына. Қашықтық және GPS бағыты офлайн есептелуде.");
+    });
     $("#intercityDestination").addEventListener("change",updateIntercityDestination);
     $("#intercityService").addEventListener("change",updateIntercityService);
     ["intercityFrom","intercityCustomDestination","intercityBasePrice","intercityPassengers","intercityCabinPrice","intercityBonus"].forEach(id=>{
@@ -1588,8 +1731,8 @@
       if(button)completeIntercityOrder(button.dataset.completeIntercity);
     });
     $("#refreshWeather").addEventListener("click",refreshWeather);
-    window.addEventListener("online",()=>{weatherOfflineMode=false;refreshWeather();});
-    window.addEventListener("offline",()=>{weatherOfflineMode=true;renderWeather();});
+    window.addEventListener("online",()=>{weatherOfflineMode=false;updateNetworkIndicator();refreshWeather();});
+    window.addEventListener("offline",()=>{weatherOfflineMode=true;updateNetworkIndicator();renderWeather();});
     $("#deleteAccount").addEventListener("click",()=>{
       if(!window.confirm("Аккаунтты және осы браузердегі барлық Zhairem Taxi деректерін біржола өшіресіз бе? Бұл әрекетті қайтару мүмкін емес."))return;
       try{
@@ -1646,6 +1789,16 @@
     renderRideActions();
     renderWeather();
     refreshWeather();
+    updateNavigationReadout();
+    updateNetworkIndicator();
+    if("serviceWorker" in navigator){
+      window.addEventListener("load",()=>{
+        navigator.serviceWorker.register("./sw.js").catch(error=>{
+          console.error("Zhairem Taxi Service Worker тіркелмеді:",error);
+          toast("Офлайн кэш белсендірілмеді. Қосымша ашық тұрған кезде қайта көріңіз.");
+        });
+      });
+    }
     startMovingCar();
     if(currentOrder)announceTripStatus(false);
     if(!("speechSynthesis" in window)||typeof window.SpeechSynthesisUtterance!=="function"){

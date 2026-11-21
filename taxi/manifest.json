@@ -1,0 +1,12 @@
+{
+  "name": "Zhairem Taxi",
+  "short_name": "Zhairem Taxi",
+  "description": "Жайрем кенті және қалааралық GPS навигация қосымшасы",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#111315",
+  "theme_color": "#111315",
+  "orientation": "portrait-primary",
+  "icons": []
+}
