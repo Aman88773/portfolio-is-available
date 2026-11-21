@@ -107,6 +107,7 @@
     .hero-price span { display: block; color: #d5e0e9; font-size: .88rem; }
     .hero-price strong { display: block; margin-top: 5px; color: var(--lime); font-size: clamp(2.3rem, 5vw, 3.2rem); letter-spacing: -.06em; line-height: 1.1; }
     .hero-price small { display: block; margin-top: 7px; color: #d5e0e9; }
+    .tariff-scope { max-width: 470px; margin: 12px 0 0; color: #d5e0e9; font-size: .82rem; }
     .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
     .button {
       display: inline-flex;
@@ -214,6 +215,24 @@
     .benefits-explainer { margin-top: 15px; padding: 18px; border-radius: 17px; background: var(--ink); color: #fff; }
     .benefits-explainer h3 { margin: 0 0 7px; }
     .benefits-explainer p { margin: 0; color: #d5e0e9; font-size: .89rem; }
+    .community-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .community-card h3 { margin-bottom: 8px; }
+    .community-card p, .community-card li { color: var(--muted); font-size: .87rem; }
+    .community-card ul { display: grid; gap: 7px; margin: 10px 0 17px; padding-left: 20px; }
+    .community-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
+    .community-actions .button { flex: 1 1 180px; }
+    .driver-report { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .driver-report-total { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px; padding: 12px; border-radius: 12px; background: #f2f6f3; color: var(--muted); font-size: .85rem; }
+    .driver-report-total strong { color: var(--ink); }
+    .driver-report .button { grid-column: 1 / -1; }
+    .admin-number { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-top: 13px; padding: 12px; border-radius: 13px; background: #f2f6f3; }
+    .admin-number span { color: var(--muted); font-size: .82rem; }
+    .admin-number strong { display: block; color: var(--ink); font-size: 1rem; }
+    .admin-number .button { flex: 0 0 auto; min-height: 40px; padding: 8px 11px; font-size: .8rem; }
+    .install-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .install-step { padding: 17px; border: 1px solid var(--line); border-radius: 15px; background: #fff; }
+    .install-step h3 { margin: 0 0 8px; }
+    .install-step ol { display: grid; gap: 7px; margin: 0; padding-left: 21px; color: var(--muted); font-size: .87rem; }
     .route-points { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
     .route-point { border: 1px solid var(--line); border-radius: 14px; padding: 13px; background: #fff; }
     .route-point span { display: block; margin-bottom: 5px; font-size: 1.15rem; }
@@ -235,6 +254,7 @@
       .booking-layout { grid-template-columns: 1fr; }
       .payment-card { position: static; }
       .benefit-grid { grid-template-columns: 1fr; }
+      .community-grid { grid-template-columns: 1fr; }
       .route-points { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
     @media (max-width: 560px) {
@@ -249,6 +269,9 @@
       .route-swap { width: 34px; }
       .count-row { grid-template-columns: 1fr; }
       .payment-options { grid-template-columns: 1fr; }
+      .driver-report, .install-grid { grid-template-columns: 1fr; }
+      .driver-report-total, .driver-report .button { grid-column: auto; }
+      .admin-number { align-items: flex-start; flex-direction: column; }
       .footer { flex-direction: column; }
     }
     @media (prefers-reduced-motion: reduce) {
@@ -264,7 +287,7 @@
         <span class="brand-mark" aria-hidden="true">↗</span>
         <span>jairem taxi<small data-i18n="brandSubtitle">Жайрем ішіндегі сапар</small></span>
       </a>
-      <nav class="language" aria-label="Тіл / Язык" data-i18n-aria-label="languageLabel">
+      <nav class="language" aria-label="Тілді таңдау" data-i18n-aria-label="languageLabel">
         <button type="button" data-language="kk" aria-pressed="true">ҚАЗ</button>
         <button type="button" data-language="ru" aria-pressed="false">РУС</button>
       </nav>
@@ -284,6 +307,7 @@
         <span data-i18n="fixedPrice">Жайрем кенті ішінде</span>
         <strong>400 ₸</strong>
         <small data-i18n="perRide">бір сапар үшін · тұрақты тариф</small>
+        <p class="tariff-scope" data-i18n="tariffScope">Бұл тариф тек Жайрем кенті ішіндегі сапарларға қолданылады. Кенттен тыс бағыттың бағасы бөлек келісіледі.</p>
       </div>
     </section>
 
@@ -300,7 +324,7 @@
         <form class="card" id="rideForm">
           <h3 data-i18n="routeTitle">Бағыт пен уақыт</h3>
           <p class="card-intro" data-i18n="routeIntro">Қайдан және қайда барасыз? Дайын нүктені таңдаңыз немесе өзіңіз жазыңыз.</p>
-          <div class="route-line" role="group" aria-label="Бағыт / Маршрут" data-i18n-aria-label="routeGroupLabel">
+          <div class="route-line" role="group" aria-label="Сапар бағыты" data-i18n-aria-label="routeGroupLabel">
             <div class="field">
               <label for="from" data-i18n="fromLabel">Қайдан</label>
               <input id="from" name="from" list="places" autocomplete="street-address" placeholder="Мысалы: Орталық алаң" data-i18n-placeholder="fromPlaceholder" required>
@@ -389,6 +413,10 @@
               <a class="button secondary" href="https://kaspi.kz/" target="_blank" rel="noopener noreferrer" data-i18n="openKaspi">Kaspi.kz ашу</a>
             </div>
           </div>
+          <div class="admin-number">
+            <span><span data-i18n="adminKaspiNumber">Әкімшінің Kaspi аударым нөмірі</span><strong>+77478632459</strong></span>
+            <button type="button" class="button secondary" id="copyAdminNumber" data-i18n="copyAdminNumber">Нөмірді көшіру</button>
+          </div>
           <div class="qr-note">
             <div class="qr-placeholder" aria-hidden="true">K</div>
             <p><strong data-i18n="qrHonestTitle">Нақты QR-кодты төлем алушыдан алыңыз</strong><span data-i18n="qrHonestCopy">Алушының Kaspi QR-коды берілмегендіктен, мұнда төлем коды көрсетілмейді. Жүргізушінің QR-кодын сканерлеп, жоғарыдағы соманы енгізіңіз.</span></p>
@@ -449,6 +477,54 @@
         </div>
       </section>
 
+      <section aria-labelledby="communityTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="communityEyebrow">ЖАЙРЕМ TAXI ҚАУЫМДАСТЫҒЫ</p>
+            <h2 id="communityTitle" data-i18n="communityTitle">Әкімші, жүргізушілер және тұрғындар бір топта</h2>
+            <p data-i18n="communityIntro">Топқа қосылып, сапар туралы хабарламаны толтырғаннан кейін бір түртумен көшіріп, топқа жіберіңіз.</p>
+          </div>
+        </div>
+        <div class="community-grid">
+          <article class="card community-card">
+            <h3 data-i18n="groupRulesTitle">Жайрем Taxi тобының ережесі</h3>
+            <p data-i18n="groupRulesIntro">Топтағы тәртіп пен жеке деректерді қорғау үшін:</p>
+            <ul>
+              <li data-i18n="groupRule1">Тек Жайрем ішіндегі такси сапары мен жүргізушіге қатысты хабарлама жазыңыз.</li>
+              <li data-i18n="groupRule2">Бағытты, уақытты және байланыс нөмірін анық көрсетіңіз; өзге адамның нөмірін рұқсатсыз жарияламаңыз.</li>
+              <li data-i18n="groupRule3">Әдеп сақтаңыз, жарнама мен қайталанған хабарламаны жібермеңіз; әкімшінің нұсқауын орындаңыз.</li>
+            </ul>
+            <div class="community-actions">
+              <a class="button whatsapp" id="groupLink" href="https://chat.whatsapp.com/ZhairemTaxiGroup" target="_blank" rel="noopener noreferrer" data-i18n="joinGroup">Топқа қосылу</a>
+              <button type="button" class="button secondary" id="copyGroupOrder" data-i18n="copyGroupOrder">Толтырылған тапсырысты топқа көшіру</button>
+            </div>
+            <p class="muted-note" data-i18n="groupCopyHint">Алдымен тапсырыс пішінін толтырыңыз. Хабарлама көшірілген соң топты ашып, оны өзіңіз жібересіз.</p>
+          </article>
+          <article class="card community-card">
+            <h3 data-i18n="driverReportTitle">Жүргізушінің бүгінгі есебі</h3>
+            <p class="card-intro" data-i18n="driverReportIntro">Сапар санын тек Жайрем ішіндегі 400 ₸ тарифпен жүрілген сапар бойынша енгізіңіз. Кенттен тыс сапар бөлек келісіледі.</p>
+            <form id="driverReportForm">
+              <div class="driver-report">
+                <div class="field">
+                  <label for="driverReportName" data-i18n="driverReportName">Жүргізушінің аты</label>
+                  <input id="driverReportName" name="driverName" autocomplete="name" required data-i18n-placeholder="driverReportNamePlaceholder" placeholder="Атыңыз">
+                </div>
+                <div class="field">
+                  <label for="driverTodayTrips" data-i18n="driverTodayTrips">Бүгінгі сапар саны</label>
+                  <input id="driverTodayTrips" name="todayTrips" type="number" min="0" step="1" inputmode="numeric" value="0" required>
+                </div>
+                <div class="driver-report-total" aria-live="polite">
+                  <span data-i18n="adminTransferDue">Әкімшіге аударылатын үлес</span>
+                  <strong id="adminTransferTotal">0 ₸</strong>
+                </div>
+                <p class="muted-note" id="driverReportBreakdown" data-i18n="driverReportBreakdown">Жүргізушіге: 0 ₸ · әкімшіге: 0 ₸</p>
+                <button type="submit" class="button whatsapp" data-i18n="sendDriverReport">Есепті әкімшіге WhatsApp-пен жіберу</button>
+              </div>
+            </form>
+          </article>
+        </div>
+      </section>
+
       <section aria-labelledby="placesTitle">
         <div class="section-heading">
           <div>
@@ -505,6 +581,34 @@
         </div>
       </section>
 
+      <section aria-labelledby="installTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="installEyebrow">ТЕЛЕФОНҒА САҚТАУ</p>
+            <h2 id="installTitle" data-i18n="installTitle">Басты экранға қосымша сияқты сақтаңыз</h2>
+            <p data-i18n="installIntro">Бетті телефон браузерінде ашып, төмендегі қадамдарды орындаңыз. Бұл — сайтқа сілтеме, интернетпен ашылады.</p>
+          </div>
+        </div>
+        <div class="install-grid">
+          <article class="install-step">
+            <h3 data-i18n="iphoneTitle">iPhone</h3>
+            <ol>
+              <li data-i18n="iphoneStep1">Бетті Safari браузерінде ашыңыз.</li>
+              <li data-i18n="iphoneStep2">«Бөлісу» белгісін түртіңіз.</li>
+              <li data-i18n="iphoneStep3">«Басты экранға қосу» тармағын таңдап, «Қосу» түймесін басыңыз.</li>
+            </ol>
+          </article>
+          <article class="install-step">
+            <h3 data-i18n="androidTitle">Android телефоны</h3>
+            <ol>
+              <li data-i18n="androidStep1">Бетті Chrome браузерінде ашыңыз.</li>
+              <li data-i18n="androidStep2">Жоғарғы оң жақтағы мәзірді ашыңыз.</li>
+              <li data-i18n="androidStep3">«Басты экранға қосу» немесе «Қолданбаны орнату» тармағын таңдап, растаңыз.</li>
+            </ol>
+          </article>
+        </div>
+      </section>
+
       <footer class="footer">
         <span data-i18n="footerText">Jairem Taxi · Жайрем кенті ішіндегі тұрақты 400 ₸ тариф</span>
         <a href="https://wa.me/77478632459" target="_blank" rel="noopener noreferrer">WhatsApp · +7 747 863 24 59</a>
@@ -516,7 +620,9 @@
   <script>
     (() => {
       "use strict";
-      const WHATSAPP_NUMBER = "77478632459";
+      const ADMIN_PHONE = "+77478632459";
+      const WHATSAPP_NUMBER = ADMIN_PHONE.replace(/\D/g, "");
+      const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/ZhairemTaxiGroup";
       const PRICE_PER_RIDE = 400;
       const PROJECT_SHARE_PER_RIDE = 50;
       const DRIVER_SHARE_PER_RIDE = PRICE_PER_RIDE - PROJECT_SHARE_PER_RIDE;
@@ -527,6 +633,7 @@
           brandSubtitle: "Жайрем ішіндегі сапар", eyebrow: "ЖАЙРЕМ · ЖЕРГІЛІКТІ ТАКСИ",
           heroTitle: "Жайрем ішінде — бір баға.", heroCopy: "Қай жерден, қайда баратыныңызды таңдаңыз. Баға алдын ала белгілі, өтінім WhatsApp арқылы бірден жіберіледі.",
           bookRide: "Сапарға тапсырыс беру", joinTeam: "Жүргізуші / серіктес болу", fixedPrice: "Жайрем кенті ішінде", perRide: "бір сапар үшін · тұрақты тариф",
+          tariffScope: "400 ₸ тарифі тек Жайрем кенті ішіндегі сапарларға қолданылады. Кенттен тыс бағыттың бағасы бөлек келісіледі.",
           bookingEyebrow: "ЖЫЛДАМ ТАПСЫРЫС", bookingTitle: "Сапар мәліметтері", bookingIntro: "Сапар санын таңдаңыз — жалпы сома мен үлестер автоматты есептеледі.",
           routeTitle: "Бағыт пен уақыт", routeIntro: "Қайдан және қайда барасыз? Дайын нүктені таңдаңыз немесе өзіңіз жазыңыз.",
           fromLabel: "Қайдан", toLabel: "Қайда", fromPlaceholder: "Мысалы: Орталық алаң", toPlaceholder: "Мысалы: Аурухана",
@@ -539,6 +646,7 @@
           paymentTitle: "Төлем және есеп", paymentIntro: "Сапар саны өзгерсе, төлем сомасы да бірден жаңарады.",
           kaspiPayTitle: "Kaspi QR төлемі", kaspiPaySubtitle: "Kaspi қолданбасында жүргізушінің QR-кодын сканерлеңіз.",
           payThisAmount: "Төленетін сома", copyAmount: "Соманы көшіру", openKaspi: "Kaspi.kz ашу",
+          adminKaspiNumber: "Әкімшінің Kaspi аударым нөмірі", copyAdminNumber: "Нөмірді көшіру",
           qrHonestTitle: "Нақты QR-кодты төлем алушыдан алыңыз", qrHonestCopy: "Алушының Kaspi QR-коды берілмегендіктен, мұнда төлем коды көрсетілмейді. Жүргізушінің QR-кодын сканерлеп, жоғарыдағы соманы енгізіңіз.",
           kaspiLink: "Kaspi.kz →", paymentDisclaimer: "Бұл бет Kaspi төлемін қабылдамайды немесе тексермейді. Белгі WhatsApp өтініміндегі растауыңызды көрсетеді.",
           benefitsEyebrow: "АШЫҚ ЕСЕП", benefitsTitle: "Үш жаққа да пайда", benefitsIntro: "400 ₸ әр сапардың үлесі ашық көрсетіледі. Сапар санын өзгертсеңіз, есеп те қайта есептеледі.",
@@ -550,6 +658,34 @@
           perRideFixed: "бір сапарға тұрақты баға", fastOrder: "Тез шақыру", fastOrderValue: "WhatsApp арқылы",
           openCalc: "Ашық есеп", openCalcValue: "400 = 50 + 350 ₸", easyPay: "Ыңғайлы төлем", easyPayValue: "Kaspi QR / қолма-қол",
           explainTitle: "Есеп қалай жасалады?", explainCopy: "Әр сапардың 400 ₸ тарифінен 50 ₸ жоба/серіктестік үлесі, 350 ₸ жүргізуші үлесі деп есептеледі. Бұл — осы беттің ашық есеп үлгісі; нақты төлем тәртібін сапар алдында жүргізушімен растаңыз. Күніне 20 сапар болса жоба үлесі 1 000 ₸, 50 сапар болса 2 500 ₸ болады. Бұл болжам, кепілдендірілген табыс емес.",
+          communityEyebrow: "ЖАЙРЕМ TAXI ҚАУЫМДАСТЫҒЫ", communityTitle: "Әкімші, жүргізушілер және тұрғындар бір топта",
+          communityIntro: "Топқа қосылып, сапар туралы хабарламаны толтырғаннан кейін бір түртумен көшіріп, топқа жіберіңіз.",
+          groupRulesTitle: "Жайрем Taxi тобының ережесі", groupRulesIntro: "Топтағы тәртіп пен жеке деректерді қорғау үшін:",
+          groupRule1: "Тек Жайрем ішіндегі такси сапары мен жүргізушіге қатысты хабарлама жазыңыз.",
+          groupRule2: "Бағытты, уақытты және байланыс нөмірін анық көрсетіңіз; өзге адамның нөмірін рұқсатсыз жарияламаңыз.",
+          groupRule3: "Әдеп сақтаңыз, жарнама мен қайталанған хабарламаны жібермеңіз; әкімшінің нұсқауын орындаңыз.",
+          joinGroup: "Топқа қосылу", copyGroupOrder: "Толтырылған тапсырысты топқа көшіру",
+          groupCopyHint: "Алдымен тапсырыс пішінін толтырыңыз. Хабарлама көшірілген соң топты ашып, оны өзіңіз жібересіз.",
+          driverReportTitle: "Жүргізушінің бүгінгі есебі",
+          driverReportIntro: "Сапар санын тек Жайрем ішіндегі 400 ₸ тарифпен жүрілген сапар бойынша енгізіңіз. Кенттен тыс сапар бөлек келісіледі.",
+          driverReportName: "Жүргізушінің аты", driverReportNamePlaceholder: "Атыңыз", driverTodayTrips: "Бүгінгі сапар саны",
+          adminTransferDue: "Әкімшіге аударылатын үлес",
+          driverReportBreakdown: "Жүргізушіге: ",
+          driverReportAdminBreakdown: " · әкімшіге: ",
+          sendDriverReport: "Есепті әкімшіге WhatsApp-пен жіберу",
+          driverReportMsgTitle: "ЖАЙРЕМ TAXI — ЖҮРГІЗУШІНІҢ КҮНДІК ЕСЕБІ",
+          driverReportMsgName: "Жүргізуші", driverReportMsgDate: "Күні", driverReportMsgTrips: "Сапар саны",
+          driverReportMsgGross: "Сапарлардың жалпы сомасы", driverReportMsgDriverShare: "Жүргізушіге",
+          driverReportMsgAdminShare: "Әкімшіге аудару", driverReportMsgPhone: "Аударым нөмірі",
+          driverReportOpening: "Күндік есеп WhatsApp-та ашылуда…", groupOrderCopied: "Тапсырыс мәтіні топқа жіберу үшін көшірілді.",
+          installEyebrow: "ТЕЛЕФОНҒА САҚТАУ", installTitle: "Басты экранға қосымша сияқты сақтаңыз",
+          installIntro: "Бетті телефон браузерінде ашып, төмендегі қадамдарды орындаңыз. Бұл — сайтқа сілтеме, интернетпен ашылады.",
+          iphoneTitle: "iPhone", iphoneStep1: "Бетті Safari браузерінде ашыңыз.",
+          iphoneStep2: "«Бөлісу» белгісін түртіңіз.",
+          iphoneStep3: "«Басты экранға қосу» тармағын таңдап, «Қосу» түймесін басыңыз.",
+          androidTitle: "Android телефоны", androidStep1: "Бетті Chrome браузерінде ашыңыз.",
+          androidStep2: "Жоғарғы оң жақтағы мәзірді ашыңыз.",
+          androidStep3: "«Басты экранға қосу» немесе «Қолданбаны орнату» тармағын таңдап, растаңыз.",
           localEyebrow: "ЖАЙРЕМ ІШІНДЕ", placesTitle: "Жиі баратын нүктелер", placesIntro: "Тізімнен таңдаңыз немесе өз мекенжайыңызды қолмен жазыңыз.",
           partnerEyebrow: "БІРГЕ ДАМЫТАЙЫҚ", partnerTitle: "Жүргізуші немесе серіктес болып қосылыңыз", partnerIntro: "Өтініміңіз WhatsApp-та дайын хабарлама ретінде ашылады.",
           partnerOfferTitle: "Жайремге пайдалы қызмет құрамыз", partnerOfferCopy: "Жүргізуші болсаңыз — көлігіңіз бен қатынайтын уақытыңызды жазыңыз. Серіктес болсаңыз — қосылатын нүктеңіз бен үлес шартын ұсыныңыз. Үлгі есеп: 400 ₸ тарифтің 50 ₸-ы жоба/серіктестікке, 350 ₸-ы жүргізушіге.",
@@ -569,9 +705,10 @@
           msgFrom: "Қайдан", msgTo: "Қайда", msgTime: "Уақыты", msgNow: "Қазір", msgCount: "Сапар саны",
           msgTotal: "Жалпы сома", msgEach: "Әр сапар", msgProjectShare: "Жоба үлесі", msgDriverShare: "Жүргізуші үлесі",
           msgPayType: "Төлем түрі", msgKaspi: "Kaspi QR", msgCash: "Қолма-қол", msgConfirmed: "Kaspi төлемін растады",
-          yes: "Иә", no: "Жоқ", msgNote: "Ескерту", msgDisclaimer: "Соманы және сапар уақытын жүргізушімен растаңыз.",
+          yes: "Иә", no: "Жоқ", msgNote: "Ескерту",
+          msgDisclaimer: "400 ₸ тарифі тек Жайрем кенті ішінде қолданылады; кенттен тыс бағыттың бағасы бөлек келісіледі. Сома мен уақытты жүргізушімен растаңыз.",
           msgPartnerTitle: "ЖҮРГІЗУШІ / СЕРІКТЕС ӨТІНІМІ", msgRole: "Рөлі", msgDriver: "Жүргізуші", msgPartner: "Серіктес",
-          msgVehicle: "Көлік / нүкте", msgTerms: "Келісім / үлес шарты", copied: "Сома көшірілді.", copyFailed: "Соманы көшіру мүмкін болмады.",
+          msgVehicle: "Көлік / нүкте", msgTerms: "Келісім / үлес шарты",                     copied: "Мәлімет буферге көшірілді.", copyFailed: "Мәтінді көшіру мүмкін болмады.",
           fillRequired: "Міндетті өрістерді толтырыңыз.", timeMissing: "Сапар уақытын таңдаңыз.", openingWhatsApp: "WhatsApp ашылуда…"
         },
         ru: {
@@ -580,6 +717,7 @@
           brandSubtitle: "Поездки по Жайрему", eyebrow: "ЖАЙРЕМ · МЕСТНОЕ ТАКСИ",
           heroTitle: "По Жайрему — одна цена.", heroCopy: "Укажите, откуда и куда едете. Цена известна заранее, заявка сразу откроется в WhatsApp.",
           bookRide: "Заказать поездку", joinTeam: "Стать водителем / партнёром", fixedPrice: "В пределах посёлка Жайрем", perRide: "за одну поездку · фиксированный тариф",
+          tariffScope: "Тариф 400 ₸ действует только в пределах посёлка Жайрем. Стоимость поездок за пределы посёлка согласуется отдельно.",
           bookingEyebrow: "БЫСТРЫЙ ЗАКАЗ", bookingTitle: "Данные поездки", bookingIntro: "Выберите количество поездок — сумма и доли рассчитаются автоматически.",
           routeTitle: "Маршрут и время", routeIntro: "Откуда и куда едете? Выберите точку из списка или введите свой адрес.",
           fromLabel: "Откуда", toLabel: "Куда", fromPlaceholder: "Например: Центральная площадь", toPlaceholder: "Например: Больница",
@@ -592,6 +730,7 @@
           paymentTitle: "Оплата и расчёт", paymentIntro: "При изменении количества поездок сумма оплаты обновится автоматически.",
           kaspiPayTitle: "Оплата Kaspi QR", kaspiPaySubtitle: "Отсканируйте QR-код водителя в приложении Kaspi.",
           payThisAmount: "Сумма к оплате", copyAmount: "Скопировать сумму", openKaspi: "Открыть Kaspi.kz",
+          adminKaspiNumber: "Номер администратора для перевода Kaspi", copyAdminNumber: "Скопировать номер",
           qrHonestTitle: "Платёжный QR-код запросите у получателя", qrHonestCopy: "QR-код получателя Kaspi не предоставлен, поэтому здесь не показан платёжный код. Отсканируйте QR-код водителя и введите сумму выше.",
           kaspiLink: "Kaspi.kz →", paymentDisclaimer: "Эта страница не принимает и не проверяет оплату Kaspi. Отметка лишь передаёт ваше подтверждение в заявке WhatsApp.",
           benefitsEyebrow: "ПРОЗРАЧНЫЙ РАСЧЁТ", benefitsTitle: "Выгода для всех трёх сторон", benefitsIntro: "Доли от тарифа 400 ₸ показаны открыто. При изменении числа поездок расчёт обновится.",
@@ -603,6 +742,34 @@
           perRideFixed: "фиксированная цена за поездку", fastOrder: "Быстрый вызов", fastOrderValue: "через WhatsApp",
           openCalc: "Прозрачный расчёт", openCalcValue: "400 = 50 + 350 ₸", easyPay: "Удобная оплата", easyPayValue: "Kaspi QR / наличные",
           explainTitle: "Как считается сумма?", explainCopy: "Из тарифа 400 ₸ за каждую поездку 50 ₸ учитываются как доля проекта/партнёрства, 350 ₸ — как доля водителя. Это открытая расчётная модель этой страницы; условия оплаты подтвердите с водителем до поездки. При 20 поездках в день доля проекта составит 1 000 ₸, при 50 — 2 500 ₸. Это прогноз, а не гарантированный доход.",
+          communityEyebrow: "СООБЩЕСТВО JAIREM TAXI", communityTitle: "Администратор, водители и жители в одной группе",
+          communityIntro: "Вступите в группу, заполните заказ и скопируйте готовое сообщение одним нажатием, чтобы отправить его в группу.",
+          groupRulesTitle: "Правила группы Jairem Taxi", groupRulesIntro: "Чтобы поддерживать порядок и беречь личные данные:",
+          groupRule1: "Публикуйте только сообщения о поездках на такси по Жайрему и работе водителей.",
+          groupRule2: "Указывайте маршрут, время и контактный номер; не публикуйте чужие номера без разрешения.",
+          groupRule3: "Общайтесь уважительно, не размещайте рекламу и повторы; соблюдайте указания администратора.",
+          joinGroup: "Вступить в группу", copyGroupOrder: "Скопировать заполненный заказ в группу",
+          groupCopyHint: "Сначала заполните форму заказа. После копирования откройте группу и отправьте сообщение самостоятельно.",
+          driverReportTitle: "Отчёт водителя за сегодня",
+          driverReportIntro: "Укажите только поездки по Жайрему, рассчитанные по тарифу 400 ₸. Поездки за пределы посёлка согласуются отдельно.",
+          driverReportName: "Имя водителя", driverReportNamePlaceholder: "Ваше имя", driverTodayTrips: "Поездок сегодня",
+          adminTransferDue: "Доля к переводу администратору",
+          driverReportBreakdown: "Водителю: ",
+          driverReportAdminBreakdown: " · администратору: ",
+          sendDriverReport: "Отправить отчёт администратору в WhatsApp",
+          driverReportMsgTitle: "JAIREM TAXI — ДНЕВНОЙ ОТЧЁТ ВОДИТЕЛЯ",
+          driverReportMsgName: "Водитель", driverReportMsgDate: "Дата", driverReportMsgTrips: "Количество поездок",
+          driverReportMsgGross: "Общая сумма поездок", driverReportMsgDriverShare: "Водителю",
+          driverReportMsgAdminShare: "Перевести администратору", driverReportMsgPhone: "Номер для перевода",
+          driverReportOpening: "Открываем дневной отчёт в WhatsApp…", groupOrderCopied: "Текст заказа скопирован для отправки в группу.",
+          installEyebrow: "СОХРАНЕНИЕ НА ТЕЛЕФОН", installTitle: "Добавьте страницу на главный экран",
+          installIntro: "Откройте страницу в браузере телефона и выполните шаги ниже. Это ссылка на сайт, она открывается при подключении к интернету.",
+          iphoneTitle: "iPhone", iphoneStep1: "Откройте страницу в браузере Safari.",
+          iphoneStep2: "Нажмите значок «Поделиться».",
+          iphoneStep3: "Выберите «На экран Домой», затем нажмите «Добавить».",
+          androidTitle: "Телефон Android", androidStep1: "Откройте страницу в браузере Chrome.",
+          androidStep2: "Откройте меню в правом верхнем углу.",
+          androidStep3: "Выберите «Добавить на главный экран» или «Установить приложение» и подтвердите действие.",
           localEyebrow: "ВНУТРИ ЖАЙРЕМА", placesTitle: "Популярные точки", placesIntro: "Выберите точку из списка или введите свой адрес вручную.",
           partnerEyebrow: "РАЗВИВАЕМ ВМЕСТЕ", partnerTitle: "Присоединяйтесь как водитель или партнёр", partnerIntro: "Заявка откроется в WhatsApp как готовое сообщение.",
           partnerOfferTitle: "Создаём полезный сервис для Жайрема", partnerOfferCopy: "Если вы водитель — укажите автомобиль и время работы. Если партнёр — предложите свою точку и условия доли. Пример расчёта: из тарифа 400 ₸ — 50 ₸ проекту/партнёрству и 350 ₸ водителю.",
@@ -622,9 +789,10 @@
           msgFrom: "Откуда", msgTo: "Куда", msgTime: "Время", msgNow: "Сейчас", msgCount: "Количество поездок",
           msgTotal: "Итого", msgEach: "За поездку", msgProjectShare: "Доля проекта", msgDriverShare: "Доля водителя",
           msgPayType: "Способ оплаты", msgKaspi: "Kaspi QR", msgCash: "Наличные", msgConfirmed: "Подтверждает оплату Kaspi",
-          yes: "Да", no: "Нет", msgNote: "Примечание", msgDisclaimer: "Пожалуйста, подтвердите сумму и время с водителем.",
+          yes: "Да", no: "Нет", msgNote: "Примечание",
+          msgDisclaimer: "Тариф 400 ₸ действует только в пределах посёлка Жайрем; стоимость поездки за его пределы согласуется отдельно. Подтвердите сумму и время с водителем.",
           msgPartnerTitle: "ЗАЯВКА ВОДИТЕЛЯ / ПАРТНЁРА", msgRole: "Роль", msgDriver: "Водитель", msgPartner: "Партнёр",
-          msgVehicle: "Автомобиль / точка", msgTerms: "Соглашение / условия доли", copied: "Сумма скопирована.", copyFailed: "Не удалось скопировать сумму.",
+          msgVehicle: "Автомобиль / точка", msgTerms: "Соглашение / условия доли",                     copied: "Данные скопированы в буфер обмена.", copyFailed: "Не удалось скопировать текст.",
           fillRequired: "Заполните обязательные поля.", timeMissing: "Выберите время поездки.", openingWhatsApp: "Открываем WhatsApp…"
         }
       };
@@ -642,6 +810,14 @@
         const parsed = Number.parseInt(countInput.value, 10);
         const count = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
         if (updateField && String(count) !== countInput.value) countInput.value = String(count);
+        return count;
+      }
+
+      function normalizedDriverTrips(updateField = false) {
+        const input = $("#driverTodayTrips");
+        const parsed = Number.parseInt(input.value, 10);
+        const count = Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+        if (updateField && String(count) !== input.value) input.value = String(count);
         return count;
       }
 
@@ -680,6 +856,17 @@
         return { count, total, project, driver };
       }
 
+      function updateDriverReport(updateField = false) {
+        const count = normalizedDriverTrips(updateField);
+        const adminShare = PROJECT_SHARE_PER_RIDE * count;
+        const driverShare = DRIVER_SHARE_PER_RIDE * count;
+        $("#adminTransferTotal").textContent = formatMoney(adminShare);
+        $("#driverReportBreakdown").textContent =
+          `${t("driverReportBreakdown")}${formatMoney(driverShare)}`
+          + `${t("driverReportAdminBreakdown")}${formatMoney(adminShare)}`;
+        return { count, adminShare, driverShare, total: PRICE_PER_RIDE * count };
+      }
+
       function setLanguage(nextLanguage) {
         language = nextLanguage === "ru" ? "ru" : "kk";
         document.documentElement.lang = language;
@@ -700,8 +887,10 @@
         });
         $("#swapRoute").setAttribute("aria-label", t("swapLabel"));
         $("#swapRoute").title = t("swapTitle");
+        $("#groupLink").href = WHATSAPP_GROUP_LINK;
         refreshPlaces();
         updateAmounts();
+        updateDriverReport();
       }
 
       function showToast(message) {
@@ -712,10 +901,27 @@
         toastTimer = window.setTimeout(() => toast.classList.remove("show"), 2600);
       }
 
-      function openWhatsApp(lines) {
+      function openWhatsApp(lines, toastKey = "openingWhatsApp") {
         const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
         window.open(url, "_blank", "noopener,noreferrer");
-        showToast(t("openingWhatsApp"));
+        showToast(t(toastKey));
+      }
+
+      async function copyText(value) {
+        try {
+          await navigator.clipboard.writeText(value);
+          return true;
+        } catch {
+          const temporary = document.createElement("textarea");
+          temporary.value = value;
+          temporary.style.position = "fixed";
+          temporary.style.opacity = "0";
+          document.body.append(temporary);
+          temporary.select();
+          const copied = document.execCommand("copy");
+          temporary.remove();
+          return copied;
+        }
       }
 
       function formatDateTime(value) {
@@ -733,6 +939,8 @@
       }));
       countInput.addEventListener("input", () => updateAmounts());
       countInput.addEventListener("blur", () => updateAmounts(true));
+      $("#driverTodayTrips").addEventListener("input", () => updateDriverReport());
+      $("#driverTodayTrips").addEventListener("blur", () => updateDriverReport(true));
       $$('input[name="rideTimeType"]').forEach((radio) => radio.addEventListener("change", () => {
         const later = $('input[name="rideTimeType"]:checked')?.value === "later";
         $("#scheduledTimeWrap").hidden = !later;
@@ -745,40 +953,35 @@
       });
       $("#copyAmount").addEventListener("click", async () => {
         const amount = String(updateAmounts(true).total);
-        try {
-          await navigator.clipboard.writeText(amount);
-          showToast(t("copied"));
-        } catch {
-          const temporary = document.createElement("textarea");
-          temporary.value = amount;
-          temporary.style.position = "fixed";
-          temporary.style.opacity = "0";
-          document.body.append(temporary);
-          temporary.select();
-          const copied = document.execCommand("copy");
-          temporary.remove();
-          showToast(copied ? t("copied") : t("copyFailed"));
-        }
+        showToast(await copyText(amount) ? t("copied") : t("copyFailed"));
       });
 
-      $("#rideForm").addEventListener("submit", (event) => {
-        event.preventDefault();
-        const form = event.currentTarget;
+      $("#copyAdminNumber").addEventListener("click", async () => {
+        showToast(await copyText(ADMIN_PHONE) ? t("copied") : t("copyFailed"));
+      });
+
+      function validateRideForm() {
+        const form = $("#rideForm");
         updateAmounts(true);
         if (!form.reportValidity()) {
           showToast(t("fillRequired"));
-          return;
+          return false;
         }
+        const scheduled = $('input[name="rideTimeType"]:checked').value === "later";
+        if (scheduled && !$("#scheduledTime").value) {
+          $("#scheduledTime").focus();
+          showToast(t("timeMissing"));
+          return false;
+        }
+        return true;
+      }
+
+      function buildRideMessage() {
         const { count, total, project, driver } = updateAmounts(true);
         const scheduled = $('input[name="rideTimeType"]:checked').value === "later";
         const time = scheduled ? $("#scheduledTime").value : "";
-        if (scheduled && !time) {
-          $("#scheduledTime").focus();
-          showToast(t("timeMissing"));
-          return;
-        }
         const payment = $('input[name="paymentType"]:checked').value;
-        const details = [
+        return [
           t("msgRideTitle"),
           `${t("msgName")}: ${$("#rideName").value.trim()}`,
           `${t("msgPhone")}: ${$("#ridePhone").value.trim()}`,
@@ -796,7 +999,41 @@
           "",
           t("msgDisclaimer")
         ];
-        openWhatsApp(details);
+      }
+
+      $("#rideForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        if (!validateRideForm()) return;
+        openWhatsApp(buildRideMessage());
+      });
+
+      $("#copyGroupOrder").addEventListener("click", async () => {
+        if (!validateRideForm()) return;
+        const copied = await copyText(buildRideMessage().join("\n"));
+        showToast(copied ? t("groupOrderCopied") : t("copyFailed"));
+      });
+
+      $("#driverReportForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if (!form.reportValidity()) {
+          showToast(t("fillRequired"));
+          return;
+        }
+        const { count, total, driverShare, adminShare } = updateDriverReport(true);
+        const date = new Intl.DateTimeFormat(language === "kk" ? "kk-KZ" : "ru-RU", {
+          dateStyle: "long"
+        }).format(new Date());
+        openWhatsApp([
+          t("driverReportMsgTitle"),
+          `${t("driverReportMsgName")}: ${$("#driverReportName").value.trim()}`,
+          `${t("driverReportMsgDate")}: ${date}`,
+          `${t("driverReportMsgTrips")}: ${count}`,
+          `${t("driverReportMsgGross")}: ${formatMoney(total)}`,
+          `${t("driverReportMsgDriverShare")}: ${formatMoney(driverShare)}`,
+          `${t("driverReportMsgAdminShare")}: ${formatMoney(adminShare)}`,
+          `${t("driverReportMsgPhone")}: ${ADMIN_PHONE}`
+        ], "driverReportOpening");
       });
 
       $("#partnerForm").addEventListener("submit", (event) => {
