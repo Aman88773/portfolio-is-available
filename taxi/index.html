@@ -139,6 +139,11 @@
     .field-help { margin:0; color:var(--muted); font-size:.78rem; }
     .permission-actions,.navigator-actions { display:flex; flex-wrap:wrap; gap:8px; }
     .permission-state { color:var(--accent); font-weight:800; }
+    .permission-settings { margin-top:8px; }
+    .permission-dialog { width:min(520px,calc(100% - 28px)); max-height:85vh; overflow:auto; border:1px solid var(--line); border-radius:18px; background:var(--surface); color:var(--text); padding:18px; }
+    .permission-dialog::backdrop { background:#000b; }
+    .permission-dialog h2 { margin-top:0; }
+    .permission-dialog li { margin:8px 0; }
     .navigator-message { min-height:56px; border-left:4px solid var(--accent); border-radius:10px; background:var(--surface2); padding:12px; }
     .weather-reading { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:8px; margin-top:10px; }
     .weather-reading div { border:1px solid var(--line); border-radius:12px; background:var(--surface2); padding:10px; }
@@ -179,6 +184,7 @@
         <button data-screen="profile">🪪 Профиль</button>
         <button data-screen="chat">💬 Чат</button>
         <button data-screen="history">🧾 Тарих</button>
+        <button data-screen="permissions">🔐 Құрылғы рұқсаттары</button>
         <button data-screen="intercity">🛣️ Қалааралық калькулятор</button>
         <button data-screen="weather">🌦️ Ауа райы болжамы</button>
         <button data-screen="notifications">🔔 Хабарламалар</button>
@@ -190,6 +196,15 @@
       </nav>
     </aside>
     <div class="drawer-backdrop" id="drawerBackdrop" hidden></div>
+    <dialog class="permission-dialog" id="permissionSettingsDialog" aria-labelledby="permissionDialogTitle">
+      <h2 id="permissionDialogTitle">Телефон баптаулары</h2>
+      <p id="permissionDialogIntro" class="muted"></p>
+      <ol id="permissionDialogSteps"></ol>
+      <div class="permission-actions">
+        <a class="button primary" id="permissionSettingsLink" hidden></a>
+        <button class="button secondary" id="closePermissionDialog" type="button">Жабу</button>
+      </div>
+    </dialog>
 
     <main>
       <section id="authScreen" class="screen active">
@@ -202,7 +217,7 @@
           </div>
           <section class="card" style="margin-top:14px" aria-labelledby="permissionTitle">
             <h2 id="permissionTitle">Рұқсаттарды басқару</h2>
-            <p class="muted">Рұқсаттар тек тиісті функцияны таңдағанда сұралады. GPS тек карта мен бағытқа, микрофон дауысты чат/AI мәтініне, хабарламалар сапар жаңартуларына қолданылады. Чат не хабарлама орталығын ашқанда браузер хабарлама рұқсатын сұрауы мүмкін. Мәтіндік чат рұқсатсыз да жұмыс істейді.</p>
+            <p class="muted">Телефонмен кіргеннен кейін рұқсаттарды осы экраннан сұрай аласыз. GPS карта мен бағытқа, микрофон дауысты енгізуге, хабарламалар сапар жаңартуларына ғана қолданылады. Мәтіндік чат пен қолданба ішіндегі хабарламалар рұқсатсыз да жұмыс істейді.</p>
             <div class="list">
               <div class="list-item"><strong>Локация (GPS)</strong><span>Орналасқан жерді картада көрсету және бағытты сапарға беру үшін ғана.</span><span class="permission-state" data-permission-status="location">Күйі тексерілуде…</span></div>
               <div class="list-item"><strong>Микрофон</strong><span>Дауыстық чатқа немесе AI-ға сөйлеуді мәтінге айналдыру үшін ғана.</span><span class="permission-state" data-permission-status="microphone">Күйі тексерілуде…</span></div>
@@ -215,6 +230,7 @@
               <button class="button secondary" type="button" data-permission-action="notifications">Хабарлама рұқсатын сұрау</button>
               <button class="button secondary" type="button" data-screen="chat">Мәтіндік чатты ашу</button>
             </div>
+            <p class="field-help" data-notification-support-help hidden>Бұл браузерде немесе PWA режимінде жүйелік push-хабарламаларға қолдау шектеулі болуы мүмкін. App Store / Google Play нативті қолданбасында жүйелік хабарламаларды телефонның Настройка бөлімінен қосуға болады. Қолданба ішіндегі хабарламалар лентасы осы жерде қолжетімді.</p>
           </section>
           <div id="authSteps" hidden>
             <div class="auth-step active" id="authInfo">
@@ -337,6 +353,27 @@
           <h2 style="margin-top:18px">Алдағы күндер</h2>
           <div class="list" id="weatherForecast"></div>
           <p class="field-help" id="weatherOfflineNote"></p>
+        </article>
+      </section>
+
+      <section id="permissionsScreen" class="screen">
+        <div class="screen-head"><button class="icon-btn" data-screen="home">←</button><h1>Құрылғы рұқсаттары</h1></div>
+        <article class="card">
+          <h2>Қажетті рұқсаттарды таңдаңыз</h2>
+          <p class="muted">Рұқсаттар міндетті емес. GPS-ті бермесеңіз, Жайремнің әдепкі орны қолданылады; микрофонсыз мәтін енгізе аласыз. Хабарламалардың ішкі лентасы әрдайым қолжетімді.</p>
+          <div class="list">
+            <div class="list-item"><strong>Локация (GPS)</strong><span>Картада орналасқан жерді көрсету және бағытты сапарға беру үшін.</span><span class="permission-state" data-permission-status="location">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Микрофон</strong><span>Чатқа немесе AI-ға сөйлеуді мәтінге айналдыру үшін.</span><span class="permission-state" data-permission-status="microphone">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Хабарламалар</strong><span>Сапар мен тапсырыс жаңартулары үшін. Қолдау болмаса, ішкі лента қолданылады.</span><span class="permission-state" data-permission-status="notifications">Күйі тексерілуде…</span></div>
+          </div>
+          <div class="permission-actions" style="margin-top:10px">
+            <button class="button secondary" type="button" data-permission-action="location">GPS рұқсатын сұрау</button>
+            <button class="button secondary" type="button" data-permission-action="microphone">Микрофонға рұқсат беру</button>
+            <button class="button secondary" type="button" data-permission-action="notifications">Хабарлама рұқсатын сұрау</button>
+            <button class="button secondary" type="button" data-screen="notifications">Ішкі хабарламалар лентасын ашу</button>
+          </div>
+          <p class="field-help" data-notification-support-help hidden>Бұл браузерде немесе PWA режимінде жүйелік push-хабарламаларға қолдау шектеулі болуы мүмкін. App Store / Google Play нативті қолданбасында жүйелік хабарламаларды телефонның Настройка бөлімінен қосуға болады. Қолданба ішіндегі хабарламалар лентасы осы жерде қолжетімді.</p>
+          <button class="button primary full" type="button" data-screen="home" style="margin-top:12px">Қолданбаны жалғастыру</button>
         </article>
       </section>
 
@@ -586,6 +623,7 @@
             <button class="button secondary" type="button" data-permission-action="notifications">Хабарлама рұқсатын сұрау</button>
             <button class="button secondary" type="button" data-screen="chat">Мәтіндік чатты ашу</button>
           </div>
+          <p class="field-help" data-notification-support-help hidden>Бұл браузерде немесе PWA режимінде жүйелік push-хабарламаларға қолдау шектеулі болуы мүмкін. App Store / Google Play нативті қолданбасында жүйелік хабарламаларды телефонның Настройка бөлімінен қосуға болады. Қолданба ішіндегі хабарламалар лентасы осы жерде қолжетімді.</p>
         </article>
       </section>
 
@@ -910,7 +948,6 @@
       $$(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.screen===name));
       openDrawer(false);
       window.scrollTo({top:0,behavior:"smooth"});
-      if(name==="chat"||name==="notifications")requestNotificationPermission();
     }
     function permissionLabel(state) {
       return state==="granted"?"Рұқсат берілді":state==="denied"?"Шектелді":state==="unsupported"?"Қолдау жоқ":"Сұралмады";
@@ -921,7 +958,59 @@
       store.set("zhairemPermissionStatus",saved);
       $$(`[data-permission-status="${name}"]`).forEach(el=>{
         el.textContent=name==="chat"?"Қосымша рұқсаты қажет емес":permissionLabel(state);
+        const card=el.closest(".list-item");
+        if((name==="location"||name==="microphone")&&card){
+          let button=card.querySelector("[data-permission-settings]");
+          if(!button){
+            button=document.createElement("button");
+            button.type="button";
+            button.className="button secondary permission-settings";
+            button.dataset.permissionSettings=name;
+            button.textContent="Баптаулардан (Настройка) рұқсат беру";
+            card.appendChild(button);
+          }
+          button.hidden=state!=="denied";
+        }
       });
+      if(name==="notifications"){
+        $$("[data-notification-support-help]").forEach(el=>{el.hidden=state!=="unsupported";});
+      }
+    }
+    function showPermissionSettings(name) {
+      const dialog=$("#permissionSettingsDialog");
+      const title=name==="location"?"Локация (GPS)":"Микрофон";
+      const permission=name==="location"?"Геопозиция / Локация":"Микрофон";
+      const userAgent=navigator.userAgent||"";
+      const isIOS=/iPhone|iPad|iPod/i.test(userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
+      const isAndroid=/Android/i.test(userAgent);
+      const steps=[];
+      let actionLabel="",actionHref="";
+      $("#permissionDialogTitle").textContent=title+" рұқсатын баптау";
+      if(isIOS){
+        $("#permissionDialogIntro").textContent="iPhone/iPad-та бұғатталған рұқсатты браузер қайта сұрай алмауы мүмкін. Веб-нұсқадан жүйелік баптауды тікелей өзгертуге болмайды.";
+        steps.push("Нативті Zhairem Taxi қолданбасында: Настройки → Zhairem Taxi → "+permission+" → рұқсат ету.");
+        steps.push("Safari/PWA нұсқасында: Safari-де осы сайтты ашыңыз → мекенжай жолағындағы «aA» → «Веб-сайт баптаулары» → "+permission+" → «Рұқсат ету».");
+        actionLabel="iPhone Настройкаларын ашу";actionHref="app-settings:";
+      }else if(isAndroid){
+        $("#permissionDialogIntro").textContent="Нативті қолданба болса, төмендегі сілтеме Android баптауларын ашуға тырысады. Браузер/PWA үшін сайт рұқсатын браузердің сайт баптауынан өзгертіңіз.";
+        steps.push("Нативті қолданба: Настройки → Приложения → Zhairem Taxi → Разрешения → "+permission+" → «Разрешить».");
+        steps.push("Браузер/PWA: мекенжай жолағындағы сайт белгішесі → «Разрешения»; немесе Настройки → Приложения → браузер (мысалы, Chrome) → Разрешения.");
+        actionLabel="Android Настройкаларын ашу";actionHref="intent://settings#Intent;action=android.settings.SETTINGS;end";
+      }else{
+        $("#permissionDialogIntro").textContent="Веб-нұсқа телефонның жүйелік баптауларын тікелей аша алмайды. Браузердегі осы сайттың рұқсат баптауларын өзгертіп, бетті қайта жүктеңіз.";
+        steps.push("Браузердің мекенжай жолағындағы сайт белгішесін немесе құлып белгісін басыңыз.");
+        steps.push(permission+" рұқсатын «Рұқсат ету» күйіне ауыстырып, бетті қайта жүктеңіз.");
+      }
+      const stepList=$("#permissionDialogSteps");
+      stepList.replaceChildren(...steps.map(text=>{
+        const item=document.createElement("li");item.textContent=text;return item;
+      }));
+      const action=$("#permissionSettingsLink");
+      action.hidden=!actionHref;
+      action.textContent=actionLabel;
+      action.href=actionHref||"#";
+      if(typeof dialog.showModal==="function")dialog.showModal();
+      else toast($("#permissionDialogIntro").textContent+" "+steps.join(" "));
     }
     async function readPermissionState(name,browserName) {
       if(name==="notifications"){
@@ -948,23 +1037,24 @@
       updatePermissionStatus("chat","granted");
     }
     async function requestNotificationPermission() {
-      if(!("Notification" in window)){
-        updatePermissionStatus("notifications","unsupported");
-        toast("Бұл браузер push-хабарламаларды қолдамайды. Қолданба ішіндегі хабарламалар лентасы қолжетімді.");
-        return;
-      }
-      if(Notification.permission!=="default"){
-        updatePermissionStatus("notifications",Notification.permission);
-        if(Notification.permission==="denied")toast("Хабарламалар шектелген. Қолданба ішіндегі хабарламалар лентасы жұмыс істейді.");
-        return;
-      }
       try{
+        if(!("Notification" in window)){
+          updatePermissionStatus("notifications","unsupported");
+          toast("Браузер немесе PWA жүйелік push-хабарламаларды қолдамауы мүмкін. App Store / Google Play нативті қолданбасында хабарламаларды Настройкадан қосыңыз; ішкі лента қолжетімді.");
+          return;
+        }
+        if(Notification.permission!=="default"){
+          updatePermissionStatus("notifications",Notification.permission);
+          if(Notification.permission==="denied")toast("Хабарламалар шектелген. Қолданба ішіндегі хабарламалар лентасы жұмыс істейді.");
+          return;
+        }
         const permission=await Notification.requestPermission();
         updatePermissionStatus("notifications",permission==="default"?"prompt":permission);
-        if(permission!=="granted")toast("Push-хабарламаларға рұқсат берілмеді. Қолданба ішіндегі хабарламалар лентасы сақталады.");
+        if(permission!=="granted")toast("Push-хабарламаларға рұқсат берілмеді. Қолданба ішіндегі лента сақталады.");
       }catch(error){
-        updatePermissionStatus("notifications","denied");
-        toast("Хабарлама рұқсатын сұрау мүмкін болмады. Қолданба ішіндегі лента жұмыс істейді.");
+        updatePermissionStatus("notifications","unsupported");
+        console.error("Жүйелік хабарлама рұқсатын сұрау мүмкін болмады:",error);
+        toast("Жүйелік хабарлама рұқсатын сұрау мүмкін болмады. Қолданба ішіндегі лента жұмыс істейді.");
       }
     }
     async function requestMicrophonePermission() {
@@ -1551,6 +1641,11 @@
       e.preventDefault();showScreen(el.dataset.screen);
     }));
     $("#openNotifications").addEventListener("click",()=>showScreen("notifications"));
+    document.addEventListener("click",event=>{
+      const button=event.target.closest("[data-permission-settings]");
+      if(button)showPermissionSettings(button.dataset.permissionSettings);
+    });
+    $("#closePermissionDialog").addEventListener("click",()=>$("#permissionSettingsDialog").close());
     $$("[data-permission-action]").forEach(button=>button.addEventListener("click",()=>{
       if(button.dataset.permissionAction==="location")startLocation();
       else if(button.dataset.permissionAction==="microphone")requestMicrophonePermission();
@@ -1605,7 +1700,8 @@
           accountData.docPhoto=await fileToDataUrl($("#docPhoto").files[0]);accountData.licensePhoto=await fileToDataUrl($("#licensePhoto").files[0]);
         }
         store.set("zhairemAccount",accountData);account=accountData;
-        updateAccountUi();showScreen("home");toast(authRole==="driver"?"Жүргізуші тіркелді: Тексерілген жүргізуші мәртебесі берілді.":"Жолаушы тіркелді.");
+        updateAccountUi();showScreen("permissions");refreshPermissionStatuses();
+        toast((authRole==="driver"?"Жүргізуші тіркелді: Тексерілген жүргізуші мәртебесі берілді.":"Жолаушы тіркелді.")+" Құрылғы рұқсаттарын осы экраннан баптай аласыз.");
       }catch(error){
         toast("Аккаунтты сақтау немесе суретті оқу мүмкін болмады: "+(error.message||"файлға қолжетімсіз."));
       }
