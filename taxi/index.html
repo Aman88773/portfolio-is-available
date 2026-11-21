@@ -22,6 +22,8 @@
     button { cursor:pointer; }
     [hidden] { display:none !important; }
     .app { width:min(1120px,calc(100% - 24px)); margin:auto; padding-bottom:80px; }
+    .app:not(.authenticated) #openDrawer,.app:not(.authenticated) #openNotifications { display:none; }
+    .app:not(.authenticated) .drawer,.app:not(.authenticated) .drawer-backdrop { display:none !important; }
     .topbar { height:68px; display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line); }
     .brand { display:flex; align-items:center; gap:10px; color:var(--text); text-decoration:none; font-weight:900; }
     .brand-mark { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; background:var(--accent); color:#111315; }
@@ -54,6 +56,7 @@
     .car-point { left:50%; top:50%; border-color:var(--accent); transition:left 1.2s ease,top 1.2s ease; }
     .map-status { position:absolute; z-index:3; bottom:9px; left:9px; border-radius:999px; background:#111315dd; padding:7px 10px; color:var(--muted); font-size:.72rem; }
     .network-indicator { display:inline-flex; align-items:center; gap:6px; min-height:36px; border:1px solid var(--line); border-radius:999px; background:var(--surface); color:var(--muted); padding:7px 10px; font-size:.72rem; font-weight:800; }
+    .app:not(.authenticated) .network-indicator { max-width:52vw; overflow:hidden; white-space:nowrap; text-overflow:ellipsis; }
     .network-indicator:before { content:""; width:8px; height:8px; border-radius:50%; background:#50df78; }
     .network-indicator.offline:before { background:#ff6961; }
     .offline-map { position:absolute; z-index:1; inset:0; width:100%; height:100%; }
@@ -160,18 +163,19 @@
       .hero { min-height:250px; }
       .map { height:185px; }
       .brand small { display:none; }
+      .app:not(.authenticated) .network-indicator { max-width:44vw; }
       .weather-reading { grid-template-columns:1fr; }
       .nav-readout { grid-template-columns:repeat(2,minmax(0,1fr)); }
     }
   </style>
 </head>
 <body>
-  <div class="app">
+  <div class="app" id="app">
     <header class="topbar">
       <button class="icon-btn" id="openDrawer" aria-label="Мәзір">☰</button>
       <a class="brand" href="#" data-screen="home"><span class="brand-mark">ZT</span><span>Zhairem Taxi<small>Жайрем · 400 ₸</small></span></a>
       <div class="top-actions">
-        <span class="network-indicator" id="networkIndicator">Онлайн + GPS спутник</span>
+        <span class="network-indicator" id="networkIndicator" role="status" aria-live="polite">Онлайн · GPS спутник күтілуде · 48.0061, 67.5964</span>
         <button class="icon-btn" id="openNotifications" aria-label="Хабарламалар">🔔</button>
       </div>
     </header>
@@ -209,29 +213,12 @@
     <main>
       <section id="authScreen" class="screen active">
         <div class="card auth">
-          <h1>Zhairem Taxi аккаунты</h1>
+          <h1>Zhairem Taxi</h1>
           <p class="muted">Жайрем кентінің тұрақты тарифи — <strong>400 ₸</strong></p>
           <div class="auth-choice">
             <button class="button" data-auth-role="passenger">Жолаушы ретінде кіру</button>
             <button class="button primary" data-auth-role="driver">Жүргізуші ретінде тіркелу</button>
           </div>
-          <section class="card" style="margin-top:14px" aria-labelledby="permissionTitle">
-            <h2 id="permissionTitle">Рұқсаттарды басқару</h2>
-            <p class="muted">Телефонмен кіргеннен кейін рұқсаттарды осы экраннан сұрай аласыз. GPS карта мен бағытқа, микрофон дауысты енгізуге, хабарламалар сапар жаңартуларына ғана қолданылады. Мәтіндік чат пен қолданба ішіндегі хабарламалар рұқсатсыз да жұмыс істейді.</p>
-            <div class="list">
-              <div class="list-item"><strong>Локация (GPS)</strong><span>Орналасқан жерді картада көрсету және бағытты сапарға беру үшін ғана.</span><span class="permission-state" data-permission-status="location">Күйі тексерілуде…</span></div>
-              <div class="list-item"><strong>Микрофон</strong><span>Дауыстық чатқа немесе AI-ға сөйлеуді мәтінге айналдыру үшін ғана.</span><span class="permission-state" data-permission-status="microphone">Күйі тексерілуде…</span></div>
-              <div class="list-item"><strong>Хабарламалар</strong><span>Сапар мен тапсырыс жаңартуларын хабарлау үшін ғана.</span><span class="permission-state" data-permission-status="notifications">Күйі тексерілуде…</span></div>
-              <div class="list-item"><strong>Мәтіндік чат</strong><span>Құрылғы рұқсатын қажет етпейді; чат мәтінін осы құрылғыда сақтайды.</span><span class="permission-state" data-permission-status="chat">Қосымша рұқсаты қажет емес</span></div>
-            </div>
-            <div class="permission-actions" style="margin-top:10px">
-              <button class="button secondary" type="button" data-permission-action="location">GPS рұқсатын сұрау</button>
-              <button class="button secondary" type="button" data-permission-action="microphone">Микрофонды тексеру</button>
-              <button class="button secondary" type="button" data-permission-action="notifications">Хабарлама рұқсатын сұрау</button>
-              <button class="button secondary" type="button" data-screen="chat">Мәтіндік чатты ашу</button>
-            </div>
-            <p class="field-help" data-notification-support-help hidden>Бұл браузерде немесе PWA режимінде жүйелік push-хабарламаларға қолдау шектеулі болуы мүмкін. App Store / Google Play нативті қолданбасында жүйелік хабарламаларды телефонның Настройка бөлімінен қосуға болады. Қолданба ішіндегі хабарламалар лентасы осы жерде қолжетімді.</p>
-          </section>
           <div id="authSteps" hidden>
             <div class="auth-step active" id="authInfo">
               <div class="form-grid">
@@ -488,6 +475,15 @@
           <h2>Бонус балансы</h2><p><strong id="driverBonusBalance">0 ₸</strong></p>
           <p class="muted">Уақытылы әрі сапалы аяқталған әр сапарға 50 ₸ бонус. Қозғалыс «Тарих / История» бөлімінде сақталады.</p>
         </article>
+        <article class="card" style="margin-top:14px">
+          <h2>Құрылғы рұқсаттары</h2>
+          <div class="list">
+            <div class="list-item"><strong>GPS</strong><span class="permission-state" data-permission-status="location">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Микрофон</strong><span class="permission-state" data-permission-status="microphone">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Хабарламалар</strong><span class="permission-state" data-permission-status="notifications">Күйі тексерілуде…</span></div>
+          </div>
+          <button class="button secondary" type="button" data-screen="permissions" style="margin-top:10px">Рұқсаттарды басқару</button>
+        </article>
       </section>
 
       <section id="accountScreen" class="screen">
@@ -500,6 +496,15 @@
             <p class="muted" id="accountBonusRule">Әр аяқталған сапарға бонус есептеледі. Бонустың берілуі мен жұмсалуы тарихта көрсетіледі.</p>
           </div>
           <button class="button primary" data-screen="profile">Профильді басқару</button>
+        </article>
+        <article class="card" style="margin-top:14px">
+          <h2>Құрылғы рұқсаттары</h2>
+          <div class="list">
+            <div class="list-item"><strong>GPS</strong><span class="permission-state" data-permission-status="location">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Микрофон</strong><span class="permission-state" data-permission-status="microphone">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Хабарламалар</strong><span class="permission-state" data-permission-status="notifications">Күйі тексерілуде…</span></div>
+          </div>
+          <button class="button secondary" type="button" data-screen="permissions" style="margin-top:10px">Рұқсаттарды басқару</button>
         </article>
       </section>
 
@@ -713,6 +718,8 @@
     let smsRole="";
     let lastAiAnswer="";
     let locationWatch=null;
+    let gpsHasFix=false;
+    let gpsState="idle";
     const savedLocation=store.get("zhairemLocation",DEFAULT_LOCATION);
     let geoLocation=Number.isFinite(Number(savedLocation?.lat))&&Number.isFinite(Number(savedLocation?.lng))
       &&Math.abs(Number(savedLocation.lat))<=90&&Math.abs(Number(savedLocation.lng))<=180
@@ -957,13 +964,13 @@
       const div=document.createElement("div"); div.textContent=String(value); return div.innerHTML;
     }
     function openDrawer(open=true) {
+      if(open&&!account)open=false;
       $("#drawer").classList.toggle("open",open);
       $("#drawer").setAttribute("aria-hidden",open?"false":"true");
       $("#drawerBackdrop").hidden=!open;
     }
     function showScreen(name) {
-      if(!account&&!["auth","permissions","privacy","terms"].includes(name)){
-        toast("Жалғастыру үшін алдымен аккаунтқа кіріңіз.");
+      if(!account&&name!=="auth"){
         name="auth";
       }
       if(account&&name==="driver"&&account.role!=="driver"){
@@ -1064,25 +1071,25 @@
       updatePermissionStatus("notifications",notifications);
       updatePermissionStatus("chat","granted");
     }
-    async function requestNotificationPermission() {
+    async function requestNotificationPermission({quiet=false}={}) {
       try{
         if(!("Notification" in window)){
           updatePermissionStatus("notifications","unsupported");
-          toast("Браузер немесе PWA жүйелік push-хабарламаларды қолдамауы мүмкін. App Store / Google Play нативті қолданбасында хабарламаларды Настройкадан қосыңыз; ішкі лента қолжетімді.");
+          if(!quiet)toast("Браузер немесе PWA жүйелік push-хабарламаларды қолдамауы мүмкін. App Store / Google Play нативті қолданбасында хабарламаларды Настройкадан қосыңыз; ішкі лента қолжетімді.");
           return;
         }
         if(Notification.permission!=="default"){
           updatePermissionStatus("notifications",Notification.permission);
-          if(Notification.permission==="denied")toast("Хабарламалар шектелген. Қолданба ішіндегі хабарламалар лентасы жұмыс істейді.");
+          if(Notification.permission==="denied"&&!quiet)toast("Хабарламалар шектелген. Қолданба ішіндегі хабарламалар лентасы жұмыс істейді.");
           return;
         }
         const permission=await Notification.requestPermission();
         updatePermissionStatus("notifications",permission==="default"?"prompt":permission);
-        if(permission!=="granted")toast("Push-хабарламаларға рұқсат берілмеді. Қолданба ішіндегі лента сақталады.");
+        if(permission!=="granted"&&!quiet)toast("Push-хабарламаларға рұқсат берілмеді. Қолданба ішіндегі лента сақталады.");
       }catch(error){
         updatePermissionStatus("notifications","unsupported");
         console.error("Жүйелік хабарлама рұқсатын сұрау мүмкін болмады:",error);
-        toast("Жүйелік хабарлама рұқсатын сұрау мүмкін болмады. Қолданба ішіндегі лента жұмыс істейді.");
+        if(!quiet)toast("Жүйелік хабарлама рұқсатын сұрау мүмкін болмады. Қолданба ішіндегі лента жұмыс істейді.");
       }
     }
     async function requestMicrophonePermission() {
@@ -1223,7 +1230,15 @@
     }
     function updateAccountUi() {
       account=store.get("zhairemAccount",null);
-      if(!account){showScreen("auth");$("#bottomNav").hidden=true;return;}
+      if(!account){
+        $("#app").classList.remove("authenticated");
+        $("#bottomNav").hidden=true;
+        openDrawer(false);
+        showScreen("auth");
+        return;
+      }
+      $("#app").classList.add("authenticated");
+      openDrawer(false);
       if(!account.bonusBalances)account.bonusBalances={[account.role]:Math.max(0,Math.floor(Number(account.bonusBalance)||0))};
       if(!Object.prototype.hasOwnProperty.call(account.bonusBalances,account.role))account.bonusBalances[account.role]=0;
       account.bonusBalance=bonusBalance(account);
@@ -1262,11 +1277,17 @@
     }
     function updateNetworkIndicator() {
       const indicator=$("#networkIndicator");
-      const gpsActive=locationWatch!==null;
+      const displayedLocation=gpsHasFix||account?geoLocation:DEFAULT_LOCATION;
+      const coordinates=`${displayedLocation.lat.toFixed(4)}, ${displayedLocation.lng.toFixed(4)}`;
+      const gpsStatus=gpsHasFix?`GPS ${coordinates}`
+        :gpsState==="denied"?`GPS рұқсаты жоқ · ${coordinates}`
+        :gpsState==="unsupported"?`GPS қолжетімсіз · ${coordinates}`
+        :gpsState==="no-signal"?`GPS сигнал жоқ · ${coordinates}`
+        :`GPS спутнигі күтілуде · ${coordinates}`;
       indicator.classList.toggle("offline",!navigator.onLine);
       indicator.textContent=navigator.onLine
-        ?(gpsActive?"Онлайн + GPS спутник":"Онлайн · GPS спутнигі күтілуде")
-        :"Байланыс жоқ · Тек GPS спутниктік режим";
+        ?`Онлайн · ${gpsStatus}`
+        :`Офлайн · ${gpsHasFix?`GPS спутник ${coordinates}`:gpsStatus}`;
       weatherOfflineMode=!navigator.onLine;
       if(!navigator.onLine)renderWeather();
     }
@@ -1287,13 +1308,23 @@
       $("#fontFamilySelect").value=fontFamilies[settings.fontFamily]?settings.fontFamily:"system";
     }
     function startLocation() {
-      if(!navigator.geolocation){updatePermissionStatus("location","unsupported");$("#locationStatus").textContent="GPS қолжетімсіз · Жайрем әдепкі орны";toast("Бұл браузер GPS-ті қолдамайды. Жайремнің әдепкі орны қолданылады.");return;}
+      if(!navigator.geolocation){
+        geoLocation={...DEFAULT_LOCATION};gpsHasFix=false;gpsState="unsupported";
+        store.set("zhairemLocation",geoLocation);
+        updateNavigationReadout();updateNetworkIndicator();
+        updatePermissionStatus("location","unsupported");
+        $("#locationStatus").textContent="GPS қолжетімсіз · Әдепкі: Жайрем · 48.0061, 67.5964";
+        $("#homeStatus").textContent="Жайрем әдепкі орны";
+        return;
+      }
       const success=pos=>{
         geoLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
+        gpsHasFix=true;gpsState="active";
         gpsSpeedKmh=Number.isFinite(pos.coords.speed)?Math.max(0,pos.coords.speed*3.6):0;
         gpsHeading=Number.isFinite(pos.coords.heading)?pos.coords.heading:gpsHeading;
         store.set("zhairemLocation",geoLocation);
         updateNavigationReadout();
+        updateNetworkIndicator();
         maybeRefreshWeatherForLocation();
         updatePermissionStatus("location","granted");
         $("#locationStatus").textContent=`GPS: ${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)} · Жайрем`;
@@ -1314,27 +1345,33 @@
         }
       };
       const error=err=>{
-        const reason=err.code===1?"Рұқсат берілмеді":err.code===2?"Орналасқан жер анықталмады":"GPS жауабы күтілген уақытта келмеді";
+        const reason=err.code===1?"GPS рұқсаты берілмеді":err.code===2?"GPS сигналы жоқ":"GPS сигналы күтілуде";
+        gpsState=err.code===1?"denied":err.code===2?"no-signal":"searching";
         if(err.code===1){
           updatePermissionStatus("location","denied");
           if(locationWatch!==null)navigator.geolocation.clearWatch(locationWatch);
           locationWatch=null;
-          updateNetworkIndicator();
         }
+        geoLocation={...DEFAULT_LOCATION};gpsHasFix=false;gpsSpeedKmh=0;gpsHeading=null;
+        store.set("zhairemLocation",geoLocation);
+        updateNavigationReadout();updateNetworkIndicator();
         $("#locationStatus").textContent=reason+" · Жайрем әдепкі орны";
-        $("#homeStatus").textContent="GPS қолжетімсіз";
-        toast(reason+". Мекенжайды қолмен енгізе аласыз.");
+        $("#homeStatus").textContent="Жайрем әдепкі орны";
       };
       try{
         if(locationWatch!==null)navigator.geolocation.clearWatch(locationWatch);
+        gpsState="searching";
         locationWatch=navigator.geolocation.watchPosition(success,error,{enableHighAccuracy:true,timeout:10000,maximumAge:5000});
         updateNetworkIndicator();
         updatePermissionStatus("location","prompt");
-        $("#locationStatus").textContent="GPS рұқсаты күтілуде…";
+        $("#locationStatus").textContent="GPS спутнигі күтілуде · Әдепкі: Жайрем · 48.0061, 67.5964";
       }catch(error){
-        updatePermissionStatus("location","denied");
-        $("#locationStatus").textContent="GPS іске қосылмады · Жайрем әдепкі орны";
-        toast("GPS іске қосылмады: "+(error.message||"браузер рұқсат бермеді."));
+        geoLocation={...DEFAULT_LOCATION};gpsHasFix=false;gpsState="unsupported";
+        store.set("zhairemLocation",geoLocation);
+        updatePermissionStatus("location","unsupported");
+        updateNavigationReadout();updateNetworkIndicator();
+        $("#locationStatus").textContent="GPS қолжетімсіз · Әдепкі: Жайрем · 48.0061, 67.5964";
+        $("#homeStatus").textContent="Жайрем әдепкі орны";
       }
     }
     function createOrder() {
@@ -1737,9 +1774,10 @@
     }));
     $("#drawerLogout").addEventListener("click",()=>{
       if(locationWatch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(locationWatch);
-      locationWatch=null;
+      locationWatch=null;gpsHasFix=false;gpsState="idle";geoLocation={...DEFAULT_LOCATION};
       updateNetworkIndicator();
       localStorage.removeItem("zhairemAccount");account=null;$("#bottomNav").hidden=true;showScreen("auth");toast("Аккаунттан шықты.");
+      $("#app").classList.remove("authenticated");
     });
 
     $$("[data-auth-role]").forEach(btn=>btn.addEventListener("click",()=>{
@@ -1789,6 +1827,8 @@
         $("#authSms").classList.remove("active");$("#authInfo").classList.add("active");
         smsCode="";return;
       }
+      startLocation();
+      void requestNotificationPermission({quiet:true});
       try{
         const existing=store.get("zhairemAccount",null);
         const sameAccount=existing?.phone===smsPhone&&existing?.role===authRole;
@@ -1807,11 +1847,14 @@
         account=accountData;
         smsCode="";$("#smsCode").value="";
         updateAccountUi();showScreen("home");
-        startLocation();
-        void requestNotificationPermission();
         void refreshPermissionStatuses();
         toast((authRole==="driver"?"Жүргізуші тіркелді: жергілікті веб-нұсқада құжаттары енгізілген, бірақ серверлік тексеру жоқ.":"Жолаушы тіркелді.")+" Басты бет ашылды.");
       }catch(error){
+        if(!account&&locationWatch!==null&&navigator.geolocation){
+          navigator.geolocation.clearWatch(locationWatch);
+          locationWatch=null;gpsHasFix=false;gpsState="idle";geoLocation={...DEFAULT_LOCATION};
+          updateNetworkIndicator();
+        }
         toast("Аккаунтты сақтау немесе суретті оқу мүмкін болмады: "+(error.message||"файлға қолжетімсіз."));
       }
     });
@@ -1981,7 +2024,7 @@
           const key=localStorage.key(i);
           if(key&&key.startsWith("zhairem"))localStorage.removeItem(key);
         }
-        account=null;currentOrder=null;locationWatch=null;
+        account=null;currentOrder=null;locationWatch=null;gpsHasFix=false;gpsState="idle";
         smsCode="";lastAiAnswer="";
         geoLocation={...DEFAULT_LOCATION};
         weatherRequestedLocation=null;weatherGpsLocationRefreshed=false;weatherLastRequestedAt=0;
@@ -2046,6 +2089,7 @@
     }
     refreshPermissionStatuses();
     showScreen(account?"home":"auth");
+    if(account)startLocation();
   })();
   </script>
 </body>
