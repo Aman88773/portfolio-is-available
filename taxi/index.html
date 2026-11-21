@@ -121,6 +121,9 @@
     .quote-result p { margin:5px 0; }
     .quote-total { color:var(--accent); font-size:1.2rem; font-weight:900; }
     .field-help { margin:0; color:var(--muted); font-size:.78rem; }
+    .permission-actions,.navigator-actions { display:flex; flex-wrap:wrap; gap:8px; }
+    .permission-state { color:var(--accent); font-weight:800; }
+    .navigator-message { min-height:56px; border-left:4px solid var(--accent); border-radius:10px; background:var(--surface2); padding:12px; }
     @media(max-width:700px) {
       .app { width:min(100% - 16px,1120px); }
       .grid-2,.grid-3,.form-grid,.auth-choice { grid-template-columns:1fr; }
@@ -171,6 +174,22 @@
             <button class="button" data-auth-role="passenger">Жолаушы ретінде кіру</button>
             <button class="button primary" data-auth-role="driver">Жүргізуші ретінде тіркелу</button>
           </div>
+          <section class="card" style="margin-top:14px" aria-labelledby="permissionTitle">
+            <h2 id="permissionTitle">Рұқсаттарды басқару</h2>
+            <p class="muted">Рұқсаттар тек тиісті функцияны таңдағанда сұралады. GPS тек карта мен бағытқа, микрофон дауысты чат/AI мәтініне, хабарламалар сапар жаңартуларына қолданылады. Чат не хабарлама орталығын ашқанда браузер хабарлама рұқсатын сұрауы мүмкін. Мәтіндік чат рұқсатсыз да жұмыс істейді.</p>
+            <div class="list">
+              <div class="list-item"><strong>Локация (GPS)</strong><span>Орналасқан жерді картада көрсету және бағытты сапарға беру үшін ғана.</span><span class="permission-state" data-permission-status="location">Күйі тексерілуде…</span></div>
+              <div class="list-item"><strong>Микрофон</strong><span>Дауыстық чатқа немесе AI-ға сөйлеуді мәтінге айналдыру үшін ғана.</span><span class="permission-state" data-permission-status="microphone">Күйі тексерілуде…</span></div>
+              <div class="list-item"><strong>Хабарламалар</strong><span>Сапар мен тапсырыс жаңартуларын хабарлау үшін ғана.</span><span class="permission-state" data-permission-status="notifications">Күйі тексерілуде…</span></div>
+              <div class="list-item"><strong>Мәтіндік чат</strong><span>Құрылғы рұқсатын қажет етпейді; чат мәтінін осы құрылғыда сақтайды.</span><span class="permission-state" data-permission-status="chat">Қосымша рұқсаты қажет емес</span></div>
+            </div>
+            <div class="permission-actions" style="margin-top:10px">
+              <button class="button secondary" type="button" data-permission-action="location">GPS рұқсатын сұрау</button>
+              <button class="button secondary" type="button" data-permission-action="microphone">Микрофонды тексеру</button>
+              <button class="button secondary" type="button" data-permission-action="notifications">Хабарлама рұқсатын сұрау</button>
+              <button class="button secondary" type="button" data-screen="chat">Мәтіндік чатты ашу</button>
+            </div>
+          </section>
           <div id="authSteps" hidden>
             <div class="auth-step active" id="authInfo">
               <div class="form-grid">
@@ -222,6 +241,24 @@
             <a class="button whatsapp" target="_blank" rel="noopener" href="https://wa.me/77478632459">WhatsApp</a>
             <button class="button secondary" data-screen="booking">Тапсырыс беру</button>
             <button class="button secondary" data-screen="intercity">Қалааралық баға</button>
+          </div>
+        </article>
+        <article class="card" style="margin-top:12px">
+          <h2>AI-навигатор</h2>
+          <p class="field-help">Бағыт пен сапар/жеткізу мәртебесі жолаушыға да, жүргізушіге де мәтінмен көрсетіліп, дауыс қосылса дауыстап оқылады.</p>
+          <div class="navigator-message" id="navigatorMessage" aria-live="polite">Жайрем кенті: әдепкі бағыт · 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге).</div>
+          <div class="settings-row">
+            <label for="navigatorVoice">Дауыспен хабарлауды қосу/өшіру</label>
+            <input type="checkbox" id="navigatorVoice" aria-describedby="navigatorVoiceSupport">
+          </div>
+          <p class="field-help" id="navigatorVoiceSupport">Дауысты оқу қолжетімді болмаса, бағыт туралы мәтін осы жерде көрсетіледі.</p>
+          <div class="navigator-actions" style="margin-top:10px">
+            <button class="button secondary" id="announceLocalRoute" type="button">Кент ішіндегі бағыт · 400 ₸</button>
+            <button class="button secondary" id="announceIntercityRoute" type="button">Қалааралық бағыт</button>
+            <button class="button secondary" id="announceDriverApproach" type="button">Жүргізуші жақындап келеді</button>
+            <button class="button secondary" id="announceTripStatus" type="button">Сапар мәртебесі</button>
+            <button class="button secondary" id="announceDeliveryStatus" type="button">Жеткізу мәртебесі</button>
+            <button class="button primary" id="speakCurrentRoute" type="button">Қазіргі бағытты дауыстап айту</button>
           </div>
         </article>
         <div class="quick">
@@ -447,10 +484,19 @@
             <button class="button danger" id="deleteAccount">Деректер мен аккаунтты өшіру</button>
           </div>
           <h3 style="margin-top:18px">Құрылғы рұқсаттары</h3>
+          <p class="field-help">Рұқсаттар тек навигация, дауыстық байланыс және сапар хабарламалары үшін сұралады. Рұқсат бермеу мәтіндік чатқа және Жайремнің әдепкі орнына әсер етпейді.</p>
           <div class="list">
-            <div class="list-item"><strong>Геолокация</strong><span>GPS сапарды картада көрсету және жүргізушіге бағытты беру үшін ғана қолданылады. Рұқсат бермесеңіз, Жайремнің әдепкі орны пайдаланылады.</span></div>
+            <div class="list-item"><strong>Геолокация</strong><span>GPS сапарды картада көрсету және жүргізушіге бағытты беру үшін ғана қолданылады.</span><span class="permission-state" data-permission-status="location">Күйі тексерілуде…</span></div>
             <div class="list-item"><strong>Камера / суреттер</strong><span>Профиль фотосы және жүргізуші құжаттарының суреттері үшін. Файл таңдау кезінде браузердің камера/сурет рұқсаты сұралуы мүмкін.</span></div>
-            <div class="list-item"><strong>Микрофон</strong><span>Чатқа немесе AI-көмекшіге дауыспен мәтін енгізу үшін ғана; браузер рұқсаты әр іске қосқанда сұралуы мүмкін.</span></div>
+            <div class="list-item"><strong>Микрофон</strong><span>Чатқа немесе AI-көмекшіге дауыспен мәтін енгізу үшін ғана.</span><span class="permission-state" data-permission-status="microphone">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Хабарламалар</strong><span>Сапар мен тапсырыс жаңартулары үшін ғана; рұқсат болмаса, қолданба ішіндегі лента жұмыс істейді.</span><span class="permission-state" data-permission-status="notifications">Күйі тексерілуде…</span></div>
+            <div class="list-item"><strong>Мәтіндік чат</strong><span>Құрылғы рұқсатын қажет етпейді және микрофонсыз да қолданылады.</span><span class="permission-state" data-permission-status="chat">Қосымша рұқсаты қажет емес</span></div>
+          </div>
+          <div class="permission-actions" style="margin-top:10px">
+            <button class="button secondary" type="button" data-permission-action="location">GPS рұқсатын сұрау</button>
+            <button class="button secondary" type="button" data-permission-action="microphone">Микрофонды тексеру</button>
+            <button class="button secondary" type="button" data-permission-action="notifications">Хабарлама рұқсатын сұрау</button>
+            <button class="button secondary" type="button" data-screen="chat">Мәтіндік чатты ашу</button>
           </div>
         </article>
       </section>
@@ -464,7 +510,7 @@
           <h2>Сақтау және бөлісу</h2>
           <p>Осы веб-нұсқада деректер осы құрылғының браузеріндегі жергілікті жадта сақталады; серверге синхрондау қарастырылмаған. WhatsApp-қа жібергенде хабарлама мазмұны WhatsApp-қа, ал Kaspi төлемі Kaspi.kz қызметіне беріледі және олардың өз саясаты қолданылады. Сыртқы қызметтерге жіберілетін ақпаратты тексеріңіз.</p>
           <h2>Рұқсаттар мен таңдау</h2>
-          <p>GPS тек карта/бағыт үшін, камера немесе суреттер профиль/жүргізуші құжаттары үшін, микрофон дауысты мәтінге енгізу үшін пайдаланылады. Рұқсатты бермеу осы функцияны шектейді, бірақ қолмен мекенжай енгізуге болады.</p>
+          <p>GPS тек карта/бағыт үшін, камера немесе суреттер профиль/жүргізуші құжаттары үшін, микрофон дауысты мәтінге енгізу үшін, ал хабарламалар сапар жаңартулары үшін пайдаланылады. Рұқсаттар тиісті функцияны таңдағанда ғана сұралады. Рұқсатты бермеу осы функцияны шектейді, бірақ қолмен мекенжай енгізу, Жайремнің әдепкі орны және қолданба ішіндегі мәтіндік чат/хабарламалар лентасы қолжетімді болып қалады.</p>
           <h2>Сақтау мерзімі және өшіру</h2>
           <p>Жергілікті жазбалар браузер жадында өшірілгенге дейін қалады. «Баптаулар → Деректер мен аккаунтты өшіру» пәрмені қолданбаның осы браузердегі деректерін жояды. Бұл әрекет WhatsApp немесе Kaspi-де бұрын жіберілген деректерді жоймайды.</p>
           <p class="field-help">Жария өндірістік қолданбаға енгізер алдында деректерді бақылаушының заңды атауы, байланыс деректері, нақты өңдеу/сақтау мерзімі және шағым беру тәсілі көрсетілген ресми саясатпен толықтырыңыз.</p>
@@ -514,15 +560,17 @@
     let geoLocation=store.get("zhairemLocation",DEFAULT_LOCATION);
     let currentOrder=store.get("zhairemCurrentOrder",null);
     let account=store.get("zhairemAccount",null);
+    let navigatorMessage="Жайрем кенті: әдепкі бағыт · 400 ₸ (350 ₸ жүргізушіге / 50 ₸ әкімшіге).";
 
-    function toast(text) {
+    function toast(text,notifyDevice=false) {
       const el=document.createElement("div"); el.className="toast"; el.textContent=text;
       $("#toastWrap").appendChild(el);
       setTimeout(()=>el.remove(),4200);
-      if ("Notification" in window && Notification.permission==="granted") {
-        try { new Notification("Zhairem Taxi",{body:text}); } catch(_) {}
-      }
       addNotification(text);
+      if(notifyDevice&&"Notification" in window&&Notification.permission==="granted"){
+        try{new Notification("Zhairem Taxi",{body:text});}
+        catch(error){console.error("Құрылғы хабарламасын көрсету мүмкін болмады:",error);}
+      }
     }
     function addNotification(text) {
       const list=store.get("zhairemNotifications",[]);
@@ -556,9 +604,140 @@
       $$(".bottom-nav button").forEach(b=>b.classList.toggle("active",b.dataset.screen===name));
       openDrawer(false);
       window.scrollTo({top:0,behavior:"smooth"});
+      if(name==="chat"||name==="notifications")requestNotificationPermission();
     }
-    function requestNotificationPermission() {
-      if("Notification" in window && Notification.permission==="default") Notification.requestPermission().catch(()=>{});
+    function permissionLabel(state) {
+      return state==="granted"?"Рұқсат берілді":state==="denied"?"Шектелді":state==="unsupported"?"Қолдау жоқ":"Сұралмады";
+    }
+    function updatePermissionStatus(name,state) {
+      const saved=store.get("zhairemPermissionStatus",{});
+      saved[name]=state;
+      store.set("zhairemPermissionStatus",saved);
+      $$(`[data-permission-status="${name}"]`).forEach(el=>{
+        el.textContent=name==="chat"?"Қосымша рұқсаты қажет емес":permissionLabel(state);
+      });
+    }
+    async function readPermissionState(name,browserName) {
+      if(name==="notifications"){
+        if(!("Notification" in window))return "unsupported";
+        return Notification.permission==="default"?"prompt":Notification.permission;
+      }
+      if(!navigator.permissions?.query)return store.get("zhairemPermissionStatus",{})[name]||"prompt";
+      try{
+        const status=await navigator.permissions.query({name:browserName});
+        return status.state;
+      }catch(_){
+        return store.get("zhairemPermissionStatus",{})[name]||"prompt";
+      }
+    }
+    async function refreshPermissionStatuses() {
+      const [location,microphone,notifications]=await Promise.all([
+        readPermissionState("location","geolocation"),
+        readPermissionState("microphone","microphone"),
+        readPermissionState("notifications")
+      ]);
+      updatePermissionStatus("location",location);
+      updatePermissionStatus("microphone",microphone);
+      updatePermissionStatus("notifications",notifications);
+      updatePermissionStatus("chat","granted");
+    }
+    async function requestNotificationPermission() {
+      if(!("Notification" in window)){
+        updatePermissionStatus("notifications","unsupported");
+        toast("Бұл браузер push-хабарламаларды қолдамайды. Қолданба ішіндегі хабарламалар лентасы қолжетімді.");
+        return;
+      }
+      if(Notification.permission!=="default"){
+        updatePermissionStatus("notifications",Notification.permission);
+        if(Notification.permission==="denied")toast("Хабарламалар шектелген. Қолданба ішіндегі хабарламалар лентасы жұмыс істейді.");
+        return;
+      }
+      try{
+        const permission=await Notification.requestPermission();
+        updatePermissionStatus("notifications",permission==="default"?"prompt":permission);
+        if(permission!=="granted")toast("Push-хабарламаларға рұқсат берілмеді. Қолданба ішіндегі хабарламалар лентасы сақталады.");
+      }catch(error){
+        updatePermissionStatus("notifications","denied");
+        toast("Хабарлама рұқсатын сұрау мүмкін болмады. Қолданба ішіндегі лента жұмыс істейді.");
+      }
+    }
+    async function requestMicrophonePermission() {
+      if(!navigator.mediaDevices?.getUserMedia){
+        updatePermissionStatus("microphone","unsupported");
+        toast("Бұл браузер микрофон рұқсатын қолдамайды. Дауыстық енгізудің орнына мәтінді қолданыңыз.");
+        return false;
+      }
+      try{
+        const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+        stream.getTracks().forEach(track=>track.stop());
+        updatePermissionStatus("microphone","granted");
+        toast("Микрофон рұқсаты берілді. Ол тек дауысты мәтінге енгізу үшін қолданылады.");
+        return true;
+      }catch(error){
+        updatePermissionStatus("microphone","denied");
+        const reason=error.name==="NotAllowedError"?"Микрофонға рұқсат берілмеді немесе ол шектелген.":"Микрофон қолжетімсіз.";
+        toast(reason+" Мәтінді қолмен енгізе аласыз.");
+        return false;
+      }
+    }
+    function speakNavigatorMessage(text=navigatorMessage) {
+      if(!("speechSynthesis" in window)||typeof window.SpeechSynthesisUtterance!=="function"){
+        $("#navigatorVoiceSupport").textContent="Бұл құрылғыда дауыстық синтез жоқ. Навигатор хабарламасы мәтін түрінде көрсетіледі.";
+        return false;
+      }
+      try{
+        window.speechSynthesis.cancel();
+        const utterance=new SpeechSynthesisUtterance(text);
+        utterance.lang="kk-KZ";
+        utterance.onerror=()=>{
+          $("#navigatorVoiceSupport").textContent="Дауыс оқылмады. Бағыт мәтіні экранда сақталады.";
+        };
+        window.speechSynthesis.speak(utterance);
+        $("#navigatorVoiceSupport").textContent="Дауыстап хабарлау қолжетімді.";
+        return true;
+      }catch(error){
+        $("#navigatorVoiceSupport").textContent="Дауыс оқылмады. Бағыт мәтіні экранда сақталады.";
+        return false;
+      }
+    }
+    function updateNavigator(text,shouldSpeak=true) {
+      navigatorMessage=text;
+      $("#navigatorMessage").textContent=text;
+      if(shouldSpeak&&$("#navigatorVoice").checked)speakNavigatorMessage(text);
+    }
+    function routeDescription(from,to) {
+      return (from||"Жайрем кенті")+" → "+(to||"бағыт көрсетілмеген");
+    }
+    function announceLocalRoute() {
+      const from=currentOrder?.from||$("#rideFrom").value.trim()||"Жайрем кенті";
+      const to=currentOrder?.to||$("#rideTo").value.trim()||"Жайрем кенті";
+      updateNavigator("Жолаушы мен жүргізушіге: кент ішіндегі бағыт "+routeDescription(from,to)+". Тұрақты тариф 400 ₸: 350 ₸ жүргізушіге, 50 ₸ әкімшіге.");
+    }
+    function announceIntercityRoute() {
+      const quote=renderIntercityQuote();
+      const from=quote?.from||$("#intercityFrom").value.trim()||"Жайрем кенті";
+      const to=quote?.to||$("#intercityCustomDestination").value.trim()||$("#intercityDestination").selectedOptions[0].textContent;
+      const price=quote?` Алдын ала есеп: ${quote.net.toLocaleString("kk-KZ")} ₸.`:" Баға калькуляторда есептеледі.";
+      updateNavigator("Жолаушы мен жүргізушіге: қалааралық бағыт "+routeDescription(from,to)+"."+price+" Түпкілікті бағаны жүргізуші WhatsApp-та растайды.");
+    }
+    function announceDriverApproach() {
+      const status=currentOrder?.status;
+      const message=status==="arrived"||status==="completed"
+        ?"Жолаушы мен жүргізушіге: жүргізуші межелі мекенжайға келді."
+        :"Жолаушы мен жүргізушіге: жүргізуші тапсырыс мекенжайына жақындап келеді. Бағыт: "+routeDescription(currentOrder?.from||"Жайрем кенті",currentOrder?.to||"");
+      updateNavigator(message);
+    }
+    function announceTripStatus(shouldSpeak=true) {
+      const labels={searching:"жүргізуші ізделуде",onWay:"жүргізуші жолаушыға қарай келе жатыр",arrived:"көлік келді",completed:"сапар аяқталды",cancelled:"сапардан бас тартылды"};
+      const status=currentOrder?.status;
+      updateNavigator(status
+        ?`Жолаушы мен жүргізушіге: ${routeDescription(currentOrder.from,currentOrder.to)}. Сапар мәртебесі: ${labels[status]||status}.`
+        :"Жолаушы мен жүргізушіге: белсенді сапар жоқ. Жайрем кентіндегі тұрақты тариф 400 ₸.",shouldSpeak);
+    }
+    function announceDeliveryStatus() {
+      const order=store.get("zhairemIntercityTrips",[]).find(item=>item.accountId===account?.id&&item.role===account?.role);
+      const status=order?.status==="completed"?"жеткізу аяқталды":order?"жеткізу WhatsApp-та сұралды":"жеткізу әлі сұралмаған";
+      updateNavigator(`Жолаушы мен жүргізушіге: ${order?routeDescription(order.from,order.to)+". ":""}Жеткізу мәртебесі: ${status}.`);
     }
     function fileToDataUrl(file) {
       return new Promise((resolve,reject)=>{
@@ -653,10 +832,11 @@
       $("#themeSelect").value=settings.theme;$("#accentSelect").value=settings.accent;$("#fontSelect").value=settings.font;
     }
     function startLocation() {
-      if(!navigator.geolocation){$("#locationStatus").textContent="GPS қолжетімсіз · Жайрем әдепкі орны";toast("Бұл браузер GPS-ті қолдамайды. Жайремнің әдепкі орны қолданылады.");return;}
+      if(!navigator.geolocation){updatePermissionStatus("location","unsupported");$("#locationStatus").textContent="GPS қолжетімсіз · Жайрем әдепкі орны";toast("Бұл браузер GPS-ті қолдамайды. Жайремнің әдепкі орны қолданылады.");return;}
       const success=pos=>{
         geoLocation={lat:pos.coords.latitude,lng:pos.coords.longitude};
         store.set("zhairemLocation",geoLocation);
+        updatePermissionStatus("location","granted");
         $("#locationStatus").textContent=`GPS: ${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)} · Жайрем`;
         $("#homeStatus").textContent="GPS қосулы";
         $("#driverLocationStatus").textContent=`Жолаушы бағыты: ${geoLocation.lat.toFixed(5)}, ${geoLocation.lng.toFixed(5)}`;
@@ -668,6 +848,7 @@
       };
       const error=err=>{
         const reason=err.code===1?"Рұқсат берілмеді":err.code===2?"Орналасқан жер анықталмады":"GPS жауабы күтілген уақытта келмеді";
+        if(err.code===1)updatePermissionStatus("location","denied");
         $("#locationStatus").textContent=reason+" · Жайрем әдепкі орны";
         $("#homeStatus").textContent="GPS қолжетімсіз";
         toast(reason+". Мекенжайды қолмен енгізе аласыз.");
@@ -675,8 +856,10 @@
       try{
         if(locationWatch!==null)navigator.geolocation.clearWatch(locationWatch);
         locationWatch=navigator.geolocation.watchPosition(success,error,{enableHighAccuracy:true,timeout:10000,maximumAge:5000});
+        updatePermissionStatus("location","prompt");
         $("#locationStatus").textContent="GPS рұқсаты күтілуде…";
       }catch(error){
+        updatePermissionStatus("location","denied");
         $("#locationStatus").textContent="GPS іске қосылмады · Жайрем әдепкі орны";
         toast("GPS іске қосылмады: "+(error.message||"браузер рұқсат бермеді."));
       }
@@ -702,8 +885,9 @@
       store.set("zhairemCurrentOrder",order);currentOrder=order;
       renderHistory();renderDriverOrder();
       renderRideActions();
-      toast("Тапсырыс қабылданды. Жүргізуші ізделуде.");
+      toast("Тапсырыс қабылданды. Жүргізуші ізделуде.",true);
       addNotification("Тапсырыс қабылданды");
+      announceTripStatus();
       startMovingCar();
       return order;
     }
@@ -824,7 +1008,8 @@
       store.set("zhairemIntercityTrips",orders.slice(0,100));
       renderIntercityOrders();
       renderHistory();
-      toast("Қалааралық есеп WhatsApp-қа дайындалды.");
+      announceIntercityRoute();
+      toast("Қалааралық есеп WhatsApp-қа дайындалды.",true);
     }
     function renderIntercityOrders() {
       const box=$("#intercityOrders");
@@ -869,7 +1054,8 @@
       }
       recordBonusMovement("earned",BONUS_REWARDS[account.role],"Аяқталған қалааралық сапар / жеткізу",order.id);
       renderIntercityOrders();renderHistory();
-      toast("Сапар аяқталды. Бонус қозғалысы тарихқа сақталды.");
+      announceDeliveryStatus();
+      toast("Сапар аяқталды. Бонус қозғалысы тарихқа сақталды.",true);
     }
     function renderDriverOrder() {
       const box=$("#driverOrder");
@@ -885,6 +1071,8 @@
       const i=trips.findIndex(t=>t.id===currentOrder.id);
       if(i>=0){trips[i]={...trips[i],...changes};store.set("zhairemTrips",trips);}
       renderHistory();renderDriverOrder();renderRideActions();
+      if(changes.status==="onWay")announceDriverApproach();
+      else if(changes.status)announceTripStatus();
     }
     function renderRideActions() {
       const box=$("#activeRideActions");
@@ -907,7 +1095,7 @@
       const thanks=store.get("zhairemThanks",[]);
       thanks.unshift({text:"Сапар сәтті аяқталды · Әдептілік үшін алғыс",time:new Date().toISOString(),accountId:account?.id});
       store.set("zhairemThanks",thanks);
-      toast("Сапар сәтті аяқталды. 400 ₸ төлемі тарихқа сақталды.");
+      toast("Сапар сәтті аяқталды. 400 ₸ төлемі тарихқа сақталды.",true);
       addNotification("Сапар аяқталды");
       renderHistory();
       updateAccountUi();
@@ -922,12 +1110,12 @@
       violations.unshift({text:"Негізсіз бас тарту/Кешігу: "+text,time:new Date().toISOString(),accountId:account?.id});
       store.set("zhairemViolations",violations);
       updateCurrentOrder({status:"cancelled",cancelReason:text});
-      toast("Тапсырыстан бас тартылды. Себебі тарихқа жазылды.");
+      toast("Тапсырыстан бас тартылды. Себебі тарихқа жазылды.",true);
     }
     function confirmPayment() {
       if(!currentOrder){toast("Алдымен тапсырыс беріңіз.");return;}
       updateCurrentOrder({payment:"paid"});
-      toast("400 ₸ төлем расталды: 350 ₸ жүргізушіге / 50 ₸ әкімшіге.");
+      toast("400 ₸ төлем расталды: 350 ₸ жүргізушіге / 50 ₸ әкімшіге.",true);
       addNotification("400 ₸ төлем расталды");
     }
     function sendChat(text) {
@@ -965,17 +1153,37 @@
       const a=document.createElement("div");a.className="message";a.textContent=lastAiAnswer;box.appendChild(a);
       $("#aiInput").value="";box.scrollTop=box.scrollHeight;
     }
-    function startSpeech(targetCallback) {
+    async function startSpeech(targetCallback) {
       const SpeechRecognition=window.SpeechRecognition||window.webkitSpeechRecognition;
       if(!SpeechRecognition){toast("Бұл браузер дауыстық тануды қолдамайды.");return;}
       if(!window.confirm("Микрофон дауысты мәтінге айналдыру үшін ғана пайдаланылады. Браузер рұқсат сұрауы мүмкін. Жалғастырасыз ба?"))return;
-      const recognition=new SpeechRecognition();recognition.lang="kk-KZ";recognition.interimResults=false;
-      recognition.onresult=e=>targetCallback(e.results[0][0].transcript);
-      recognition.onerror=e=>{
-        const reason=e.error==="not-allowed"?"Микрофонға рұқсат берілмеді":e.error==="no-speech"?"Дауыс анықталмады":"Дауысты тану аяқталмады";
-        toast(reason+". Мәтінді қолмен енгізе аласыз.");
-      };
-      try{recognition.start();}catch(error){toast("Микрофон іске қосылмады: "+(error.message||"рұқсат жоқ."));}
+      if(!navigator.mediaDevices?.getUserMedia){
+        updatePermissionStatus("microphone","unsupported");
+        toast("Бұл браузер микрофон рұқсатын қолдамайды. Мәтінді қолмен енгізе аласыз.");
+        return;
+      }
+      let stream;
+      try{
+        stream=await navigator.mediaDevices.getUserMedia({audio:true});
+        updatePermissionStatus("microphone","granted");
+      }catch(error){
+        updatePermissionStatus("microphone","denied");
+        toast((error.name==="NotAllowedError"?"Микрофонға рұқсат берілмеді.":"Микрофон қолжетімсіз.")+" Мәтінді қолмен енгізе аласыз.");
+        return;
+      }
+      const releaseMicrophone=()=>stream?.getTracks().forEach(track=>track.stop());
+      try{
+        const recognition=new SpeechRecognition();recognition.lang="kk-KZ";recognition.interimResults=false;
+        recognition.onresult=e=>targetCallback(e.results[0][0].transcript);
+        recognition.onerror=e=>{
+          if(e.error==="not-allowed")updatePermissionStatus("microphone","denied");
+          const reason=e.error==="not-allowed"?"Микрофонға рұқсат берілмеді":e.error==="no-speech"?"Дауыс анықталмады":"Дауысты тану аяқталмады";
+          toast(reason+". Мәтінді қолмен енгізе аласыз.");
+          releaseMicrophone();
+        };
+        recognition.onend=releaseMicrophone;
+        recognition.start();
+      }catch(error){releaseMicrophone();toast("Микрофон іске қосылмады: "+(error.message||"рұқсат жоқ."));}
     }
     function openGoogleSearch(query) {
       window.open("https://www.google.com/search?q="+encodeURIComponent(query),"_blank","noopener");
@@ -988,6 +1196,11 @@
       e.preventDefault();showScreen(el.dataset.screen);
     }));
     $("#openNotifications").addEventListener("click",()=>showScreen("notifications"));
+    $$("[data-permission-action]").forEach(button=>button.addEventListener("click",()=>{
+      if(button.dataset.permissionAction==="location")startLocation();
+      else if(button.dataset.permissionAction==="microphone")requestMicrophonePermission();
+      else if(button.dataset.permissionAction==="notifications")requestNotificationPermission();
+    }));
     $("#drawerLogout").addEventListener("click",()=>{
       localStorage.removeItem("zhairemAccount");account=null;$("#bottomNav").hidden=true;showScreen("auth");toast("Аккаунттан шықты.");
     });
@@ -1054,13 +1267,13 @@
     $("#acceptOrder").addEventListener("click",()=>{
       if(!currentOrder){toast("Белсенді тапсырыс жоқ.");return;}
       updateCurrentOrder({status:"onWay"});
-      toast("Тапсырыс қабылданды");
+      toast("Тапсырыс қабылданды",true);
       addNotification("Тапсырыс қабылданды");
     });
     $("#arrivedOrder").addEventListener("click",()=>{
       if(!currentOrder){toast("Белсенді тапсырыс жоқ.");return;}
       updateCurrentOrder({status:"arrived"});
-      toast("Көлік келді");
+      toast("Көлік келді",true);
       addNotification("Көлік келді");
     });
     $("#driverOnline").addEventListener("change",e=>toast(e.target.checked?"Жүргізуші желіде.":"Жүргізуші желіден шықты."));
@@ -1119,6 +1332,18 @@
     $("#locateMe").addEventListener("click",()=>{
       if(!window.confirm("Геолокация картада орналасқан жерді көрсету және сапар бағытын жүргізушіге беру үшін қолданылады. Рұқсат бермесеңіз, Жайремнің әдепкі орны пайдаланылады. GPS-ті қосасыз ба?"))return;
       startLocation();
+    });
+    $("#announceLocalRoute").addEventListener("click",announceLocalRoute);
+    $("#announceIntercityRoute").addEventListener("click",announceIntercityRoute);
+    $("#announceDriverApproach").addEventListener("click",announceDriverApproach);
+    $("#announceTripStatus").addEventListener("click",announceTripStatus);
+    $("#announceDeliveryStatus").addEventListener("click",announceDeliveryStatus);
+    $("#speakCurrentRoute").addEventListener("click",()=>speakNavigatorMessage());
+    $("#navigatorVoice").checked=store.get("zhairemSpeechEnabled",false);
+    $("#navigatorVoice").addEventListener("change",event=>{
+      store.set("zhairemSpeechEnabled",event.currentTarget.checked);
+      if(event.currentTarget.checked)speakNavigatorMessage();
+      else if(window.speechSynthesis)window.speechSynthesis.cancel();
     });
     $("#intercityDestination").addEventListener("change",updateIntercityDestination);
     $("#intercityService").addEventListener("change",updateIntercityService);
@@ -1182,7 +1407,11 @@
     renderDriverOrder();
     renderRideActions();
     startMovingCar();
-    requestNotificationPermission();
+    if(currentOrder)announceTripStatus(false);
+    if(!("speechSynthesis" in window)||typeof window.SpeechSynthesisUtterance!=="function"){
+      $("#navigatorVoiceSupport").textContent="Бұл құрылғыда дауыстық синтез жоқ. Навигатор хабарламасы мәтін түрінде көрсетіледі.";
+    }
+    refreshPermissionStatuses();
   })();
   </script>
 </body>
