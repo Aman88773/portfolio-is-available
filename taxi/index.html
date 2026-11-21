@@ -216,11 +216,34 @@
     .benefits-explainer h3 { margin: 0 0 7px; }
     .benefits-explainer p { margin: 0; color: #d5e0e9; font-size: .89rem; }
     .community-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .community-grid.single-card { grid-template-columns: 1fr; }
     .community-card h3 { margin-bottom: 8px; }
     .community-card p, .community-card li { color: var(--muted); font-size: .87rem; }
     .community-card ul { display: grid; gap: 7px; margin: 10px 0 17px; padding-left: 20px; }
     .community-actions { display: flex; flex-wrap: wrap; gap: 9px; margin-top: 15px; }
     .community-actions .button { flex: 1 1 180px; }
+    .role-switch { display: flex; flex-wrap: wrap; gap: 8px; margin: 24px 0 18px; }
+    .role-switch button { min-height: 44px; border: 1px solid var(--line); border-radius: 12px; padding: 9px 16px; background: #fff; color: var(--ink); font-weight: 800; }
+    .role-switch button[aria-pressed="true"] { border-color: var(--green); background: var(--green); color: #fff; }
+    .order-status-card { margin-top: 15px; }
+    .order-status-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; margin: 14px 0; padding: 0; list-style: none; }
+    .order-status-list li { display: flex; align-items: center; gap: 8px; min-height: 48px; border: 1px solid var(--line); border-radius: 12px; padding: 9px; color: var(--muted); font-size: .8rem; font-weight: 750; }
+    .order-status-list li[aria-current="step"] { border-color: var(--green); background: #eaf6ef; color: var(--green-dark); }
+    .order-status-number { display: grid; width: 25px; height: 25px; flex: 0 0 auto; place-items: center; border-radius: 50%; background: var(--blue); font-size: .75rem; }
+    .order-status-list li[aria-current="step"] .order-status-number { background: var(--green); color: #fff; }
+    .driver-dashboard { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .driver-order-details { display: grid; gap: 9px; margin: 14px 0; }
+    .driver-order-details div { display: flex; justify-content: space-between; gap: 12px; border-bottom: 1px solid var(--line); padding-bottom: 8px; font-size: .85rem; }
+    .driver-order-details span { color: var(--muted); }
+    .driver-order-details strong { text-align: right; overflow-wrap: anywhere; }
+    .driver-order-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+    .driver-order-actions .button { flex: 1 1 170px; }
+    .release-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .partner-income-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 14px; }
+    .income-total { display: flex; justify-content: space-between; gap: 12px; margin-top: 14px; border-radius: 13px; padding: 13px; background: var(--ink); color: #fff; }
+    .income-total strong { color: var(--lime); white-space: nowrap; }
+    .release-state { display: inline-flex; margin: 8px 0 10px; border-radius: 999px; padding: 6px 11px; background: #fff1df; color: #805100; font-size: .8rem; font-weight: 850; }
+    .release-checklist { display: grid; gap: 8px; margin: 10px 0; padding-left: 20px; color: var(--muted); font-size: .86rem; }
     .driver-report { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
     .driver-report-total { grid-column: 1 / -1; display: flex; justify-content: space-between; gap: 10px; padding: 12px; border-radius: 12px; background: #f2f6f3; color: var(--muted); font-size: .85rem; }
     .driver-report-total strong { color: var(--ink); }
@@ -255,6 +278,7 @@
       .payment-card { position: static; }
       .benefit-grid { grid-template-columns: 1fr; }
       .community-grid { grid-template-columns: 1fr; }
+      .driver-dashboard, .release-grid { grid-template-columns: 1fr; }
       .route-points { grid-template-columns: repeat(2, minmax(0,1fr)); }
     }
     @media (max-width: 560px) {
@@ -270,6 +294,8 @@
       .count-row { grid-template-columns: 1fr; }
       .payment-options { grid-template-columns: 1fr; }
       .driver-report, .install-grid { grid-template-columns: 1fr; }
+      .order-status-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .partner-income-fields { grid-template-columns: 1fr; }
       .driver-report-total, .driver-report .button { grid-column: auto; }
       .admin-number { align-items: flex-start; flex-direction: column; }
       .footer { flex-direction: column; }
@@ -312,6 +338,11 @@
     </section>
 
     <main>
+      <nav class="role-switch" aria-label="Қолданушы түрі" data-i18n-aria-label="roleLabel">
+        <button type="button" data-app-role="passenger" aria-pressed="true" data-i18n="passengerRole">Жолаушы бөлімі</button>
+        <button type="button" data-app-role="driver" aria-pressed="false" data-i18n="driverRole">Жүргізуші бөлімі</button>
+      </nav>
+      <section id="passengerPanel" class="role-panel">
       <div class="section-heading" id="booking">
         <div>
           <p class="eyebrow" data-i18n="bookingEyebrow">ЖЫЛДАМ ТАПСЫРЫС</p>
@@ -425,6 +456,74 @@
           <p class="fine-print" data-i18n="paymentDisclaimer">Бұл бет Kaspi төлемін қабылдамайды немесе тексермейді. Белгі WhatsApp өтініміндегі растауыңызды көрсетеді.</p>
         </aside>
       </div>
+      <article class="card order-status-card" aria-labelledby="orderStatusTitle">
+        <h3 id="orderStatusTitle" data-i18n="orderStatusTitle">Тапсырыс күйі</h3>
+        <ol class="order-status-list" aria-label="Тапсырыс кезеңдері" data-i18n-aria-label="orderStagesLabel">
+          <li data-order-step="new" aria-current="step"><span class="order-status-number">1</span><span data-i18n="statusNew">Жаңа</span></li>
+          <li data-order-step="searching" aria-current="false"><span class="order-status-number">2</span><span data-i18n="statusSearching">Жүргізуші ізделуде</span></li>
+          <li data-order-step="onWay" aria-current="false"><span class="order-status-number">3</span><span data-i18n="statusOnWay">Шықты</span></li>
+          <li data-order-step="completed" aria-current="false"><span class="order-status-number">4</span><span data-i18n="statusCompleted">Аяқталды</span></li>
+        </ol>
+        <p id="passengerOrderStatus" aria-live="polite" data-i18n="orderNotCreated">Әзірге тапсырыс жіберілген жоқ.</p>
+        <p id="passengerOrderSummary" class="muted-note"></p>
+        <p class="muted-note" data-i18n="localOrderNotice">Бұл нұсқада күй осы браузерде ғана көрінеді. Нақты құрылғылар арасында тапсырыс тарату үшін сервер қажет.</p>
+      </article>
+      </section>
+
+      <section id="driverPanel" class="role-panel" hidden>
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="driverPanelEyebrow">ЖҮРГІЗУШІ ЖҰМЫС ОРНЫ</p>
+            <h2 data-i18n="driverPanelTitle">Тапсырысты басқару</h2>
+            <p data-i18n="driverPanelIntro">Жолаушы осы браузерде тапсырыс жібергенде, оны қабылдап, сапар күйін жаңартыңыз.</p>
+          </div>
+        </div>
+        <div class="driver-dashboard">
+          <article class="card">
+            <h3 data-i18n="driverCurrentOrder">Ағымдағы тапсырыс</h3>
+            <p id="driverOrderEmpty" data-i18n="driverNoOrder">Қазір көрсетілетін тапсырыс жоқ.</p>
+            <p id="driverOrderStatus" aria-live="polite"></p>
+            <div class="driver-order-details" id="driverOrderDetails" hidden>
+              <div><span data-i18n="msgFrom">Қайдан</span><strong id="driverOrderFrom"></strong></div>
+              <div><span data-i18n="msgTo">Қайда</span><strong id="driverOrderTo"></strong></div>
+              <div><span data-i18n="msgTime">Уақыты</span><strong id="driverOrderTime"></strong></div>
+              <div><span data-i18n="msgCount">Сапар саны</span><strong id="driverOrderCount"></strong></div>
+              <div><span data-i18n="msgTotal">Жалпы сома</span><strong id="driverOrderTotal"></strong></div>
+              <div><span data-i18n="msgDriverShare">Жүргізуші үлесі</span><strong id="driverOrderDriverShare"></strong></div>
+              <div><span data-i18n="msgProjectShare">Жоба үлесі</span><strong id="driverOrderAdminShare"></strong></div>
+              <div><span data-i18n="msgPayType">Төлем түрі</span><strong id="driverOrderPayment"></strong></div>
+              <div><span data-i18n="msgPhone">Телефон</span><strong id="driverOrderPhone"></strong></div>
+            </div>
+            <div class="driver-order-actions">
+              <button type="button" class="button" id="acceptOrder" data-i18n="acceptOrder" disabled>Тапсырысты қабылдап, жолға шығу</button>
+              <button type="button" class="button secondary" id="completeOrder" data-i18n="completeOrder" disabled>Сапарды аяқтау</button>
+            </div>
+            <p class="muted-note" data-i18n="localOrderNotice">Бұл нұсқада күй осы браузерде ғана көрінеді. Нақты құрылғылар арасында тапсырыс тарату үшін сервер қажет.</p>
+          </article>
+          <article class="card community-card">
+            <h3 data-i18n="driverReportTitle">Жүргізушінің бүгінгі есебі</h3>
+            <p class="card-intro" data-i18n="driverReportIntro">Сапар санын тек Жайрем ішіндегі 400 ₸ тарифпен жүрілген сапар бойынша енгізіңіз. Кенттен тыс сапар бөлек келісіледі.</p>
+            <form id="driverReportForm">
+              <div class="driver-report">
+                <div class="field">
+                  <label for="driverReportName" data-i18n="driverReportName">Жүргізушінің аты</label>
+                  <input id="driverReportName" name="driverName" autocomplete="name" required data-i18n-placeholder="driverReportNamePlaceholder" placeholder="Атыңыз">
+                </div>
+                <div class="field">
+                  <label for="driverTodayTrips" data-i18n="driverTodayTrips">Бүгінгі сапар саны</label>
+                  <input id="driverTodayTrips" name="todayTrips" type="number" min="0" step="1" inputmode="numeric" value="0" required>
+                </div>
+                <div class="driver-report-total" aria-live="polite">
+                  <span data-i18n="adminTransferDue">Әкімшіге аударылатын үлес</span>
+                  <strong id="adminTransferTotal">0 ₸</strong>
+                </div>
+                <p class="muted-note" id="driverReportBreakdown" data-i18n="driverReportBreakdown">Жүргізушіге: 0 ₸ · әкімшіге: 0 ₸</p>
+                <button type="submit" class="button whatsapp" data-i18n="sendDriverReport">Есепті әкімшіге WhatsApp-пен жіберу</button>
+              </div>
+            </form>
+          </article>
+        </div>
+      </section>
 
       <section aria-labelledby="benefitsTitle">
         <div class="section-heading">
@@ -477,6 +576,48 @@
         </div>
       </section>
 
+      <section aria-labelledby="incomeReleaseTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="incomeReleaseEyebrow">ЖОБА ТАБЫСЫ ЖӘНЕ ЖАРИЯЛАУ</p>
+            <h2 id="incomeReleaseTitle" data-i18n="incomeReleaseTitle">Серіктестік табысы және Android күйі</h2>
+            <p data-i18n="incomeReleaseIntro">Сапар үлесі мен серіктес нүктелерінің келісілген түсімін бөлек есептеңіз.</p>
+          </div>
+        </div>
+        <div class="release-grid">
+          <article class="card">
+            <h3 data-i18n="partnerPointIncomeTitle">Серіктес нүктелерден түсетін табыс</h3>
+            <p class="card-intro" data-i18n="partnerPointIncomeIntro">Нақты келісілген төлемді енгізіңіз. Әдепкі мәндер табыс бар дегенді білдірмейді.</p>
+            <div class="partner-income-fields">
+              <div class="field">
+                <label for="partnerPointVisits" data-i18n="partnerPointVisits">Ақылы келу саны</label>
+                <input id="partnerPointVisits" type="number" min="0" step="1" inputmode="numeric" value="0">
+              </div>
+              <div class="field">
+                <label for="partnerPointRate" data-i18n="partnerPointRate">Бір келуден келісілген төлем</label>
+                <input id="partnerPointRate" type="number" min="0" step="1" inputmode="numeric" value="0">
+              </div>
+            </div>
+            <div class="income-total" aria-live="polite">
+              <span data-i18n="partnerPointIncomeTotal">Серіктес нүктелерден есептік түсім</span>
+              <strong id="partnerPointIncomeAmount">0 ₸</strong>
+            </div>
+            <p class="muted-note" data-i18n="partnerPointIncomeNote">Бұл есеп тек нақты келісілген шарт пен ақылы келулерге негізделеді; кепілдендірілген табыс емес.</p>
+          </article>
+          <article class="card">
+            <h3 data-i18n="playReadinessTitle">Android және Play Маркетке шығару</h3>
+            <span class="release-state" data-i18n="playReadinessState">Қазір жарияланбаған · веб-нұсқа</span>
+            <p class="card-intro" data-i18n="playReadinessIntro">Бұл бет — браузерде ашылатын веб-қосымша; Android орнату файлы емес.</p>
+            <ul class="release-checklist">
+              <li data-i18n="playReadyWeb">Веб-нұсқа желіде ашылады.</li>
+              <li data-i18n="playPendingAndroid">Android қолданбасын жинау және сынау қажет.</li>
+              <li data-i18n="playPendingPolicy">Құпиялық саясаты мен дүкенге арналған мәліметтер қажет.</li>
+              <li data-i18n="playPendingReview">Әзірлеуші тіркелгісі, ішкі сынақ және дүкен тексерісі қажет.</li>
+            </ul>
+          </article>
+        </div>
+      </section>
+
       <section aria-labelledby="communityTitle">
         <div class="section-heading">
           <div>
@@ -485,7 +626,7 @@
             <p data-i18n="communityIntro">Топқа қосылып, сапар туралы хабарламаны толтырғаннан кейін бір түртумен көшіріп, топқа жіберіңіз.</p>
           </div>
         </div>
-        <div class="community-grid">
+        <div class="community-grid single-card">
           <article class="card community-card">
             <h3 data-i18n="groupRulesTitle">Жайрем Taxi тобының ережесі</h3>
             <p data-i18n="groupRulesIntro">Топтағы тәртіп пен жеке деректерді қорғау үшін:</p>
@@ -500,28 +641,6 @@
               <button type="button" class="button secondary" id="copyGroupInvite" data-i18n="copyGroupInvite">Топқа орналастыратын сілтеме мен ережені көшіру</button>
             </div>
             <p class="muted-note" data-i18n="groupCopyHint">Алдымен тапсырыс пішінін толтырыңыз. Хабарлама көшірілген соң топты ашып, оны өзіңіз жібересіз.</p>
-          </article>
-          <article class="card community-card">
-            <h3 data-i18n="driverReportTitle">Жүргізушінің бүгінгі есебі</h3>
-            <p class="card-intro" data-i18n="driverReportIntro">Сапар санын тек Жайрем ішіндегі 400 ₸ тарифпен жүрілген сапар бойынша енгізіңіз. Кенттен тыс сапар бөлек келісіледі.</p>
-            <form id="driverReportForm">
-              <div class="driver-report">
-                <div class="field">
-                  <label for="driverReportName" data-i18n="driverReportName">Жүргізушінің аты</label>
-                  <input id="driverReportName" name="driverName" autocomplete="name" required data-i18n-placeholder="driverReportNamePlaceholder" placeholder="Атыңыз">
-                </div>
-                <div class="field">
-                  <label for="driverTodayTrips" data-i18n="driverTodayTrips">Бүгінгі сапар саны</label>
-                  <input id="driverTodayTrips" name="todayTrips" type="number" min="0" step="1" inputmode="numeric" value="0" required>
-                </div>
-                <div class="driver-report-total" aria-live="polite">
-                  <span data-i18n="adminTransferDue">Әкімшіге аударылатын үлес</span>
-                  <strong id="adminTransferTotal">0 ₸</strong>
-                </div>
-                <p class="muted-note" id="driverReportBreakdown" data-i18n="driverReportBreakdown">Жүргізушіге: 0 ₸ · әкімшіге: 0 ₸</p>
-                <button type="submit" class="button whatsapp" data-i18n="sendDriverReport">Есепті әкімшіге WhatsApp-пен жіберу</button>
-              </div>
-            </form>
           </article>
         </div>
       </section>
@@ -628,10 +747,19 @@
       const PRICE_PER_RIDE = 400;
       const PROJECT_SHARE_PER_RIDE = 50;
       const DRIVER_SHARE_PER_RIDE = PRICE_PER_RIDE - PROJECT_SHARE_PER_RIDE;
+      const ORDER_STATUS_KEYS = {
+        new: "statusNew",
+        searching: "statusSearching",
+        onWay: "statusOnWay",
+        completed: "statusCompleted"
+      };
       const translations = {
         kk: {
           htmlTitle: "Jairem Taxi — Жайрем ішіндегі сапар", metaDescription: "Жайрем ішіндегі ыңғайлы такси: әр сапар 400 ₸.",
-          languageLabel: "Тілді таңдау", routeGroupLabel: "Сапар бағыты",
+          languageLabel: "Тілді таңдау", roleLabel: "Қолданушы түрі",
+          orderStagesLabel: "Тапсырыс кезеңдері",
+          passengerRole: "Жолаушы бөлімі", driverRole: "Жүргізуші бөлімі",
+          routeGroupLabel: "Сапар бағыты",
           brandSubtitle: "Жайрем ішіндегі сапар", eyebrow: "ЖАЙРЕМ · ЖЕРГІЛІКТІ ТАКСИ",
           heroTitle: "Жайрем ішінде — бір баға.", heroCopy: "Қай жерден, қайда баратыныңызды таңдаңыз. Баға алдын ала белгілі, өтінім WhatsApp арқылы бірден жіберіледі.",
           bookRide: "Сапарға тапсырыс беру", joinTeam: "Жүргізуші / серіктес болу", fixedPrice: "Жайрем кенті ішінде", perRide: "бір сапар үшін · тұрақты тариф",
@@ -711,13 +839,43 @@
           msgPayType: "Төлем түрі", msgKaspi: "Kaspi QR", msgCash: "Қолма-қол", msgConfirmed: "Kaspi төлемін растады",
           yes: "Иә", no: "Жоқ", msgNote: "Ескерту",
           msgDisclaimer: "400 ₸ тарифі тек Жайрем кенті ішінде қолданылады; кенттен тыс бағыттың бағасы бөлек келісіледі. Сома мен уақытты жүргізушімен растаңыз.",
+          orderStatusTitle: "Тапсырыс күйі", statusNew: "Жаңа",
+          statusSearching: "Жүргізуші ізделуде", statusOnWay: "Шықты", statusCompleted: "Аяқталды",
+          statusLabel: "Күйі", orderNotCreated: "Әзірге тапсырыс жіберілген жоқ.",
+          localOrderNotice: "Бұл демо-күй тек осы ашық бетте сақталады. Құрылғылар арасында тапсырысты тарату үшін сервер қажет.",
+          driverPanelEyebrow: "ЖҮРГІЗУШІ ЖҰМЫС ОРНЫ", driverPanelTitle: "Тапсырысты басқару",
+          driverPanelIntro: "Жолаушы осы ашық беттен тапсырыс жібергенде, оны қабылдап, сапар күйін жаңартыңыз.",
+          driverCurrentOrder: "Ағымдағы тапсырыс", driverNoOrder: "Қазір көрсетілетін тапсырыс жоқ.",
+          acceptOrder: "Тапсырысты қабылдап, жолға шығу", completeOrder: "Сапарды аяқтау",
+          orderActiveWarning: "Алдыңғы тапсырыс аяқталмайынша жаңасын бастау мүмкін емес.",
+          orderSearchingToast: "Тапсырыс жүргізуші іздеуге жіберілді.",
+          orderAcceptedToast: "Тапсырыс қабылданды. Жүргізуші жолға шықты.",
+          orderCompletedToast: "Сапар аяқталды.",
+          incomeReleaseEyebrow: "ЖОБА ТАБЫСЫ ЖӘНЕ ЖАРИЯЛАУ",
+          incomeReleaseTitle: "Серіктестік табысы және Android күйі",
+          incomeReleaseIntro: "Сапар үлесі мен серіктес нүктелерінің келісілген түсімін бөлек есептеңіз.",
+          partnerPointIncomeTitle: "Серіктес нүктелерден түсетін табыс",
+          partnerPointIncomeIntro: "Нақты келісілген төлемді енгізіңіз. Әдепкі мәндер табыс бар дегенді білдірмейді.",
+          partnerPointVisits: "Ақылы келу саны", partnerPointRate: "Бір келуден келісілген төлем",
+          partnerPointIncomeTotal: "Серіктес нүктелерден есептік түсім",
+          partnerPointIncomeNote: "Бұл есеп тек нақты келісілген шарт пен ақылы келулерге негізделеді; кепілдендірілген табыс емес.",
+          playReadinessTitle: "Android және Play Маркетке шығару",
+          playReadinessState: "Қазір жарияланбаған · веб-нұсқа",
+          playReadinessIntro: "Бұл бет — браузерде ашылатын веб-қосымша; Android орнату файлы емес.",
+          playReadyWeb: "Веб-нұсқа желіде ашылады.",
+          playPendingAndroid: "Android қолданбасын жинау және сынау қажет.",
+          playPendingPolicy: "Құпиялық саясаты мен дүкенге арналған мәліметтер қажет.",
+          playPendingReview: "Әзірлеуші тіркелгісі, ішкі сынақ және дүкен тексерісі қажет.",
           msgPartnerTitle: "ЖҮРГІЗУШІ / СЕРІКТЕС ӨТІНІМІ", msgRole: "Рөлі", msgDriver: "Жүргізуші", msgPartner: "Серіктес",
           msgVehicle: "Көлік / нүкте", msgTerms: "Келісім / үлес шарты",                     copied: "Мәлімет буферге көшірілді.", copyFailed: "Мәтінді көшіру мүмкін болмады.",
           fillRequired: "Міндетті өрістерді толтырыңыз.", timeMissing: "Сапар уақытын таңдаңыз.", openingWhatsApp: "WhatsApp ашылуда…"
         },
         ru: {
           htmlTitle: "Jairem Taxi — поездки по Жайрему", metaDescription: "Удобное такси по Жайрему: 400 ₸ за поездку.",
-          languageLabel: "Выбор языка", routeGroupLabel: "Маршрут поездки",
+          languageLabel: "Выбор языка", roleLabel: "Роль пользователя",
+          orderStagesLabel: "Этапы заказа",
+          passengerRole: "Для пассажира", driverRole: "Для водителя",
+          routeGroupLabel: "Маршрут поездки",
           brandSubtitle: "Поездки по Жайрему", eyebrow: "ЖАЙРЕМ · МЕСТНОЕ ТАКСИ",
           heroTitle: "По Жайрему — одна цена.", heroCopy: "Укажите, откуда и куда едете. Цена известна заранее, заявка сразу откроется в WhatsApp.",
           bookRide: "Заказать поездку", joinTeam: "Стать водителем / партнёром", fixedPrice: "В пределах посёлка Жайрем", perRide: "за одну поездку · фиксированный тариф",
@@ -797,6 +955,33 @@
           msgPayType: "Способ оплаты", msgKaspi: "Kaspi QR", msgCash: "Наличные", msgConfirmed: "Подтверждает оплату Kaspi",
           yes: "Да", no: "Нет", msgNote: "Примечание",
           msgDisclaimer: "Тариф 400 ₸ действует только в пределах посёлка Жайрем; стоимость поездки за его пределы согласуется отдельно. Подтвердите сумму и время с водителем.",
+          orderStatusTitle: "Статус заказа", statusNew: "Новый",
+          statusSearching: "Поиск водителя", statusOnWay: "Выехал", statusCompleted: "Завершён",
+          statusLabel: "Статус", orderNotCreated: "Заказ ещё не отправлен.",
+          localOrderNotice: "Демо-статус хранится только на этой открытой странице. Для обмена заказами между устройствами нужен сервер.",
+          driverPanelEyebrow: "РАБОЧЕЕ МЕСТО ВОДИТЕЛЯ", driverPanelTitle: "Управление заказом",
+          driverPanelIntro: "Когда пассажир отправит заказ с этой открытой страницы, примите его и обновите статус поездки.",
+          driverCurrentOrder: "Текущий заказ", driverNoOrder: "Сейчас нет отображаемого заказа.",
+          acceptOrder: "Принять заказ и выехать", completeOrder: "Завершить поездку",
+          orderActiveWarning: "Нельзя начать новый заказ, пока предыдущий не завершён.",
+          orderSearchingToast: "Заказ передан в поиск водителя.",
+          orderAcceptedToast: "Заказ принят. Водитель выехал.",
+          orderCompletedToast: "Поездка завершена.",
+          incomeReleaseEyebrow: "ДОХОД ПРОЕКТА И ПУБЛИКАЦИЯ",
+          incomeReleaseTitle: "Доход от партнёров и статус Android",
+          incomeReleaseIntro: "Считайте долю с поездок и согласованный доход от партнёрских точек отдельно.",
+          partnerPointIncomeTitle: "Доход от партнёрских точек",
+          partnerPointIncomeIntro: "Введите фактически согласованную оплату. Начальные значения не означают наличие дохода.",
+          partnerPointVisits: "Число оплаченных посещений", partnerPointRate: "Согласованная оплата за посещение",
+          partnerPointIncomeTotal: "Расчётный доход от партнёрских точек",
+          partnerPointIncomeNote: "Расчёт основан только на согласованных условиях и оплаченных посещениях; это не гарантированный доход.",
+          playReadinessTitle: "Выпуск для Android и Google Play",
+          playReadinessState: "Пока не опубликовано · веб-версия",
+          playReadinessIntro: "Эта страница открывается в браузере и не является установочным файлом Android.",
+          playReadyWeb: "Веб-версия доступна в интернете.",
+          playPendingAndroid: "Нужно собрать и проверить приложение для Android.",
+          playPendingPolicy: "Нужны политика конфиденциальности и сведения для страницы магазина.",
+          playPendingReview: "Нужны учётная запись разработчика, внутреннее тестирование и проверка магазина.",
           msgPartnerTitle: "ЗАЯВКА ВОДИТЕЛЯ / ПАРТНЁРА", msgRole: "Роль", msgDriver: "Водитель", msgPartner: "Партнёр",
           msgVehicle: "Автомобиль / точка", msgTerms: "Соглашение / условия доли",                     copied: "Данные скопированы в буфер обмена.", copyFailed: "Не удалось скопировать текст.",
           fillRequired: "Заполните обязательные поля.", timeMissing: "Выберите время поездки.", openingWhatsApp: "Открываем WhatsApp…"
@@ -805,6 +990,8 @@
 
       let language = "kk";
       let toastTimer;
+      let currentOrder = null;
+      let orderCreationPending = false;
       const $ = (selector, root = document) => root.querySelector(selector);
       const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
       const t = (key) => translations[language][key] ?? translations.kk[key] ?? key;
@@ -873,6 +1060,59 @@
         return { count, adminShare, driverShare, total: PRICE_PER_RIDE * count };
       }
 
+      function setAppRole(role) {
+        const isDriver = role === "driver";
+        $("#passengerPanel").hidden = isDriver;
+        $("#driverPanel").hidden = !isDriver;
+        $$("[data-app-role]").forEach((button) => {
+          button.setAttribute("aria-pressed", button.dataset.appRole === role ? "true" : "false");
+        });
+      }
+
+      function renderOrderWorkflow() {
+        const activeStatus = currentOrder?.status ?? "new";
+        $$("[data-order-step]").forEach((step) => {
+          step.setAttribute("aria-current", step.dataset.orderStep === activeStatus ? "step" : "false");
+        });
+
+        $("#passengerOrderStatus").textContent = currentOrder
+          ? `${t("statusLabel")}: ${t(ORDER_STATUS_KEYS[currentOrder.status])}`
+          : t("orderNotCreated");
+        $("#passengerOrderSummary").textContent = currentOrder
+          ? `${currentOrder.from} → ${currentOrder.to} · ${t("msgCount")}: ${currentOrder.count} · ${formatMoney(currentOrder.total)}`
+          : "";
+
+        $("#driverOrderEmpty").hidden = Boolean(currentOrder);
+        $("#driverOrderDetails").hidden = !currentOrder;
+        $("#driverOrderStatus").textContent = currentOrder
+          ? `${t("statusLabel")}: ${t(ORDER_STATUS_KEYS[currentOrder.status])}`
+          : "";
+        $("#acceptOrder").disabled = currentOrder?.status !== "searching";
+        $("#completeOrder").disabled = currentOrder?.status !== "onWay";
+        if (!currentOrder) return;
+
+        $("#driverOrderFrom").textContent = currentOrder.from;
+        $("#driverOrderTo").textContent = currentOrder.to;
+        $("#driverOrderTime").textContent = currentOrder.timeType === "now"
+          ? t("msgNow")
+          : formatDateTime(currentOrder.scheduledTime);
+        $("#driverOrderCount").textContent = String(currentOrder.count);
+        $("#driverOrderTotal").textContent = formatMoney(currentOrder.total);
+        $("#driverOrderDriverShare").textContent = formatMoney(currentOrder.driver);
+        $("#driverOrderAdminShare").textContent = formatMoney(currentOrder.project);
+        $("#driverOrderPayment").textContent = t(currentOrder.paymentKey);
+        $("#driverOrderPhone").textContent = currentOrder.phone;
+      }
+
+      function updatePartnerPointIncome() {
+        const visits = Number($("#partnerPointVisits").value);
+        const rate = Number($("#partnerPointRate").value);
+        const safeVisits = Number.isSafeInteger(visits) && visits >= 0 ? visits : 0;
+        const safeRate = Number.isSafeInteger(rate) && rate >= 0 ? rate : 0;
+        const income = safeVisits * safeRate;
+        $("#partnerPointIncomeAmount").textContent = formatMoney(Number.isSafeInteger(income) ? income : 0);
+      }
+
       function setLanguage(nextLanguage) {
         const next = nextLanguage === "ru" ? "ru" : "kk";
         const previousPlaces = locale().places;
@@ -905,6 +1145,8 @@
         refreshPlaces();
         updateAmounts();
         updateDriverReport();
+        renderOrderWorkflow();
+        updatePartnerPointIncome();
       }
 
       function showToast(message) {
@@ -990,42 +1232,107 @@
         return true;
       }
 
-      function buildRideMessage() {
+      function captureRideOrder() {
         const { count, total, project, driver } = updateAmounts(true);
-        const scheduled = $('input[name="rideTimeType"]:checked').value === "later";
-        const time = scheduled ? $("#scheduledTime").value : "";
-        const payment = $('input[name="paymentType"]:checked').value;
+        const timeType = $('input[name="rideTimeType"]:checked').value;
+        const paymentType = $('input[name="paymentType"]:checked').value;
+        return {
+          name: $("#rideName").value.trim(),
+          phone: $("#ridePhone").value.trim(),
+          from: $("#from").value.trim(),
+          to: $("#to").value.trim(),
+          timeType,
+          scheduledTime: timeType === "later" ? $("#scheduledTime").value : "",
+          count,
+          total,
+          project,
+          driver,
+          paymentKey: paymentType === "kaspi" ? "msgKaspi" : "msgCash",
+          kaspiConfirmed: $("#kaspiConfirmed").checked,
+          note: $("#rideNote").value.trim()
+        };
+      }
+
+      function buildRideMessage(order) {
         return [
           t("msgRideTitle"),
-          `${t("msgName")}: ${$("#rideName").value.trim()}`,
-          `${t("msgPhone")}: ${$("#ridePhone").value.trim()}`,
+          `${t("msgName")}: ${order.name}`,
+          `${t("msgPhone")}: ${order.phone}`,
           `${t("msgRoute")}:`,
-          `• ${t("msgFrom")}: ${$("#from").value.trim()}`,
-          `• ${t("msgTo")}: ${$("#to").value.trim()}`,
-          `${t("msgTime")}: ${scheduled ? formatDateTime(time) : t("msgNow")}`,
-          `${t("msgCount")}: ${count}`,
-          `${t("msgTotal")}: ${formatMoney(total)} (${formatMoney(PRICE_PER_RIDE)} × ${count})`,
-          `${t("msgProjectShare")}: ${formatMoney(project)}`,
-          `${t("msgDriverShare")}: ${formatMoney(driver)}`,
-          `${t("msgPayType")}: ${payment === "kaspi" ? t("msgKaspi") : t("msgCash")}`,
-          `${t("msgConfirmed")}: ${$("#kaspiConfirmed").checked ? t("yes") : t("no")}`,
-          ...($("#rideNote").value.trim() ? [`${t("msgNote")}: ${$("#rideNote").value.trim()}`] : []),
+          `• ${t("msgFrom")}: ${order.from}`,
+          `• ${t("msgTo")}: ${order.to}`,
+          `${t("msgTime")}: ${order.timeType === "now" ? t("msgNow") : formatDateTime(order.scheduledTime)}`,
+          `${t("msgCount")}: ${order.count}`,
+          `${t("msgTotal")}: ${formatMoney(order.total)} (${formatMoney(PRICE_PER_RIDE)} × ${order.count})`,
+          `${t("msgProjectShare")}: ${formatMoney(order.project)}`,
+          `${t("msgDriverShare")}: ${formatMoney(order.driver)}`,
+          `${t("msgPayType")}: ${t(order.paymentKey)}`,
+          `${t("msgConfirmed")}: ${order.kaspiConfirmed ? t("yes") : t("no")}`,
+          ...(order.note ? [`${t("msgNote")}: ${order.note}`] : []),
           "",
           t("msgDisclaimer")
         ];
       }
 
+      function canStartRideOrder() {
+        if (orderCreationPending || (currentOrder && currentOrder.status !== "completed")) {
+          showToast(t("orderActiveWarning"));
+          return false;
+        }
+        return true;
+      }
+
+      function startDriverSearch(order) {
+        order.status = "new";
+        currentOrder = order;
+        renderOrderWorkflow();
+        advanceOrderStatus("searching", "orderSearchingToast");
+      }
+
+      function advanceOrderStatus(nextStatus, toastKey) {
+        const nextByStatus = { new: "searching", searching: "onWay", onWay: "completed", completed: null };
+        if (!currentOrder || nextByStatus[currentOrder.status] !== nextStatus) return false;
+        currentOrder.status = nextStatus;
+        renderOrderWorkflow();
+        showToast(t(toastKey));
+        return true;
+      }
+
       $("#rideForm").addEventListener("submit", (event) => {
         event.preventDefault();
         if (!validateRideForm()) return;
-        openWhatsApp(buildRideMessage());
+        if (!canStartRideOrder()) return;
+        const order = captureRideOrder();
+        startDriverSearch(order);
+        openWhatsApp(buildRideMessage(order));
       });
 
       $("#copyGroupOrder").addEventListener("click", async () => {
         if (!validateRideForm()) return;
-        const copied = await copyText(buildRideMessage().join("\n"));
-        showToast(copied ? t("groupOrderCopied") : t("copyFailed"));
+        if (!canStartRideOrder()) return;
+        const order = captureRideOrder();
+        orderCreationPending = true;
+        let copied;
+        try {
+          copied = await copyText(buildRideMessage(order).join("\n"));
+        } finally {
+          orderCreationPending = false;
+        }
+        if (!copied) {
+          showToast(t("copyFailed"));
+          return;
+        }
+        startDriverSearch(order);
+        showToast(t("groupOrderCopied"));
       });
+
+      $("#acceptOrder").addEventListener("click", () => advanceOrderStatus("onWay", "orderAcceptedToast"));
+      $("#completeOrder").addEventListener("click", () => advanceOrderStatus("completed", "orderCompletedToast"));
+      $$("[data-app-role]").forEach((button) => {
+        button.addEventListener("click", () => setAppRole(button.dataset.appRole));
+      });
+      $("#partnerPointVisits").addEventListener("input", updatePartnerPointIncome);
+      $("#partnerPointRate").addEventListener("input", updatePartnerPointIncome);
 
       $("#copyGroupInvite").addEventListener("click", async () => {
         const rule = language === "kk"
