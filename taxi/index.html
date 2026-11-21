@@ -734,6 +734,7 @@
     .map-road { stroke: #68706b; }
     .map-block { fill: #343a36; stroke: #454c48; }
     .map-pin { background: #1c1f24; border-color: #303539; color: #f4f6f1; }
+    .map-pin[aria-pressed="true"], .map-pin:hover { background: #303825; border-color: #c1f11d; color: #f4f6f1; }
     .map-pin > span { background: #303539; }
     .map-caption, .map-ride-status { background: #1c1f24; color: #a7ada5; border-color: #303539; }
     .button, .button.call-taxi-button, .button.whatsapp, .send-button {
@@ -741,6 +742,9 @@
       color: #111315 !important;
       border-color: #c1f11d;
     }
+    .button:focus-visible, .language button:focus-visible, input:focus-visible,
+    select:focus-visible, textarea:focus-visible, .map-pin:focus-visible,
+    .destination-shortcuts button:focus-visible { outline-color: #c1f11d; }
     .button:hover, .button.call-taxi-button:hover, .button.whatsapp:hover { background: #b0df18 !important; }
     .button.secondary { background: #222628 !important; color: #f4f6f1 !important; border-color: #3a3f41; }
     .drawer-driver { background: #c1f11d !important; color: #111315 !important; }
@@ -757,6 +761,11 @@
     }
     .total-box, .amount-panel, .qr-note, .kaspi-banner, .forecast,
     .driver-report-total, .admin-number, .income-total { background: #222628; border-color: #303539; }
+    .qr-placeholder { border-color: #55403e; background: #302322; color: #ef7269; }
+    .release-state { border: 1px solid #55462d; background: #302819; color: #ffd47c; }
+    .order-status-list li[aria-current="step"] { border-color: #c1f11d; background: #303825; color: #c1f11d; }
+    .benefits-explainer { background: #1c1f24; color: #f4f6f1; }
+    .benefits-explainer p { color: #a7ada5; }
     .total-box strong, .amount-panel strong { color: #c1f11d; }
     .safety-call { background: #d44b42 !important; color: #fff !important; }
     .role-switch { padding: 4px; }
@@ -782,6 +791,58 @@
     .toggle { width:44px; height:24px; accent-color:#c1f11d; }
     .emergency-card { text-align:center; }
     .emergency-card button { width:100%; }
+    :root { color-scheme: dark; --paper: #111315; --card: #1c1f24; --lime: #c1f11d; }
+    .wrap { width: min(1120px, calc(100% - 32px)); }
+    .map-hero, .card, .home-booking-bar, .service-tile, .drawer, .language, .header-tariff,
+    .screen-heading button, .role-switch, .history-item, .saved-address-item, .install-step {
+      background-color: #1c1f24 !important;
+    }
+    .map-area { isolation: isolate; }
+    .map-streets { z-index: 0; }
+    .route-overlay { position: absolute; z-index: 1; inset: 0; width: 100%; height: 100%; overflow: visible; pointer-events: none; }
+    .route-overlay #routeLine { fill: none; stroke: #c1f11d; stroke-width: 1.5; stroke-linecap: round; stroke-dasharray: 3 2; filter: drop-shadow(0 0 2px #111315); }
+    #routeArrow path { fill: #c1f11d; stroke: #111315; stroke-width: .4; }
+    .route-label { position: absolute; z-index: 4; max-width: 180px; overflow: hidden; border: 1px solid #c1f11d; border-radius: 999px; padding: 3px 7px; background: #111315; color: #c1f11d; font-size: .62rem; font-weight: 850; text-overflow: ellipsis; white-space: nowrap; }
+    .route-label-from { top: 48%; left: 47%; }
+    .route-label-to { top: 29%; left: 37%; }
+    .map-pin { z-index: 2; }
+    .map-origin { z-index: 3; }
+    .map-tools { display: grid; grid-template-columns: auto 1fr; gap: 4px 12px; align-items: center; margin-top: 12px; }
+    .map-tools .button { grid-row: span 2; }
+    .location-status { margin: 0; color: #b7beb5; font-size: .77rem; }
+    .home-actions { display: grid; gap: 12px; margin-top: 14px; }
+    .welcome-banner { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 9px; border: 1px solid #3b4730; border-radius: 14px; padding: 11px 15px; background: #1c1f24; color: #f4f6f1; font-size: .85rem; text-align: center; }
+    .welcome-banner strong:first-child { color: #c1f11d; }
+    .brand-promo { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 10px 20px; border-color: #414a2d; background: radial-gradient(circle at 100% 0, rgba(193,241,29,.12), transparent 35%), #1c1f24 !important; }
+    .brand-promo > div:first-child { grid-row: span 3; }
+    .brand-promo .eyebrow { margin-bottom: 5px; }
+    .brand-promo h2 { margin: 0; font-size: clamp(1.2rem, 3vw, 1.75rem); line-height: 1.2; }
+    .brand-promo > p { margin: 0; color: #c1f11d; font-weight: 750; }
+    .promo-actions, .call-controls { display: flex; flex-wrap: wrap; gap: 9px; }
+    .promo-actions { grid-column: 1 / -1; }
+    .account-role-switch { margin: 8px 0 16px; }
+    .account-panel { display: grid; gap: 14px; }
+    .account-location { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 8px; border-top: 1px solid #303539; padding-top: 12px; }
+    .account-location p { margin: 0; }
+    .driver-online-row { align-items: center; color: #f4f6f1; }
+    .driver-online-row input { accent-color: #c1f11d; }
+    .rating-box { margin-top: 20px; border-top: 1px solid #303539; padding-top: 16px; }
+    .rating-box p { color: #a7ada5; }
+    .rating-stars { display: flex; gap: 5px; }
+    .rating-stars button { min-width: 42px; min-height: 42px; border: 1px solid #3a3f41; border-radius: 10px; background: #222628; color: #a7ada5; font-size: 1.35rem; }
+    .rating-stars button[aria-pressed="true"], .rating-stars button:hover { color: #c1f11d; border-color: #c1f11d; }
+    .call-screen > p:not(.card-intro) { color: #a7ada5; }
+    .call-controls { margin: 16px 0; }
+    @media (max-width: 560px) {
+      .wrap { width: calc(100% - 20px); }
+      .brand-promo { grid-template-columns: 1fr; }
+      .brand-promo > div:first-child { grid-row: auto; }
+      .promo-actions .button { flex: 1 1 170px; }
+      .map-tools { grid-template-columns: 1fr; }
+      .map-tools .button { grid-row: auto; }
+      .welcome-banner { font-size: .75rem; }
+      .route-label { max-width: 120px; }
+    }
     @media (max-width:560px) {
       .feature-grid, .safety-grid { grid-template-columns:1fr; }
     }
@@ -810,9 +871,11 @@
       </div>
       <div class="drawer-profile">
         <strong id="drawerProfileName">Аманжол</strong>
-        <span>★ 5,0</span>
+        <span id="drawerRating">★ 0,0</span>
       </div>
       <nav class="drawer-nav" aria-label="Бөлімдер" data-i18n-aria-label="menuSectionsLabel">
+        <button type="button" data-open-screen="account"><span aria-hidden="true">👤</span><span data-i18n="accountTitle">Жеке кабинет</span></button>
+        <button type="button" data-open-screen="call"><span aria-hidden="true">📞</span><span data-i18n="callTitle">Қоңырау</span></button>
         <button type="button" data-open-screen="profile"><span aria-hidden="true">👤</span><span data-i18n="menuProfile">Профиль / рейтинг</span></button>
         <button type="button" data-open-screen="booking"><span aria-hidden="true">📍</span><span data-i18n="menuTown">Кент · Жайрем</span></button>
         <button type="button" data-open-screen="orders"><span aria-hidden="true">🧾</span><span data-i18n="menuOrders">Тапсырыстар тарихы</span></button>
@@ -841,6 +904,12 @@
         </div>
       </div>
       <div class="map-area" role="group" aria-label="Жайремдегі бағыт нүктелері" data-i18n-aria-label="mapPointsLabel">
+        <svg class="route-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <defs><marker id="routeArrow" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><path d="M0 0 L7 3.5 L0 7z"></path></marker></defs>
+          <path id="routeLine" d="M53 53 L42 34" marker-end="url(#routeArrow)"></path>
+        </svg>
+        <span class="route-label route-label-from" id="routeLabelFrom" data-i18n="routeFrom">Қайдан</span>
+        <span class="route-label route-label-to" id="routeToLabel" data-i18n="routeTo">Қайда</span>
         <svg class="map-streets" viewBox="0 0 900 440" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
           <path class="map-road road-main" d="M-30 325 C140 270 198 308 318 216 S510 90 690 148 830 217 950 150"/>
           <path class="map-road" d="M58 -20 C128 80 165 130 225 220 S309 340 350 470"/>
@@ -859,9 +928,32 @@
         <span class="map-origin" aria-hidden="true"><span></span></span>
         <span class="map-caption"><span class="map-caption-dot"></span><span data-i18n="mapCaption">Жайрем кенті · интерактивті схема</span></span>
       </div>
+      <div class="map-tools">
+        <button type="button" class="button secondary" id="locateMe" data-i18n="locateMe">Менің орнымды анықтау</button>
+        <p id="locationStatus" class="location-status" aria-live="polite" data-i18n="locationFallback">Жайрем кенті · 48.0061, 67.5964 (әдепкі орын)</p>
+        <p id="routeSummary" class="location-status" data-i18n="routeSummary">Бағыт Жайрем картасында көрсетіледі.</p>
+      </div>
     </section>
 
     <section class="home-actions" id="homeActions" aria-label="Сапар қызметтері" data-i18n-aria-label="servicesLabel">
+      <div class="welcome-banner" role="status">
+        <strong data-i18n="welcomeKazakh">Сәлем! Жайрем кентіне қош келдіңіз</strong>
+        <span aria-hidden="true">·</span>
+        <strong lang="ru" data-i18n="welcomeRussian">Привет! Добро пожаловать в посёлок Жайрем</strong>
+      </div>
+      <article class="card brand-promo">
+        <div>
+          <p class="eyebrow" data-i18n="promoEyebrow">ZHAIREM TAXI · ЖЕРГІЛІКТІ ТАКСИ</p>
+          <h2 data-i18n="promoTitle">Жайрем кенті бойынша бірыңғай тариф — 400 ₸</h2>
+        </div>
+        <p data-i18n="promoSplit">350 ₸ жүргізушіге / 50 ₸ әкімшіге</p>
+        <p data-i18n="promoKaspi">Kaspi арқылы ыңғайлы төлем</p>
+        <p data-i18n="promoServices">Қалааралық · Курьер · Жүк</p>
+        <div class="promo-actions">
+          <a class="button secondary" href="tel:+77478632459" data-i18n="callAdmin">Телефонмен қоңырау шалу</a>
+          <a class="button whatsapp" href="https://wa.me/77478632459" target="_blank" rel="noopener noreferrer" data-i18n="messageWhatsApp">WhatsApp-қа жазу</a>
+        </div>
+      </article>
       <button type="button" class="home-booking-bar" data-open-screen="booking">
         <strong data-i18n="homeSearch">Қайда және қаншаға?</strong>
         <span data-i18n="homeSearchHint">Бағытыңызды енгізіп, сапарға тапсырыс беріңіз</span>
@@ -1007,6 +1099,7 @@
         </ol>
         <p id="passengerOrderStatus" aria-live="polite" data-i18n="orderNotCreated">Әзірге тапсырыс жіберілген жоқ.</p>
         <p id="passengerOrderSummary" class="muted-note"></p>
+        <button type="button" class="button secondary" data-open-screen="account" data-i18n="rateTripLink">Сапарға баға беру</button>
         <p class="muted-note" data-i18n="localOrderNotice">Бұл нұсқада күй осы браузерде ғана көрінеді. Нақты құрылғылар арасында тапсырыс тарату үшін сервер қажет.</p>
       </article>
       </section>
@@ -1038,6 +1131,7 @@
             <div class="driver-order-actions">
               <button type="button" class="button" id="acceptOrder" data-i18n="acceptOrder" disabled>Тапсырысты қабылдап, жолға шығу</button>
               <button type="button" class="button secondary" id="completeOrder" data-i18n="completeOrder" disabled>Сапарды аяқтау</button>
+              <button type="button" class="button secondary" id="driverCallButton" data-open-screen="call" disabled data-i18n="callTitle">Қоңырау</button>
             </div>
             <p class="muted-note" data-i18n="localOrderNotice">Бұл нұсқада күй осы браузерде ғана көрінеді. Нақты құрылғылар арасында тапсырыс тарату үшін сервер қажет.</p>
           </article>
@@ -1294,35 +1388,93 @@
         <ul class="history-list" id="orderHistory" aria-live="polite"></ul>
       </section>
 
-      <section class="card page-content" id="profileScreen" data-screen-content="profile">
+      <section class="card page-content" id="profileScreen" data-screen-content="profile account">
+        <h2 data-i18n="accountTitle">Жеке кабинет</h2>
+        <p class="card-intro" data-i18n="accountPrivacy">Деректер осы құрылғыда сақталады. Сапарларды басқа құрылғыға беру үшін сервер қажет.</p>
+        <div class="role-switch account-role-switch" role="group" aria-label="Аккаунт түрі" data-i18n-aria-label="accountRoleLabel">
+          <button type="button" data-account-role="passenger" aria-pressed="true" data-i18n="passengerRole">Жолаушы</button>
+          <button type="button" data-account-role="driver" aria-pressed="false" data-i18n="driverRole">Жүргізуші</button>
+        </div>
+        <div id="passengerAccount" class="account-panel">
         <div class="profile-summary">
           <img id="profileAvatarPreview" class="profile-avatar" alt="Аватар" hidden>
           <span id="profileAvatarFallback" class="profile-avatar" aria-hidden="true">A</span>
-          <div><h2 id="profileDisplayName">Аманжол</h2><p>★ 5,0</p></div>
+          <div><h3 id="profileDisplayName">Аманжол</h3><p id="profileRatingDisplay">★ 0,0</p></div>
         </div>
         <div class="field-grid">
           <div class="field">
-            <label for="profileAvatarInput">Аватар суретін жүктеу / өзгерту</label>
-            <input id="profileAvatarInput" type="file" accept="image/*">
+            <label for="profileAvatarInput" data-i18n="avatarLabel">Фото түсіру немесе галереядан таңдау</label>
+            <input id="profileAvatarInput" type="file" accept="image/*" capture="environment">
           </div>
           <div class="field">
-            <label for="profileNameInput">Аты</label>
+            <label for="profileNameInput" data-i18n="nameLabel">Аты</label>
             <input id="profileNameInput" autocomplete="given-name" value="Аманжол" placeholder="Аты">
           </div>
           <div class="field">
-            <label for="profileSurnameInput">Тегі</label>
+            <label for="profileSurnameInput" data-i18n="surnameLabel">Тегі</label>
             <input id="profileSurnameInput" autocomplete="family-name" placeholder="Тегі">
           </div>
           <div class="field">
-            <label for="profilePhoneInput">Телефон нөмірі</label>
+            <label for="profilePhoneInput" data-i18n="phoneLabel">Телефон нөмірі</label>
             <input id="profilePhoneInput" type="tel" autocomplete="tel" value="+7 747 863 24 59">
           </div>
           <div class="field full">
-            <label for="profileLocationInput">Елді мекен</label>
+            <label for="profileLocationInput" data-i18n="locationLabel">Елді мекен</label>
             <input id="profileLocationInput" autocomplete="address-level2" value="Жайрем кенті">
           </div>
         </div>
         <button type="button" class="button" id="saveProfileName" style="margin-top:14px">Сақтау</button>
+        <div class="account-location">
+          <p id="passengerLocationText" aria-live="polite" data-i18n="locationFallback">Жайрем кенті · 48.0061, 67.5964 (әдепкі орын)</p>
+          <button type="button" class="button secondary account-locate" data-i18n="refreshLocation">Локацияны жаңарту</button>
+        </div>
+        <h3 data-i18n="tripHistoryTitle">Сапар тарихы</h3>
+        <ul class="history-list" id="accountTripHistory"></ul>
+        </div>
+        <div id="driverAccount" class="account-panel" hidden>
+          <div class="profile-summary">
+            <img id="driverAvatarPreview" class="profile-avatar" alt="Жүргізуші аватары" hidden>
+            <span id="driverAvatarFallback" class="profile-avatar" aria-hidden="true">Ж</span>
+            <div><h3 data-i18n="driverAccountTitle">Жүргізуші аккаунты</h3><p id="driverStatusText" data-i18n="driverOffline">Офлайн</p></div>
+          </div>
+          <div class="field-grid">
+            <div class="field"><label for="driverAccountName" data-i18n="nameLabel">Аты</label><input id="driverAccountName" autocomplete="name"></div>
+            <div class="field"><label for="driverAccountPhone" data-i18n="phoneLabel">Телефон нөмірі</label><input id="driverAccountPhone" type="tel" autocomplete="tel"></div>
+            <div class="field"><label for="driverVehicle" data-i18n="vehicleLabel">Көлік</label><input id="driverVehicle" data-i18n-placeholder="vehiclePlaceholder" placeholder="Маркасы, түсі, нөмірі"></div>
+            <div class="field"><label for="driverRoute" data-i18n="driverRouteLabel">Бағыт</label><input id="driverRoute" value="Жайрем кенті"></div>
+            <div class="field full"><label for="driverAvatarInput" data-i18n="avatarLabel">Фото түсіру немесе галереядан таңдау</label><input id="driverAvatarInput" type="file" accept="image/*" capture="environment"></div>
+          </div>
+          <label class="check-row driver-online-row"><input id="driverOnline" type="checkbox"><span data-i18n="driverOnline">Жүргізуші онлайн</span></label>
+          <button type="button" class="button" id="saveDriverProfile" data-i18n="saveProfile">Сақтау</button>
+          <div class="account-location">
+            <p id="driverLocationText" aria-live="polite" data-i18n="locationFallback">Жайрем кенті · 48.0061, 67.5964 (әдепкі орын)</p>
+            <button type="button" class="button secondary account-locate" data-i18n="refreshLocation">Локацияны жаңарту</button>
+          </div>
+        </div>
+        <section class="rating-box" aria-labelledby="ratingTitle">
+          <h3 id="ratingTitle" data-i18n="ratingTitle">Сапар бағасы</h3>
+          <p id="ratingPrompt" data-i18n="ratingPrompt">Аяқталған сапарға 1–5 жұлдыз қойыңыз.</p>
+          <div class="rating-stars" role="group" aria-label="1-ден 5-ке дейін баға">
+            <button type="button" data-rate="1" aria-label="1 жұлдыз">★</button><button type="button" data-rate="2" aria-label="2 жұлдыз">★</button><button type="button" data-rate="3" aria-label="3 жұлдыз">★</button><button type="button" data-rate="4" aria-label="4 жұлдыз">★</button><button type="button" data-rate="5" aria-label="5 жұлдыз">★</button>
+          </div>
+          <p class="muted-note" data-i18n="ratingHonest">Орташа рейтинг нақты берілген бағалардан есептеледі. Баға жоқ болса — 0,0.</p>
+        </section>
+      </section>
+
+      <section class="card page-content call-screen" id="callScreen" data-screen-content="call">
+        <h2 data-i18n="callTitle">Жолаушы мен жүргізуші арасындағы қоңырау</h2>
+        <p class="card-intro" id="callStatus" aria-live="polite" data-i18n="callIdle">Қоңырау басталмады.</p>
+        <p data-i18n="callDemoNotice">Бұл статикалық демо-бетте құрылғылар арасында аудио қосылым жоқ. Нақты сөйлесу үшін телефон немесе WhatsApp қолданыңыз.</p>
+        <div class="call-controls">
+          <button type="button" class="button" id="startCall" data-i18n="startCall">Қоңырау шалу</button>
+          <button type="button" class="button secondary" id="toggleMic" aria-pressed="false" data-i18n="muteMic">Микрофонды өшіру</button>
+          <button type="button" class="button secondary" id="toggleSpeaker" aria-pressed="false" data-i18n="muteSound">Дыбысты өшіру</button>
+          <button type="button" class="button secondary" id="endCall" data-i18n="endCall">Қоңырауды аяқтау</button>
+        </div>
+        <div class="promo-actions">
+          <a class="button secondary" id="callPhoneLink" href="tel:+77478632459" data-i18n="callPhone">Телефонмен қоңырау</a>
+          <a class="button whatsapp" id="callWhatsAppLink" href="https://wa.me/77478632459" target="_blank" rel="noopener noreferrer" data-i18n="whatsAppCall">WhatsApp арқылы қоңырау/хабарлама</a>
+        </div>
       </section>
 
       <section class="card page-content" id="addressesScreen" data-screen-content="addresses">
@@ -1771,23 +1923,96 @@
         }
       };
 
+      const featureText = {
+        kk: {
+          accountTitle: "Жеке кабинет", accountPrivacy: "Деректер осы құрылғыда сақталады. Құрылғылар арасында синхрондау үшін сервер қажет.",
+          accountRoleLabel: "Аккаунт түрі", tripHistoryTitle: "Сапар тарихы", driverAccountTitle: "Жүргізуші аккаунты",
+          surnameLabel: "Тегі", locationLabel: "Елді мекен", vehiclePlaceholder: "Маркасы, түсі, нөмірі",
+          driverOnline: "Жүргізуші онлайн", driverOffline: "Офлайн", vehicleLabel: "Көлік", driverRouteLabel: "Бағыт",
+          avatarLabel: "Фото түсіру немесе галереядан таңдау", locationFallback: "Жайрем кенті · 48.0061, 67.5964 (әдепкі орын)",
+          locationFound: "Телефонның орны", locationDenied: "Локацияға рұқсат берілмеді. Жайрем орны қолданылды.",
+          locationUnavailable: "Локация анықталмады. Жайрем орны қолданылды.", locateMe: "Менің орнымды анықтау",
+          refreshLocation: "Локацияны жаңарту", routeSummary: "Сызбадағы жасыл сызық — бағыт. Бұл нақты навигация картасы емес.",
+          welcomeKazakh: "Сәлем! Жайрем кентіне қош келдіңіз", welcomeRussian: "Привет! Добро пожаловать в посёлок Жайрем",
+          promoEyebrow: "ZHAIREM TAXI · ЖЕРГІЛІКТІ ТАКСИ", promoTitle: "Жайрем кенті бойынша бірыңғай тариф — 400 ₸",
+          promoSplit: "350 ₸ жүргізушіге / 50 ₸ әкімшіге", promoKaspi: "Kaspi арқылы ыңғайлы төлем",
+          promoServices: "Қалааралық · Курьер · Жүк", callAdmin: "Телефонмен қоңырау шалу", messageWhatsApp: "WhatsApp-қа жазу",
+          ratingTitle: "Сапар бағасы", ratingPrompt: "Аяқталған сапарға 1–5 жұлдыз қойыңыз.",
+          ratingHonest: "Орташа рейтинг нақты берілген бағалардан есептеледі. Баға жоқ болса — 0,0.",
+          ratingSaved: "Бағаңыз сақталды.", ratingNeedTrip: "Баға қою үшін аяқталған сапар қажет.",
+          ratingAverage: "Орташа рейтинг", ratingUnrated: "Барлық аяқталған сапарға баға қойылған.",
+          photoReadFailed: "Суретті оқу мүмкін болмады.", photoTooLarge: "Сурет 8 МБ-тан кіші болуы керек.",
+          callTitle: "Жолаушы мен жүргізуші арасындағы қоңырау", callIdle: "Қоңырау басталмады.",
+          callConnecting: "Қоңырау шалынуда…", callDemoNotice: "Бұл статикалық бетте құрылғылар арасында аудио қосылым жоқ. Нақты сөйлесу үшін телефон немесе WhatsApp қолданыңыз.",
+          startCall: "Қоңырау шалу", muteMic: "Микрофонды өшіру", unmuteMic: "Микрофонды қосу",
+          muteSound: "Дыбысты өшіру", unmuteSound: "Дыбысты қосу", endCall: "Қоңырауды аяқтау",
+          callEnded: "Қоңырау аяқталды.", callPhone: "Телефонмен қоңырау", whatsAppCall: "WhatsApp-та чат/қоңырау бастау",
+          routeFrom: "Қайдан", routeTo: "Қайда", routeDistanceNote: "Қашықтық нақты координаталар берілгенде есептеледі.",
+          rateTripLink: "Сапарға баға беру", saveProfile: "Сақтау", profileSaved: "Профиль сақталды."
+        },
+        ru: {
+          accountTitle: "Личный кабинет", accountPrivacy: "Данные хранятся на этом устройстве. Для синхронизации между устройствами нужен сервер.",
+          accountRoleLabel: "Тип аккаунта", tripHistoryTitle: "История поездок", driverAccountTitle: "Аккаунт водителя",
+          surnameLabel: "Фамилия", locationLabel: "Населённый пункт", vehiclePlaceholder: "Марка, цвет, госномер",
+          driverOnline: "Водитель онлайн", driverOffline: "Не в сети", vehicleLabel: "Автомобиль", driverRouteLabel: "Маршрут",
+          avatarLabel: "Сделать фото или выбрать из галереи", locationFallback: "Посёлок Жайрем · 48.0061, 67.5964 (место по умолчанию)",
+          locationFound: "Местоположение телефона", locationDenied: "Нет разрешения на геолокацию. Используется Жайрем.",
+          locationUnavailable: "Не удалось определить местоположение. Используется Жайрем.", locateMe: "Определить моё местоположение",
+          refreshLocation: "Обновить местоположение", routeSummary: "Зелёная линия показывает схему маршрута, это не навигационная карта.",
+          welcomeKazakh: "Сәлем! Жайрем кентіне қош келдіңіз", welcomeRussian: "Привет! Добро пожаловать в посёлок Жайрем",
+          promoEyebrow: "ZHAIREM TAXI · МЕСТНОЕ ТАКСИ", promoTitle: "Единый тариф по посёлку Жайрем — 400 ₸",
+          promoSplit: "350 ₸ водителю / 50 ₸ администратору", promoKaspi: "Удобная оплата через Kaspi",
+          promoServices: "Межгород · Курьер · Груз", callAdmin: "Позвонить по телефону", messageWhatsApp: "Написать в WhatsApp",
+          ratingTitle: "Оценка поездки", ratingPrompt: "Поставьте от 1 до 5 звёзд за завершённую поездку.",
+          ratingHonest: "Средняя оценка рассчитана по фактически выставленным оценкам. Пока оценок нет — 0,0.",
+          ratingSaved: "Оценка сохранена.", ratingNeedTrip: "Чтобы поставить оценку, нужна завершённая поездка.",
+          ratingAverage: "Средняя оценка", ratingUnrated: "Все завершённые поездки уже оценены.",
+          photoReadFailed: "Не удалось прочитать изображение.", photoTooLarge: "Размер изображения должен быть меньше 8 МБ.",
+          callTitle: "Звонок пассажира и водителя", callIdle: "Звонок не начат.",
+          callConnecting: "Вызов…", callDemoNotice: "На этой статической странице нет аудиосвязи между устройствами. Для разговора используйте телефон или WhatsApp.",
+          startCall: "Начать звонок", muteMic: "Выключить микрофон", unmuteMic: "Включить микрофон",
+          muteSound: "Выключить звук", unmuteSound: "Включить звук", endCall: "Завершить звонок",
+          callEnded: "Звонок завершён.", callPhone: "Позвонить по телефону", whatsAppCall: "Открыть WhatsApp для звонка/сообщения",
+          routeFrom: "Откуда", routeTo: "Куда", routeDistanceNote: "Расстояние рассчитается при наличии точных координат.",
+          rateTripLink: "Оценить поездку", saveProfile: "Сохранить", profileSaved: "Профиль сохранён."
+        }
+      };
+
       let language = "kk";
       let toastTimer;
-      let currentOrder = null;
-      const orderHistory = [];
+      const savedOrders = loadJson("zhairemOrderHistory", []);
+      const orderHistory = Array.isArray(savedOrders) ? savedOrders.filter((order) =>
+        order && typeof order === "object" && typeof order.from === "string" && typeof order.to === "string"
+        && Object.prototype.hasOwnProperty.call(ORDER_STATUS_KEYS, order.status)
+      ).map((order) => ({ ...order, id: order.id || `${Date.now()}-${Math.random().toString(36).slice(2)}` })) : [];
+      let currentOrder = [...orderHistory].reverse().find((order) => order.status !== "completed") ?? null;
+      const savedRatings = loadJson("zhairemTripRatings", []);
+      const rideRatings = Array.isArray(savedRatings) ? savedRatings.filter((rating) =>
+        rating && typeof rating.orderId === "string" && Number.isInteger(rating.value) && rating.value >= 1 && rating.value <= 5
+      ) : [];
       const savedAddresses = [];
       let orderCreationPending = false;
       let activeScreen = "home";
       let historyFilter = "all";
       let intercityType = "Жолаушылармен";
+      const DEFAULT_LOCATION = { latitude: 48.0061, longitude: 67.5964, isFallback: true };
+      let currentLocation = { ...DEFAULT_LOCATION };
+      let locationStatusKey = "locationFallback";
+      let locationWatchId = null;
+      let currentRatingOrder = null;
+      let callActive = false;
+      let micMuted = false;
+      let soundMuted = false;
+      let passengerAvatarData = "";
+      let driverAvatarData = "";
       const $ = (selector, root = document) => root.querySelector(selector);
       const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
-      const t = (key) => translations[language][key] ?? translations.kk[key] ?? key;
+      const t = (key) => featureText[language][key] ?? translations[language][key] ?? translations.kk[key] ?? key;
       const formatMoney = (value) => `${new Intl.NumberFormat(language === "kk" ? "kk-KZ" : "ru-RU").format(value)} ₸`;
       const countInput = $("#rideCount");
       const locale = () => translations[language];
       const screenTitleKeys = {
-        booking: "routeTitle", profile: "menuProfile", town: "menuTown", orders: "menuOrders",
+        booking: "routeTitle", account: "accountTitle", profile: "menuProfile", call: "callTitle", town: "menuTown", orders: "menuOrders",
         courier: "menuCourier", intercity: "menuIntercity", addresses: "menuAddresses",
         cargo: "menuCargo", notifications: "menuNotifications", group: "communityTitle", safety: "menuSafety",
         settings: "menuSettings", support: "supportTitle", driver: "driverPanelTitle", driverSignup: "partnerTitle"
@@ -1894,6 +2119,114 @@
         $("#profileDisplayName").textContent = displayName;
       }
 
+      function renderRating() {
+        const average = rideRatings.length
+          ? rideRatings.reduce((sum, rating) => sum + rating.value, 0) / rideRatings.length
+          : 0;
+        const score = average.toFixed(1).replace(".", ",");
+        $("#profileRatingDisplay").textContent = `★ ${score}`;
+        $("#drawerRating").textContent = `★ ${score}`;
+        currentRatingOrder = [...orderHistory].reverse().find((order) =>
+          order.status === "completed" && order.id && !rideRatings.some((rating) => rating.orderId === order.id)
+        ) ?? null;
+        $("#ratingPrompt").textContent = currentRatingOrder
+          ? `${t("ratingPrompt")} ${currentRatingOrder.from} → ${currentRatingOrder.to}`
+          : orderHistory.some((order) => order.status === "completed") ? t("ratingUnrated") : t("ratingNeedTrip");
+        $$("[data-rate]").forEach((button) => button.setAttribute("aria-pressed", "false"));
+      }
+
+      function renderAccountHistory() {
+        const list = $("#accountTripHistory");
+        list.replaceChildren();
+        if (orderHistory.length === 0) {
+          const item = document.createElement("li");
+          item.className = "history-item";
+          item.textContent = t("historyEmpty");
+          list.append(item);
+          return;
+        }
+        [...orderHistory].reverse().forEach((order) => {
+          const item = document.createElement("li");
+          item.className = "history-item";
+          const route = document.createElement("strong");
+          route.textContent = `${order.from} → ${order.to}`;
+          const details = document.createElement("span");
+          details.textContent = `${formatDateTime(order.createdAt)} · ${t(ORDER_STATUS_KEYS[order.status])} · ${formatMoney(order.total)}`;
+          item.append(route, details);
+          list.append(item);
+        });
+      }
+
+      function persistOrderHistory() {
+        saveJson("zhairemOrderHistory", orderHistory);
+      }
+
+      function updateLocationDisplay(messageKey = locationStatusKey) {
+        locationStatusKey = messageKey;
+        const text = currentLocation.isFallback
+          ? messageKey === "locationFallback" ? t("locationFallback")
+            : `${t(messageKey)} · ${currentLocation.latitude.toFixed(5)}, ${currentLocation.longitude.toFixed(5)}`
+          : `${t(messageKey)} · ${currentLocation.latitude.toFixed(5)}, ${currentLocation.longitude.toFixed(5)}`;
+        $("#locationStatus").textContent = text;
+        $("#passengerLocationText").textContent = text;
+        $("#driverLocationText").textContent = text;
+      }
+
+      function useTownFallback(messageKey) {
+        currentLocation = { ...DEFAULT_LOCATION };
+        updateLocationDisplay(messageKey);
+      }
+
+      function startLocationWatch() {
+        if (!navigator.geolocation || locationWatchId !== null) return;
+        locationWatchId = navigator.geolocation.watchPosition((position) => {
+          currentLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            isFallback: false
+          };
+          updateLocationDisplay("locationFound");
+        }, (error) => {
+          if (error.code === error.PERMISSION_DENIED) useTownFallback("locationDenied");
+          else useTownFallback("locationUnavailable");
+          if (locationWatchId !== null) navigator.geolocation.clearWatch(locationWatchId);
+          locationWatchId = null;
+        }, { enableHighAccuracy: true, maximumAge: 30000, timeout: 10000 });
+      }
+
+      function requestLocation(showFeedback = true) {
+        if (!navigator.geolocation) {
+          useTownFallback("locationUnavailable");
+          if (showFeedback) showToast(t("locationUnavailable"));
+          return;
+        }
+        navigator.geolocation.getCurrentPosition((position) => {
+          currentLocation = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            isFallback: false
+          };
+          updateLocationDisplay("locationFound");
+          startLocationWatch();
+          if (showFeedback) showToast(t("locationFound"));
+        }, (error) => {
+          const key = error.code === error.PERMISSION_DENIED ? "locationDenied" : "locationUnavailable";
+          useTownFallback(key);
+          if (showFeedback) showToast(t(key));
+        }, { enableHighAccuracy: true, maximumAge: 30000, timeout: 10000 });
+      }
+
+      function updateRouteOverlay(index = -1) {
+        const endpoints = [
+          [42, 34], [18, 68], [88, 25], [82, 78]
+        ];
+        const point = endpoints[index] ?? endpoints[0];
+        $("#routeLine").setAttribute("d", `M53 53 L${point[0]} ${point[1]}`);
+        $("#routeLabelFrom").textContent = `${t("routeFrom")}: ${$("#from").value || "Жайрем"}`;
+        $("#routeToLabel").textContent = `${t("routeTo")}: ${locale().places[index]?.[0] ?? t("placeSquare")}`;
+        $("#routeSummary").textContent = `${t("routeSummary")} ${t("routeDistanceNote")}`;
+      }
+
       function normalizedCount(updateField = false) {
         const parsed = Number(countInput.value);
         const count = Number.isSafeInteger(parsed) && parsed > 0 ? parsed : 1;
@@ -1954,6 +2287,7 @@
         $$("[data-place-choice]").forEach((button) => {
           button.setAttribute("aria-pressed", Number(button.dataset.placeChoice) === selectedIndex ? "true" : "false");
         });
+        updateRouteOverlay(selectedIndex);
       }
 
       function selectDestination(index) {
@@ -2000,6 +2334,8 @@
           ? `${currentOrder.from} → ${currentOrder.to} · ${t("msgCount")}: ${currentOrder.count} · ${formatMoney(currentOrder.total)}`
           : "";
         renderOrderHistory();
+        renderAccountHistory();
+        renderRating();
 
         $("#driverOrderEmpty").hidden = Boolean(currentOrder);
         $("#driverOrderDetails").hidden = !currentOrder;
@@ -2008,6 +2344,8 @@
           : "";
         $("#acceptOrder").disabled = currentOrder?.status !== "searching";
         $("#completeOrder").disabled = currentOrder?.status !== "onWay";
+        $("#driverCallButton").disabled = !currentOrder;
+        updateCallLinks();
         if (!currentOrder) return;
 
         $("#driverOrderFrom").textContent = currentOrder.from;
@@ -2030,6 +2368,47 @@
         const safeRate = Number.isSafeInteger(rate) && rate >= 0 ? rate : 0;
         const income = safeVisits * safeRate;
         $("#partnerPointIncomeAmount").textContent = formatMoney(Number.isSafeInteger(income) ? income : 0);
+      }
+
+      function updateCallLinks() {
+        const phone = selectedAccountRole === "driver" && currentOrder?.phone
+          ? currentOrder.phone
+          : ADMIN_PHONE;
+        const telephone = phone.replace(/[^\d+]/g, "");
+        const whatsapp = phone.replace(/\D/g, "");
+        $("#callPhoneLink").href = `tel:${telephone || ADMIN_PHONE}`;
+        $("#callWhatsAppLink").href = `https://wa.me/${whatsapp || WHATSAPP_NUMBER}`;
+      }
+
+      function renderCallState() {
+        $("#callStatus").textContent = callActive ? t("callConnecting") : t("callIdle");
+        $("#toggleMic").textContent = micMuted ? t("unmuteMic") : t("muteMic");
+        $("#toggleSpeaker").textContent = soundMuted ? t("unmuteSound") : t("muteSound");
+        $("#toggleMic").setAttribute("aria-pressed", String(micMuted));
+        $("#toggleSpeaker").setAttribute("aria-pressed", String(soundMuted));
+        $("#endCall").disabled = !callActive;
+      }
+
+      function saveDriverAccount() {
+        saveJson("zhairemDriverAccount", {
+          name: $("#driverAccountName").value.trim(),
+          phone: $("#driverAccountPhone").value.trim(),
+          vehicle: $("#driverVehicle").value.trim(),
+          route: $("#driverRoute").value.trim() || "Жайрем кенті",
+          online: $("#driverOnline").checked,
+          avatar: driverAvatarData
+        });
+      }
+
+      let selectedAccountRole = "passenger";
+      function setAccountRole(role) {
+        selectedAccountRole = role === "driver" ? "driver" : "passenger";
+        $("#passengerAccount").hidden = selectedAccountRole !== "passenger";
+        $("#driverAccount").hidden = selectedAccountRole !== "driver";
+        $$("[data-account-role]").forEach((button) => {
+          button.setAttribute("aria-pressed", String(button.dataset.accountRole === selectedAccountRole));
+        });
+        updateCallLinks();
       }
 
       function setLanguage(nextLanguage) {
@@ -2068,6 +2447,9 @@
         updateDriverReport();
         renderOrderWorkflow();
         updatePartnerPointIncome();
+        updateLocationDisplay();
+        renderCallState();
+        $("#driverStatusText").textContent = $("#driverOnline").checked ? t("driverOnline") : t("driverOffline");
         if (activeScreen !== "home") $("#screenTitle").textContent = t(screenTitleKeys[activeScreen] ?? "menuSettings");
       }
 
@@ -2165,10 +2547,10 @@
         refreshMapSelection();
       });
       $("#to").addEventListener("input", refreshMapSelection);
+      $("#from").addEventListener("input", () => updateRouteOverlay(Number($("[data-map-place][aria-pressed='true']")?.dataset.mapPlace ?? -1)));
       $$("[data-map-place], [data-place-choice]").forEach((button) => {
         button.addEventListener("click", () => {
           selectDestination(Number(button.dataset.mapPlace ?? button.dataset.placeChoice));
-          if (button.hasAttribute("data-map-place")) showScreen("booking");
         });
       });
       $$("[data-contact-service]").forEach((button) => {
@@ -2263,8 +2645,10 @@
       function startDriverSearch(order) {
         order.status = "new";
         order.createdAt = new Date().toISOString();
+        order.id = `${Date.now()}-${Math.random().toString(36).slice(2)}`;
         currentOrder = order;
         orderHistory.push(order);
+        persistOrderHistory();
         renderOrderWorkflow();
         advanceOrderStatus("searching", "orderSearchingToast");
       }
@@ -2273,6 +2657,7 @@
         const nextByStatus = { new: "searching", searching: "onWay", onWay: "completed", completed: null };
         if (!currentOrder || nextByStatus[currentOrder.status] !== nextStatus) return false;
         currentOrder.status = nextStatus;
+        persistOrderHistory();
         renderOrderWorkflow();
         showToast(t(toastKey));
         return true;
@@ -2312,6 +2697,44 @@
       $("#completeOrder").addEventListener("click", () => advanceOrderStatus("completed", "orderCompletedToast"));
       $$("[data-app-role]").forEach((button) => {
         button.addEventListener("click", () => setAppRole(button.dataset.appRole));
+      });
+      $$("[data-account-role]").forEach((button) => {
+        button.addEventListener("click", () => setAccountRole(button.dataset.accountRole));
+      });
+      $$("[data-rate]").forEach((button) => button.addEventListener("click", () => {
+        if (!currentRatingOrder) {
+          showToast(t("ratingNeedTrip"));
+          return;
+        }
+        rideRatings.push({ orderId: currentRatingOrder.id, value: Number(button.dataset.rate) });
+        saveJson("zhairemTripRatings", rideRatings);
+        renderRating();
+        showToast(t("ratingSaved"));
+      }));
+      $("#locateMe").addEventListener("click", () => requestLocation(true));
+      $$(".account-locate").forEach((button) => button.addEventListener("click", () => requestLocation(true)));
+      $("#startCall").addEventListener("click", () => {
+        callActive = true;
+        renderCallState();
+      });
+      $("#toggleMic").addEventListener("click", () => {
+        micMuted = !micMuted;
+        renderCallState();
+      });
+      $("#toggleSpeaker").addEventListener("click", () => {
+        soundMuted = !soundMuted;
+        renderCallState();
+      });
+      $("#endCall").addEventListener("click", () => {
+        callActive = false;
+        micMuted = false;
+        soundMuted = false;
+        renderCallState();
+        $("#callStatus").textContent = t("callEnded");
+      });
+      $("#driverOnline").addEventListener("change", () => {
+        $("#driverStatusText").textContent = $("#driverOnline").checked ? t("driverOnline") : t("driverOffline");
+        saveDriverAccount();
       });
       $("#partnerPointVisits").addEventListener("input", updatePartnerPointIncome);
       $("#partnerPointRate").addEventListener("input", updatePartnerPointIncome);
@@ -2375,7 +2798,7 @@
         try { const value = JSON.parse(localStorage.getItem(key)); return value ?? fallback; } catch (error) { return fallback; }
       }
 
-      const storedProfile = loadJson("zhairemProfile", null);
+      const storedProfile = loadJson("zhairemPassengerAccount", null) || loadJson("zhairemProfile", null);
       if (storedProfile) {
         profileName = storedProfile.name || "Аманжол";
         $("#profileNameInput").value = profileName;
@@ -2383,6 +2806,7 @@
         $("#profilePhoneInput").value = storedProfile.phone || "+7 747 863 24 59";
         $("#profileLocationInput").value = storedProfile.location || "Жайрем кенті";
         if (storedProfile.avatar) {
+          passengerAvatarData = storedProfile.avatar;
           $("#profileAvatarPreview").src = storedProfile.avatar;
           $("#profileAvatarPreview").hidden = false;
           $("#profileAvatarFallback").hidden = true;
@@ -2393,18 +2817,68 @@
         $("#profilePhoneInput").value = "+7 747 863 24 59";
         $("#profileLocationInput").value = "Жайрем кенті";
       }
+      const storedDriverProfile = loadJson("zhairemDriverAccount", {});
+      $("#driverAccountName").value = storedDriverProfile.name || "";
+      $("#driverAccountPhone").value = storedDriverProfile.phone || "";
+      $("#driverVehicle").value = storedDriverProfile.vehicle || "";
+      $("#driverRoute").value = storedDriverProfile.route || "Жайрем кенті";
+      $("#driverOnline").checked = Boolean(storedDriverProfile.online);
+      if (storedDriverProfile.avatar) {
+        driverAvatarData = storedDriverProfile.avatar;
+        $("#driverAvatarPreview").src = driverAvatarData;
+        $("#driverAvatarPreview").hidden = false;
+        $("#driverAvatarFallback").hidden = true;
+      }
 
-      $("#profileAvatarInput").addEventListener("change", (event) => {
+      function previewAvatar(event, role) {
         const file = event.target.files?.[0];
         if (!file) return;
+        if (!file.type.startsWith("image/")) {
+          showToast(t("photoReadFailed"));
+          event.target.value = "";
+          return;
+        }
+        if (file.size > 8 * 1024 * 1024) {
+          showToast(t("photoTooLarge"));
+          event.target.value = "";
+          return;
+        }
         const reader = new FileReader();
         reader.onload = () => {
-          $("#profileAvatarPreview").src = reader.result;
-          $("#profileAvatarPreview").hidden = false;
-          $("#profileAvatarFallback").hidden = true;
+          if (typeof reader.result !== "string") {
+            showToast(t("photoReadFailed"));
+            return;
+          }
+          const image = new Image();
+          image.onload = () => {
+            const canvas = document.createElement("canvas");
+            const scale = Math.min(1, 512 / Math.max(image.naturalWidth, image.naturalHeight));
+            canvas.width = Math.round(image.naturalWidth * scale);
+            canvas.height = Math.round(image.naturalHeight * scale);
+            const context = canvas.getContext("2d");
+            if (!context) {
+              showToast(t("photoReadFailed"));
+              return;
+            }
+            context.fillStyle = "#fff";
+            context.fillRect(0, 0, canvas.width, canvas.height);
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            const avatar = canvas.toDataURL("image/jpeg", .78);
+            const isDriver = role === "driver";
+            if (isDriver) driverAvatarData = avatar;
+            else passengerAvatarData = avatar;
+            $(`#${isDriver ? "driverAvatarPreview" : "profileAvatarPreview"}`).src = avatar;
+            $(`#${isDriver ? "driverAvatarPreview" : "profileAvatarPreview"}`).hidden = false;
+            $(`#${isDriver ? "driverAvatarFallback" : "profileAvatarFallback"}`).hidden = true;
+          };
+          image.onerror = () => showToast(t("photoReadFailed"));
+          image.src = reader.result;
         };
+        reader.onerror = () => showToast(t("photoReadFailed"));
         reader.readAsDataURL(file);
-      });
+      }
+      $("#profileAvatarInput").addEventListener("change", (event) => previewAvatar(event, "passenger"));
+      $("#driverAvatarInput").addEventListener("change", (event) => previewAvatar(event, "driver"));
 
       $("#saveProfileName").addEventListener("click", () => {
         const name = $("#profileNameInput").value.trim();
@@ -2414,11 +2888,16 @@
           surname: $("#profileSurnameInput").value.trim(),
           phone: $("#profilePhoneInput").value.trim(),
           location: $("#profileLocationInput").value.trim(),
-          avatar: $("#profileAvatarPreview").hidden ? "" : $("#profileAvatarPreview").src
+          avatar: passengerAvatarData
         };
         profileName = name;
         saveJson("zhairemProfile", profile);
+        saveJson("zhairemPassengerAccount", profile);
         renderProfileName();
+        showToast(t("profileSaved"));
+      });
+      $("#saveDriverProfile").addEventListener("click", () => {
+        saveDriverAccount();
         showToast(t("profileSaved"));
       });
 
@@ -2517,6 +2996,11 @@
       renderSavedAddresses();
       setLanguage("kk");
       showScreen("home");
+      persistOrderHistory();
+      requestLocation(false);
+      window.addEventListener("pagehide", () => {
+        if (locationWatchId !== null) navigator.geolocation.clearWatch(locationWatchId);
+      });
     })();
   </script>
 </body>
