@@ -497,6 +497,7 @@
             <div class="community-actions">
               <a class="button whatsapp" id="groupLink" href="https://chat.whatsapp.com/BWrWRS63CfN9B5i9irs5su?s=cl&amp;p=i&amp;mlu=4&amp;ilr=4&amp;iam=2" target="_blank" rel="noopener noreferrer" data-i18n="joinGroup">Топқа қосылу</a>
               <button type="button" class="button secondary" id="copyGroupOrder" data-i18n="copyGroupOrder">Толтырылған тапсырысты топқа көшіру</button>
+              <button type="button" class="button secondary" id="copyGroupInvite" data-i18n="copyGroupInvite">Топқа орналастыратын сілтеме мен ережені көшіру</button>
             </div>
             <p class="muted-note" data-i18n="groupCopyHint">Алдымен тапсырыс пішінін толтырыңыз. Хабарлама көшірілген соң топты ашып, оны өзіңіз жібересіз.</p>
           </article>
@@ -665,6 +666,8 @@
           groupRule2: "Бағытты, уақытты және байланыс нөмірін анық көрсетіңіз; өзге адамның нөмірін рұқсатсыз жарияламаңыз.",
           groupRule3: "Әдеп сақтаңыз, жарнама мен қайталанған хабарламаны жібермеңіз; әкімшінің нұсқауын орындаңыз.",
           joinGroup: "Топқа қосылу", copyGroupOrder: "Толтырылған тапсырысты топқа көшіру",
+          copyGroupInvite: "Топқа орналастыратын сілтеме мен ережені көшіру",
+          groupInviteCopied: "Қосымша сілтемесі мен ереже көшірілді.",
           groupCopyHint: "Алдымен тапсырыс пішінін толтырыңыз. Хабарлама көшірілген соң топты ашып, оны өзіңіз жібересіз.",
           driverReportTitle: "Жүргізушінің бүгінгі есебі",
           driverReportIntro: "Сапар санын тек Жайрем ішіндегі 400 ₸ тарифпен жүрілген сапар бойынша енгізіңіз. Кенттен тыс сапар бөлек келісіледі.",
@@ -749,6 +752,8 @@
           groupRule2: "Указывайте маршрут, время и контактный номер; не публикуйте чужие номера без разрешения.",
           groupRule3: "Общайтесь уважительно, не размещайте рекламу и повторы; соблюдайте указания администратора.",
           joinGroup: "Вступить в группу", copyGroupOrder: "Скопировать заполненный заказ в группу",
+          copyGroupInvite: "Скопировать ссылку и правила для группы",
+          groupInviteCopied: "Ссылка на приложение и правила скопированы.",
           groupCopyHint: "Сначала заполните форму заказа. После копирования откройте группу и отправьте сообщение самостоятельно.",
           driverReportTitle: "Отчёт водителя за сегодня",
           driverReportIntro: "Укажите только поездки по Жайрему, рассчитанные по тарифу 400 ₸. Поездки за пределы посёлка согласуются отдельно.",
@@ -1011,6 +1016,15 @@
         if (!validateRideForm()) return;
         const copied = await copyText(buildRideMessage().join("\n"));
         showToast(copied ? t("groupOrderCopied") : t("copyFailed"));
+      });
+
+      $("#copyGroupInvite").addEventListener("click", async () => {
+        const appUrl = window.location.origin + "/taxi/";
+        const rule = language === "kk"
+          ? "Жайрем кенті ішінде 1 сапар = 400 ₸; 350 ₸ жүргізушіге / 50 ₸ қызмет үлесі.\nТапсырыс беру үшін осы сілтемені ашыңыз."
+          : "В посёлке Жайрем 1 поездка = 400 ₸; 350 ₸ водителю / 50 ₸ доля сервиса.\nЧтобы оформить заказ, откройте эту ссылку.";
+        const copied = await copyText(`${appUrl}\n\n${rule}`);
+        showToast(copied ? t("groupInviteCopied") : t("copyFailed"));
       });
 
       $("#driverReportForm").addEventListener("submit", (event) => {
