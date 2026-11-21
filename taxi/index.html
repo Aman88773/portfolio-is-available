@@ -1,0 +1,824 @@
+<!doctype html>
+<html lang="kk">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#102a43">
+  <meta name="description" content="Жайрем ішіндегі ыңғайлы такси: әр сапар 400 ₸.">
+  <title>Jairem Taxi — Жайрем ішіндегі сапар</title>
+  <style>
+    :root {
+      color-scheme: light;
+      --ink: #102a43;
+      --muted: #627d98;
+      --paper: #f4f7f5;
+      --card: #fff;
+      --line: #d9e2dd;
+      --green: #157347;
+      --green-dark: #105b38;
+      --lime: #d8f36a;
+      --blue: #e8f0f7;
+      --shadow: 0 18px 55px rgba(16, 42, 67, .09);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      line-height: 1.55;
+    }
+    button, input, select, textarea { font: inherit; }
+    button, a, input, select, textarea { -webkit-tap-highlight-color: transparent; }
+    a { color: inherit; }
+    button { cursor: pointer; }
+    .wrap { width: min(1120px, calc(100% - 36px)); margin-inline: auto; }
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+      padding-block: 18px;
+    }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 850; letter-spacing: -.03em; }
+    .brand-mark {
+      display: grid;
+      width: 42px;
+      height: 42px;
+      place-items: center;
+      border-radius: 14px;
+      background: var(--lime);
+      color: var(--ink);
+      font-size: 1.35rem;
+    }
+    .brand small { display: block; color: var(--muted); font-size: .73rem; font-weight: 650; letter-spacing: .04em; }
+    .language { display: inline-flex; gap: 4px; padding: 4px; border: 1px solid var(--line); border-radius: 999px; background: #fff; }
+    .language button {
+      min-width: 48px;
+      border: 0;
+      border-radius: 999px;
+      padding: 7px 12px;
+      background: transparent;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 800;
+    }
+    .language button[aria-pressed="true"] { background: var(--ink); color: #fff; }
+    .hero {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.3fr) minmax(230px, .7fr);
+      gap: 28px;
+      align-items: center;
+      overflow: hidden;
+      padding: clamp(26px, 5vw, 58px);
+      border-radius: 30px;
+      background: var(--ink);
+      color: #fff;
+      box-shadow: var(--shadow);
+    }
+    .hero::after {
+      position: absolute;
+      right: -70px;
+      bottom: -180px;
+      width: 410px;
+      height: 410px;
+      border: 1px solid rgba(216, 243, 106, .22);
+      border-radius: 50%;
+      box-shadow: 0 0 0 35px rgba(216, 243, 106, .04), 0 0 0 75px rgba(216, 243, 106, .035);
+      content: "";
+      pointer-events: none;
+    }
+    .eyebrow { margin: 0 0 12px; color: var(--lime); font-size: .77rem; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { max-width: 680px; margin: 0; font-size: clamp(2.35rem, 6vw, 4.7rem); letter-spacing: -.065em; line-height: .99; }
+    .hero-copy { max-width: 600px; margin: 19px 0 0; color: #d5e0e9; font-size: 1.04rem; }
+    .hero-price {
+      position: relative;
+      z-index: 1;
+      justify-self: end;
+      width: min(100%, 260px);
+      padding: 23px;
+      border: 1px solid rgba(255,255,255,.19);
+      border-radius: 22px;
+      background: rgba(255,255,255,.08);
+      backdrop-filter: blur(8px);
+    }
+    .hero-price span { display: block; color: #d5e0e9; font-size: .88rem; }
+    .hero-price strong { display: block; margin-top: 5px; color: var(--lime); font-size: clamp(2.3rem, 5vw, 3.2rem); letter-spacing: -.06em; line-height: 1.1; }
+    .hero-price small { display: block; margin-top: 7px; color: #d5e0e9; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 24px; }
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      padding: 11px 17px;
+      background: var(--green);
+      color: #fff;
+      font-weight: 800;
+      text-align: center;
+      text-decoration: none;
+      transition: transform .16s ease, background .16s ease, box-shadow .16s ease;
+    }
+    .button:hover { transform: translateY(-1px); background: var(--green-dark); box-shadow: 0 8px 18px rgba(21,115,71,.18); }
+    .button:focus-visible, .language button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 3px solid #82c91e;
+      outline-offset: 3px;
+    }
+    .button.secondary { border-color: var(--line); background: #fff; color: var(--ink); }
+    .button.secondary:hover { background: #f7faf8; }
+    .button.whatsapp { background: #168a54; }
+    main { padding-block: 28px 58px; }
+    .section-heading { display: flex; justify-content: space-between; gap: 20px; align-items: end; margin: 34px 0 16px; }
+    .section-heading h2 { margin: 0; font-size: clamp(1.45rem, 3vw, 2rem); letter-spacing: -.045em; line-height: 1.15; }
+    .section-heading p { max-width: 550px; margin: 7px 0 0; color: var(--muted); }
+    .booking-layout { display: grid; grid-template-columns: minmax(0, 1.12fr) minmax(290px, .88fr); gap: 18px; align-items: start; }
+    .card { border: 1px solid var(--line); border-radius: 22px; padding: clamp(18px, 3vw, 27px); background: var(--card); box-shadow: 0 8px 28px rgba(16,42,67,.045); }
+    .card h3 { margin: 0 0 5px; font-size: 1.15rem; letter-spacing: -.025em; }
+    .card-intro { margin: 0 0 20px; color: var(--muted); font-size: .91rem; }
+    .field-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 15px; }
+    .field { min-width: 0; }
+    .field.full { grid-column: 1 / -1; }
+    label, .field-label { display: block; margin-bottom: 7px; font-size: .86rem; font-weight: 800; }
+    input, select, textarea {
+      width: 100%;
+      min-height: 47px;
+      border: 1px solid #cbd6d0;
+      border-radius: 12px;
+      padding: 10px 12px;
+      background: #fff;
+      color: var(--ink);
+    }
+    input::placeholder, textarea::placeholder { color: #91a1ad; }
+    textarea { min-height: 90px; resize: vertical; }
+    .muted-note { margin: 7px 0 0; color: var(--muted); font-size: .78rem; }
+    .route-line { display: grid; grid-template-columns: 1fr 38px 1fr; gap: 8px; align-items: end; }
+    .route-swap { display: grid; width: 38px; height: 46px; place-items: center; border: 1px solid var(--line); border-radius: 12px; background: var(--blue); color: var(--ink); font-size: 1.15rem; }
+    .trip-choices { display: flex; flex-wrap: wrap; gap: 8px; }
+    .trip-choice {
+      min-width: 49px;
+      min-height: 43px;
+      border: 1px solid var(--line);
+      border-radius: 11px;
+      padding: 8px 12px;
+      background: #fff;
+      color: var(--ink);
+      font-weight: 800;
+    }
+    .trip-choice[aria-pressed="true"] { border-color: var(--green); background: #eaf6ef; color: var(--green-dark); box-shadow: inset 0 0 0 1px var(--green); }
+    .count-row { display: grid; grid-template-columns: minmax(110px, 150px) 1fr; gap: 13px; align-items: end; margin-top: 14px; }
+    .count-row input { font-size: 1.08rem; font-weight: 800; }
+    .total-box { min-height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 10px; border-radius: 15px; padding: 12px 15px; background: var(--ink); color: #fff; }
+    .total-box span { color: #d5e0e9; font-size: .84rem; }
+    .total-box strong { color: var(--lime); font-size: 1.6rem; letter-spacing: -.04em; white-space: nowrap; }
+    .payment-options { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+    .choice-card { display: flex; align-items: center; gap: 9px; min-height: 49px; margin: 0; border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; cursor: pointer; font-size: .86rem; font-weight: 750; }
+    .choice-card input { width: 17px; min-height: 17px; height: 17px; margin: 0; accent-color: var(--green); }
+    .check-row { display: flex; align-items: flex-start; gap: 10px; margin-top: 13px; color: var(--muted); font-size: .84rem; }
+    .check-row input { flex: 0 0 auto; width: 18px; min-height: 18px; height: 18px; margin: 2px 0 0; accent-color: var(--green); }
+    .payment-card { position: sticky; top: 16px; }
+    .kaspi-banner { display: flex; align-items: center; gap: 12px; margin-bottom: 17px; border-radius: 15px; padding: 13px; background: #fef1ed; }
+    .kaspi-icon { display: grid; width: 43px; height: 43px; flex: 0 0 auto; place-items: center; border-radius: 13px; background: #e43e30; color: #fff; font-weight: 900; }
+    .kaspi-banner strong { display: block; }
+    .kaspi-banner span { display: block; color: #805c57; font-size: .8rem; }
+    .amount-panel { padding: 17px; border: 1px dashed #cbd6d0; border-radius: 16px; background: #f8faf8; text-align: center; }
+    .amount-panel span { display: block; color: var(--muted); font-size: .82rem; }
+    .amount-panel strong { display: block; margin: 4px 0 13px; font-size: 2.05rem; letter-spacing: -.055em; }
+    .amount-actions { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+    .amount-actions .button { min-height: 40px; padding: 8px 12px; font-size: .82rem; }
+    .qr-note { display: grid; grid-template-columns: 50px 1fr; gap: 12px; align-items: center; margin: 15px 0; padding: 12px; border-radius: 14px; background: #f2f6f3; }
+    .qr-placeholder { display: grid; width: 50px; height: 50px; place-items: center; border: 1px solid #f1c7c1; border-radius: 12px; background: #fef1ed; color: #e43e30; font-size: 1.5rem; font-weight: 950; }
+    .qr-note p { margin: 0; color: var(--muted); font-size: .78rem; }
+    .qr-note strong { display: block; margin-bottom: 2px; color: var(--ink); font-size: .85rem; }
+    .kaspi-link { display: block; margin-top: 10px; color: #bd3024; font-size: .85rem; font-weight: 800; text-align: center; text-underline-offset: 3px; }
+    .send-button { width: 100%; margin-top: 18px; }
+    .fine-print { margin: 10px 0 0; color: var(--muted); font-size: .75rem; text-align: center; }
+    .benefit-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 15px; }
+    .benefit-card { overflow: hidden; }
+    .benefit-top { display: flex; align-items: center; gap: 10px; margin-bottom: 13px; }
+    .benefit-icon { display: grid; width: 42px; height: 42px; place-items: center; border-radius: 13px; background: var(--blue); font-size: 1.2rem; }
+    .benefit-card h3 { margin: 0; }
+    .benefit-number { display: block; margin: 13px 0 1px; font-size: 2rem; font-weight: 900; letter-spacing: -.06em; }
+    .benefit-card p { margin: 0; color: var(--muted); font-size: .87rem; }
+    .breakdown { display: grid; gap: 9px; margin-top: 17px; padding-top: 14px; border-top: 1px solid var(--line); }
+    .breakdown-row { display: flex; justify-content: space-between; gap: 10px; color: var(--muted); font-size: .82rem; }
+    .breakdown-row strong { color: var(--ink); text-align: right; }
+    .daily-forecast { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+    .forecast { padding: 10px; border-radius: 12px; background: #f2f6f3; }
+    .forecast span { display: block; color: var(--muted); font-size: .74rem; }
+    .forecast strong { font-size: 1rem; }
+    .benefits-explainer { margin-top: 15px; padding: 18px; border-radius: 17px; background: var(--ink); color: #fff; }
+    .benefits-explainer h3 { margin: 0 0 7px; }
+    .benefits-explainer p { margin: 0; color: #d5e0e9; font-size: .89rem; }
+    .route-points { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); gap: 10px; }
+    .route-point { border: 1px solid var(--line); border-radius: 14px; padding: 13px; background: #fff; }
+    .route-point span { display: block; margin-bottom: 5px; font-size: 1.15rem; }
+    .route-point strong { display: block; font-size: .85rem; }
+    .route-point small { color: var(--muted); font-size: .75rem; }
+    .partner-card { display: grid; grid-template-columns: .8fr 1.2fr; gap: 25px; align-items: start; }
+    .partner-aside { padding: 20px; border-radius: 17px; background: #eff6e2; }
+    .partner-aside h3 { margin: 0 0 8px; }
+    .partner-aside p { margin: 0; color: #53634b; font-size: .88rem; }
+    .partner-form .field-grid { gap: 13px; }
+    .partner-form .button { margin-top: 14px; }
+    .footer { display: flex; justify-content: space-between; gap: 15px; margin-top: 32px; border-top: 1px solid var(--line); padding-top: 18px; color: var(--muted); font-size: .82rem; }
+    .footer a { color: var(--green-dark); font-weight: 800; }
+    .toast { position: fixed; z-index: 9; right: 18px; bottom: 18px; max-width: min(360px, calc(100% - 36px)); transform: translateY(20px); opacity: 0; pointer-events: none; border-radius: 13px; padding: 12px 16px; background: var(--ink); color: #fff; box-shadow: var(--shadow); transition: .2s ease; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    @media (max-width: 820px) {
+      .hero { grid-template-columns: 1fr; }
+      .hero-price { justify-self: start; width: min(100%, 290px); }
+      .booking-layout { grid-template-columns: 1fr; }
+      .payment-card { position: static; }
+      .benefit-grid { grid-template-columns: 1fr; }
+      .route-points { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    }
+    @media (max-width: 560px) {
+      .wrap { width: min(100% - 24px, 1120px); }
+      .topbar { padding-block: 12px; }
+      .hero { gap: 20px; padding: 25px 20px; border-radius: 22px; }
+      .hero-copy { font-size: .94rem; }
+      .section-heading { align-items: start; flex-direction: column; }
+      .field-grid, .partner-card { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .route-line { grid-template-columns: 1fr 34px 1fr; gap: 5px; }
+      .route-swap { width: 34px; }
+      .count-row { grid-template-columns: 1fr; }
+      .payment-options { grid-template-columns: 1fr; }
+      .footer { flex-direction: column; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header class="topbar">
+      <a class="brand" href="#home" aria-label="Jairem Taxi">
+        <span class="brand-mark" aria-hidden="true">↗</span>
+        <span>jairem taxi<small data-i18n="brandSubtitle">Жайрем ішіндегі сапар</small></span>
+      </a>
+      <nav class="language" aria-label="Тіл / Язык" data-i18n-aria-label="languageLabel">
+        <button type="button" data-language="kk" aria-pressed="true">ҚАЗ</button>
+        <button type="button" data-language="ru" aria-pressed="false">РУС</button>
+      </nav>
+    </header>
+
+    <section class="hero" id="home">
+      <div>
+        <p class="eyebrow" data-i18n="eyebrow">ЖАЙРЕМ · ЖЕРГІЛІКТІ ТАКСИ</p>
+        <h1 data-i18n="heroTitle">Жайрем ішінде — бір баға.</h1>
+        <p class="hero-copy" data-i18n="heroCopy">Қай жерден, қайда баратыныңызды таңдаңыз. Баға алдын ала белгілі, өтінім WhatsApp арқылы бірден жіберіледі.</p>
+        <div class="hero-actions">
+          <a class="button" href="#booking"><span aria-hidden="true">↘</span><span data-i18n="bookRide">Сапарға тапсырыс беру</span></a>
+          <a class="button secondary" href="#partners" data-i18n="joinTeam">Жүргізуші / серіктес болу</a>
+        </div>
+      </div>
+      <div class="hero-price">
+        <span data-i18n="fixedPrice">Жайрем кенті ішінде</span>
+        <strong>400 ₸</strong>
+        <small data-i18n="perRide">бір сапар үшін · тұрақты тариф</small>
+      </div>
+    </section>
+
+    <main>
+      <div class="section-heading" id="booking">
+        <div>
+          <p class="eyebrow" data-i18n="bookingEyebrow">ЖЫЛДАМ ТАПСЫРЫС</p>
+          <h2 data-i18n="bookingTitle">Сапар мәліметтері</h2>
+          <p data-i18n="bookingIntro">Сапар санын таңдаңыз — жалпы сома мен үлестер автоматты есептеледі.</p>
+        </div>
+      </div>
+
+      <div class="booking-layout">
+        <form class="card" id="rideForm">
+          <h3 data-i18n="routeTitle">Бағыт пен уақыт</h3>
+          <p class="card-intro" data-i18n="routeIntro">Қайдан және қайда барасыз? Дайын нүктені таңдаңыз немесе өзіңіз жазыңыз.</p>
+          <div class="route-line" role="group" aria-label="Бағыт / Маршрут" data-i18n-aria-label="routeGroupLabel">
+            <div class="field">
+              <label for="from" data-i18n="fromLabel">Қайдан</label>
+              <input id="from" name="from" list="places" autocomplete="street-address" placeholder="Мысалы: Орталық алаң" data-i18n-placeholder="fromPlaceholder" required>
+            </div>
+            <button type="button" class="route-swap" id="swapRoute" aria-label="Бағытты ауыстыру" title="Бағытты ауыстыру">↔</button>
+            <div class="field">
+              <label for="to" data-i18n="toLabel">Қайда</label>
+              <input id="to" name="to" list="places" autocomplete="street-address" placeholder="Мысалы: Аурухана" data-i18n-placeholder="toPlaceholder" required>
+            </div>
+          </div>
+          <datalist id="places"></datalist>
+
+          <div class="field-grid" style="margin-top:16px">
+            <div class="field">
+              <label for="rideName" data-i18n="nameLabel">Атыңыз</label>
+              <input id="rideName" name="name" autocomplete="name" placeholder="Атыңыз" data-i18n-placeholder="namePlaceholder" required>
+            </div>
+            <div class="field">
+              <label for="ridePhone" data-i18n="phoneLabel">Телефон нөмірі</label>
+              <input id="ridePhone" name="phone" type="tel" autocomplete="tel" placeholder="+7 7XX XXX XX XX" data-i18n-placeholder="phonePlaceholder" required>
+            </div>
+            <div class="field full">
+              <span class="field-label" data-i18n="timeLabel">Қашан керек?</span>
+              <div class="payment-options">
+                <label class="choice-card"><input type="radio" name="rideTimeType" value="now" checked><span data-i18n="nowOption">Қазір</span></label>
+                <label class="choice-card"><input type="radio" name="rideTimeType" value="later"><span data-i18n="laterOption">Уақытты таңдау</span></label>
+              </div>
+              <div id="scheduledTimeWrap" hidden style="margin-top:10px">
+                <label for="scheduledTime" data-i18n="scheduledLabel">Сапар уақыты</label>
+                <input id="scheduledTime" name="scheduledTime" type="datetime-local">
+              </div>
+            </div>
+            <div class="field full">
+              <span class="field-label" data-i18n="rideCountLabel">Сапар саны</span>
+              <div class="trip-choices" role="group" aria-label="Сапар саны" data-i18n-aria-label="rideCountLabel">
+                <button type="button" class="trip-choice" data-count="1" aria-pressed="true">1</button>
+                <button type="button" class="trip-choice" data-count="2" aria-pressed="false">2</button>
+                <button type="button" class="trip-choice" data-count="3" aria-pressed="false">3</button>
+                <button type="button" class="trip-choice" data-count="5" aria-pressed="false">5</button>
+                <button type="button" class="trip-choice" data-count="10" aria-pressed="false">10</button>
+              </div>
+              <div class="count-row">
+                <div>
+                  <label for="rideCount" data-i18n="manualCount">Қолмен енгізу</label>
+                  <input id="rideCount" name="rideCount" type="number" min="1" step="1" inputmode="numeric" value="1" aria-describedby="countHint">
+                </div>
+                <div class="total-box" aria-live="polite">
+                  <span data-i18n="totalPrice">Жалпы сома</span>
+                  <strong id="rideTotal">400 ₸</strong>
+                </div>
+              </div>
+              <p class="muted-note" id="countHint" data-i18n="countHint">Бос, 0 немесе теріс сан 1 сапар деп есептеледі.</p>
+            </div>
+            <div class="field full">
+              <span class="field-label" data-i18n="paymentMethod">Төлем түрі</span>
+              <div class="payment-options">
+                <label class="choice-card"><input type="radio" name="paymentType" value="kaspi" checked><span data-i18n="kaspiOption">Kaspi QR</span></label>
+                <label class="choice-card"><input type="radio" name="paymentType" value="cash"><span data-i18n="cashOption">Қолма-қол</span></label>
+              </div>
+              <label class="check-row" for="kaspiConfirmed">
+                <input id="kaspiConfirmed" name="kaspiConfirmed" type="checkbox">
+                <span data-i18n="kaspiConfirm">Kaspi төлемін растаймын</span>
+              </label>
+            </div>
+            <div class="field full">
+              <label for="rideNote" data-i18n="noteLabel">Қосымша ақпарат (міндетті емес)</label>
+              <textarea id="rideNote" name="note" placeholder="Кіреберіс, багаж немесе басқа ескерту" data-i18n-placeholder="notePlaceholder"></textarea>
+            </div>
+          </div>
+          <button type="submit" class="button whatsapp send-button"><span aria-hidden="true">◉</span><span data-i18n="sendRide">Тапсырысты WhatsApp-қа жіберу</span></button>
+          <p class="fine-print" data-i18n="waNote">WhatsApp ашылғанда хабарламаны өзіңіз жіберіп растайсыз.</p>
+        </form>
+
+        <aside class="card payment-card" aria-labelledby="paymentTitle">
+          <h3 id="paymentTitle" data-i18n="paymentTitle">Төлем және есеп</h3>
+          <p class="card-intro" data-i18n="paymentIntro">Сапар саны өзгерсе, төлем сомасы да бірден жаңарады.</p>
+          <div class="kaspi-banner">
+            <div class="kaspi-icon" aria-hidden="true">K</div>
+            <div><strong data-i18n="kaspiPayTitle">Kaspi QR төлемі</strong><span data-i18n="kaspiPaySubtitle">Kaspi қолданбасында жүргізушінің QR-кодын сканерлеңіз.</span></div>
+          </div>
+          <div class="amount-panel" aria-live="polite">
+            <span data-i18n="payThisAmount">Төленетін сома</span>
+            <strong id="paymentTotal">400 ₸</strong>
+            <div class="amount-actions">
+              <button type="button" class="button secondary" id="copyAmount" data-i18n="copyAmount">Соманы көшіру</button>
+              <a class="button secondary" href="https://kaspi.kz/" target="_blank" rel="noopener noreferrer" data-i18n="openKaspi">Kaspi.kz ашу</a>
+            </div>
+          </div>
+          <div class="qr-note">
+            <div class="qr-placeholder" aria-hidden="true">K</div>
+            <p><strong data-i18n="qrHonestTitle">Нақты QR төлем алушыдан</strong><span data-i18n="qrHonestCopy">Алушының Kaspi QR-коды берілмегендіктен, мұнда төлем коды көрсетілмейді. Жүргізушінің QR-ын сканерлеп, жоғарыдағы соманы енгізіңіз.</span></p>
+          </div>
+          <a class="kaspi-link" href="https://kaspi.kz/" target="_blank" rel="noopener noreferrer" data-i18n="kaspiLink">Kaspi.kz →</a>
+          <p class="fine-print" data-i18n="paymentDisclaimer">Бұл бет Kaspi төлемін қабылдамайды немесе тексермейді. Белгі WhatsApp өтініміндегі растауыңызды көрсетеді.</p>
+        </aside>
+      </div>
+
+      <section aria-labelledby="benefitsTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="benefitsEyebrow">АШЫҚ ЕСЕП</p>
+            <h2 id="benefitsTitle" data-i18n="benefitsTitle">Үш жаққа да пайда</h2>
+            <p data-i18n="benefitsIntro">400 ₸ әр сапардың үлесі ашық көрсетіледі. Сапар санын өзгертсеңіз, есеп те қайта есептеледі.</p>
+          </div>
+        </div>
+        <div class="benefit-grid">
+          <article class="card benefit-card">
+            <div class="benefit-top"><span class="benefit-icon" aria-hidden="true">↗</span><h3 data-i18n="projectTitle">Менің пайдам</h3></div>
+            <p data-i18n="projectDesc">Жоба / серіктестік үлесі: 1 сапардан 50 ₸.</p>
+            <strong class="benefit-number" id="projectTotal">50 ₸</strong>
+            <p data-i18n="selectedTrips">таңдалған сапардан</p>
+            <div class="breakdown">
+              <div class="breakdown-row"><span data-i18n="perTripShare">Үлес / сапар</span><strong>50 ₸</strong></div>
+              <div class="breakdown-row"><span data-i18n="totalShare">Жалпы үлес</span><strong id="projectBreakdown">50 ₸</strong></div>
+            </div>
+            <div class="daily-forecast">
+              <div class="forecast"><span data-i18n="day20">Күніне 20 сапар</span><strong>1 000 ₸</strong></div>
+              <div class="forecast"><span data-i18n="day50">Күніне 50 сапар</span><strong>2 500 ₸</strong></div>
+            </div>
+          </article>
+          <article class="card benefit-card">
+            <div class="benefit-top"><span class="benefit-icon" aria-hidden="true">🚕</span><h3 data-i18n="driverTitle">Такси жүргізушісінің пайдасы</h3></div>
+            <p data-i18n="driverDesc">Жүргізушіге қалатын сома: 1 сапардан 350 ₸.</p>
+            <strong class="benefit-number" id="driverTotal">350 ₸</strong>
+            <p data-i18n="selectedTrips">таңдалған сапардан</p>
+            <div class="breakdown">
+              <div class="breakdown-row"><span data-i18n="driverPerTrip">Жүргізушіге / сапар</span><strong>350 ₸</strong></div>
+              <div class="breakdown-row"><span data-i18n="driverForTrips">Жалпы жүргізушіге</span><strong id="driverBreakdown">350 ₸</strong></div>
+            </div>
+          </article>
+          <article class="card benefit-card">
+            <div class="benefit-top"><span class="benefit-icon" aria-hidden="true">🏘️</span><h3 data-i18n="peopleTitle">Халыққа пайдасы</h3></div>
+            <p data-i18n="peopleDesc">Қарапайым тариф пен алдын ала белгілі есеп.</p>
+            <strong class="benefit-number">400 ₸</strong>
+            <p data-i18n="perRideFixed">бір сапарға тұрақты баға</p>
+            <div class="breakdown">
+              <div class="breakdown-row"><span data-i18n="fastOrder">Тез шақыру</span><strong data-i18n="fastOrderValue">WhatsApp арқылы</strong></div>
+              <div class="breakdown-row"><span data-i18n="openCalc">Ашық есеп</span><strong data-i18n="openCalcValue">400 = 50 + 350 ₸</strong></div>
+              <div class="breakdown-row"><span data-i18n="easyPay">Ыңғайлы төлем</span><strong data-i18n="easyPayValue">Kaspi QR / қолма-қол</strong></div>
+            </div>
+          </article>
+        </div>
+        <div class="benefits-explainer">
+          <h3 data-i18n="explainTitle">Есеп қалай жасалады?</h3>
+          <p data-i18n="explainCopy">Әр сапардың 400 ₸ тарифінен 50 ₸ жоба/серіктестік үлесі, 350 ₸ жүргізуші үлесі деп есептеледі. Бұл — осы беттің ашық есеп үлгісі; нақты төлем тәртібін сапар алдында жүргізушімен растаңыз. Күніне 20 сапар болса жоба үлесі 1 000 ₸, 50 сапар болса 2 500 ₸ болады. Бұл болжам, кепілдендірілген табыс емес.</p>
+        </div>
+      </section>
+
+      <section aria-labelledby="placesTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="localEyebrow">ЖАЙРЕМ ІШІНДЕ</p>
+            <h2 id="placesTitle" data-i18n="placesTitle">Жиі баратын нүктелер</h2>
+            <p data-i18n="placesIntro">Тізімнен таңдаңыз немесе өз мекенжайыңызды қолмен жазыңыз.</p>
+          </div>
+        </div>
+        <div class="route-points" id="routePoints"></div>
+      </section>
+
+      <section id="partners" aria-labelledby="partnersTitle">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow" data-i18n="partnerEyebrow">БІРГЕ ДАМЫТАЙЫҚ</p>
+            <h2 id="partnersTitle" data-i18n="partnerTitle">Жүргізуші немесе серіктес болып қосылыңыз</h2>
+            <p data-i18n="partnerIntro">Өтініміңіз WhatsApp-та дайын хабарлама ретінде ашылады.</p>
+          </div>
+        </div>
+        <div class="card partner-card">
+          <aside class="partner-aside">
+            <h3 data-i18n="partnerOfferTitle">Жайремге пайдалы қызмет құрамыз</h3>
+            <p data-i18n="partnerOfferCopy">Жүргізуші болсаңыз — көлігіңіз бен қатынайтын уақытыңызды жазыңыз. Серіктес болсаңыз — қосылатын нүктеңіз бен үлес шартын ұсыныңыз. Үлгі есеп: 400 ₸ тарифтің 50 ₸-ы жоба/серіктестікке, 350 ₸-ы жүргізушіге.</p>
+          </aside>
+          <form class="partner-form" id="partnerForm">
+            <div class="field-grid">
+              <div class="field">
+                <label for="partnerName" data-i18n="partnerName">Аты-жөні</label>
+                <input id="partnerName" name="name" autocomplete="name" required data-i18n-placeholder="partnerNamePlaceholder" placeholder="Аты-жөніңіз">
+              </div>
+              <div class="field">
+                <label for="partnerPhone" data-i18n="partnerPhone">Байланыс телефоны</label>
+                <input id="partnerPhone" name="phone" type="tel" autocomplete="tel" placeholder="+7 7XX XXX XX XX" required>
+              </div>
+              <div class="field">
+                <label for="partnerRole" data-i18n="partnerRole">Қосылу түрі</label>
+                <select id="partnerRole" name="role">
+                  <option value="driver" data-i18n="driverOption">Жүргізуші</option>
+                  <option value="partner" data-i18n="partnerOption">Серіктес</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="partnerCar" data-i18n="vehiclePoint">Көлігіңіз / нүктеңіз</label>
+                <input id="partnerCar" name="car" required data-i18n-placeholder="vehiclePlaceholder" placeholder="Көлік маркасы немесе нүкте">
+              </div>
+              <div class="field full">
+                <label for="partnerTerms" data-i18n="shareTerms">Келісім / үлес шарты</label>
+                <textarea id="partnerTerms" name="terms" required data-i18n-placeholder="termsPlaceholder" placeholder="Мысалы: әр сапардан 50 ₸ жобалық үлес шартын талқылау"></textarea>
+                <p class="muted-note" data-i18n="shareTermsHint">Сома мен үлес алдын ала келісіліп, серіктестік басталғанша расталады.</p>
+              </div>
+            </div>
+            <button type="submit" class="button whatsapp"><span aria-hidden="true">◉</span><span data-i18n="sendPartner">Өтінімді WhatsApp-қа жіберу</span></button>
+          </form>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <span data-i18n="footerText">Jairem Taxi · Жайрем кенті ішіндегі тұрақты 400 ₸ тариф</span>
+        <a href="https://wa.me/77478632459" target="_blank" rel="noopener noreferrer">WhatsApp · +7 747 863 24 59</a>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      "use strict";
+      const WHATSAPP_NUMBER = "77478632459";
+      const PRICE_PER_RIDE = 400;
+      const PROJECT_SHARE_PER_RIDE = 50;
+      const DRIVER_SHARE_PER_RIDE = PRICE_PER_RIDE - PROJECT_SHARE_PER_RIDE;
+      const translations = {
+        kk: {
+          htmlTitle: "Jairem Taxi — Жайрем ішіндегі сапар", metaDescription: "Жайрем ішіндегі ыңғайлы такси: әр сапар 400 ₸.",
+          languageLabel: "Тілді таңдау", routeGroupLabel: "Сапар бағыты",
+          brandSubtitle: "Жайрем ішіндегі сапар", eyebrow: "ЖАЙРЕМ · ЖЕРГІЛІКТІ ТАКСИ",
+          heroTitle: "Жайрем ішінде — бір баға.", heroCopy: "Қай жерден, қайда баратыныңызды таңдаңыз. Баға алдын ала белгілі, өтінім WhatsApp арқылы бірден жіберіледі.",
+          bookRide: "Сапарға тапсырыс беру", joinTeam: "Жүргізуші / серіктес болу", fixedPrice: "Жайрем кенті ішінде", perRide: "бір сапар үшін · тұрақты тариф",
+          bookingEyebrow: "ЖЫЛДАМ ТАПСЫРЫС", bookingTitle: "Сапар мәліметтері", bookingIntro: "Сапар санын таңдаңыз — жалпы сома мен үлестер автоматты есептеледі.",
+          routeTitle: "Бағыт пен уақыт", routeIntro: "Қайдан және қайда барасыз? Дайын нүктені таңдаңыз немесе өзіңіз жазыңыз.",
+          fromLabel: "Қайдан", toLabel: "Қайда", fromPlaceholder: "Мысалы: Орталық алаң", toPlaceholder: "Мысалы: Аурухана",
+          nameLabel: "Атыңыз", namePlaceholder: "Атыңыз", phoneLabel: "Телефон нөмірі", phonePlaceholder: "+7 7XX XXX XX XX",
+          timeLabel: "Қашан керек?", nowOption: "Қазір", laterOption: "Уақытты таңдау", scheduledLabel: "Сапар уақыты",
+          rideCountLabel: "Сапар саны", manualCount: "Қолмен енгізу", totalPrice: "Жалпы сома", countHint: "Бос, 0 немесе теріс сан 1 сапар деп есептеледі.",
+          paymentMethod: "Төлем түрі", kaspiOption: "Kaspi QR", cashOption: "Қолма-қол", kaspiConfirm: "Kaspi төлемін растаймын",
+          noteLabel: "Қосымша ақпарат (міндетті емес)", notePlaceholder: "Кіреберіс, багаж немесе басқа ескерту",
+          sendRide: "Тапсырысты WhatsApp-қа жіберу", waNote: "WhatsApp ашылғанда хабарламаны өзіңіз жіберіп растайсыз.",
+          paymentTitle: "Төлем және есеп", paymentIntro: "Сапар саны өзгерсе, төлем сомасы да бірден жаңарады.",
+          kaspiPayTitle: "Kaspi QR төлемі", kaspiPaySubtitle: "Kaspi қолданбасында жүргізушінің QR-кодын сканерлеңіз.",
+          payThisAmount: "Төленетін сома", copyAmount: "Соманы көшіру", openKaspi: "Kaspi.kz ашу",
+          qrHonestTitle: "Нақты QR төлем алушыдан", qrHonestCopy: "Алушының Kaspi QR-коды берілмегендіктен, мұнда төлем коды көрсетілмейді. Жүргізушінің QR-ын сканерлеп, жоғарыдағы соманы енгізіңіз.",
+          kaspiLink: "Kaspi.kz →", paymentDisclaimer: "Бұл бет Kaspi төлемін қабылдамайды немесе тексермейді. Белгі WhatsApp өтініміндегі растауыңызды көрсетеді.",
+          benefitsEyebrow: "АШЫҚ ЕСЕП", benefitsTitle: "Үш жаққа да пайда", benefitsIntro: "400 ₸ әр сапардың үлесі ашық көрсетіледі. Сапар санын өзгертсеңіз, есеп те қайта есептеледі.",
+          projectTitle: "Менің пайдам", projectDesc: "Жоба / серіктестік үлесі: 1 сапардан 50 ₸.", selectedTrips: "таңдалған сапардан",
+          perTripShare: "Үлес / сапар", totalShare: "Жалпы үлес", day20: "Күніне 20 сапар", day50: "Күніне 50 сапар",
+          driverTitle: "Такси жүргізушісінің пайдасы", driverDesc: "Жүргізушіге қалатын сома: 1 сапардан 350 ₸.",
+          driverPerTrip: "Жүргізушіге / сапар", driverForTrips: "Жалпы жүргізушіге",
+          peopleTitle: "Халыққа пайдасы", peopleDesc: "Қарапайым тариф пен алдын ала белгілі есеп.",
+          perRideFixed: "бір сапарға тұрақты баға", fastOrder: "Тез шақыру", fastOrderValue: "WhatsApp арқылы",
+          openCalc: "Ашық есеп", openCalcValue: "400 = 50 + 350 ₸", easyPay: "Ыңғайлы төлем", easyPayValue: "Kaspi QR / қолма-қол",
+          explainTitle: "Есеп қалай жасалады?", explainCopy: "Әр сапардың 400 ₸ тарифінен 50 ₸ жоба/серіктестік үлесі, 350 ₸ жүргізуші үлесі деп есептеледі. Бұл — осы беттің ашық есеп үлгісі; нақты төлем тәртібін сапар алдында жүргізушімен растаңыз. Күніне 20 сапар болса жоба үлесі 1 000 ₸, 50 сапар болса 2 500 ₸ болады. Бұл болжам, кепілдендірілген табыс емес.",
+          localEyebrow: "ЖАЙРЕМ ІШІНДЕ", placesTitle: "Жиі баратын нүктелер", placesIntro: "Тізімнен таңдаңыз немесе өз мекенжайыңызды қолмен жазыңыз.",
+          partnerEyebrow: "БІРГЕ ДАМЫТАЙЫҚ", partnerTitle: "Жүргізуші немесе серіктес болып қосылыңыз", partnerIntro: "Өтініміңіз WhatsApp-та дайын хабарлама ретінде ашылады.",
+          partnerOfferTitle: "Жайремге пайдалы қызмет құрамыз", partnerOfferCopy: "Жүргізуші болсаңыз — көлігіңіз бен қатынайтын уақытыңызды жазыңыз. Серіктес болсаңыз — қосылатын нүктеңіз бен үлес шартын ұсыныңыз. Үлгі есеп: 400 ₸ тарифтің 50 ₸-ы жоба/серіктестікке, 350 ₸-ы жүргізушіге.",
+          partnerName: "Аты-жөні", partnerNamePlaceholder: "Аты-жөніңіз", partnerPhone: "Байланыс телефоны",
+          partnerRole: "Қосылу түрі", driverOption: "Жүргізуші", partnerOption: "Серіктес",
+          vehiclePoint: "Көлігіңіз / нүктеңіз", vehiclePlaceholder: "Көлік маркасы немесе нүкте",
+          shareTerms: "Келісім / үлес шарты", termsPlaceholder: "Мысалы: әр сапардан 50 ₸ жобалық үлес шартын талқылау",
+          shareTermsHint: "Сома мен үлес алдын ала келісіліп, серіктестік басталғанша расталады.",
+          sendPartner: "Өтінімді WhatsApp-қа жіберу", footerText: "Jairem Taxi · Жайрем кенті ішіндегі тұрақты 400 ₸ тариф",
+          swapLabel: "Бағытты ауыстыру", swapTitle: "Қайдан мен қайданы ауыстыру",
+          places: [
+            ["Орталық алаң", "Кент орталығы"], ["Теміржол вокзалы", "Вокзал"], ["Аурухана", "Аурухана"],
+            ["Мектеп", "Мектеп"], ["Балабақша", "Балабақша"], ["Дүкен", "Дүкен"], ["Базар", "Базар"],
+            ["Әкімдік", "Әкімдік"], ["Спорт кешені", "Спорт кешені"], ["Үй мекенжайы", "Тұрғын үй"]
+          ],
+          msgRideTitle: "ЖАЙРЕМ TAXI — САПАР ТАПСЫРЫСЫ", msgName: "Аты", msgPhone: "Телефон", msgRoute: "Бағыт",
+          msgFrom: "Қайдан", msgTo: "Қайда", msgTime: "Уақыты", msgNow: "Қазір", msgCount: "Сапар саны",
+          msgTotal: "Жалпы сома", msgEach: "Әр сапар", msgProjectShare: "Жоба үлесі", msgDriverShare: "Жүргізуші үлесі",
+          msgPayType: "Төлем түрі", msgKaspi: "Kaspi QR", msgCash: "Қолма-қол", msgConfirmed: "Kaspi төлемін растады",
+          yes: "Иә", no: "Жоқ", msgNote: "Ескерту", msgDisclaimer: "Соманы және сапар уақытын жүргізушімен растаңыз.",
+          msgPartnerTitle: "ЖҮРГІЗУШІ / СЕРІКТЕС ӨТІНІМІ", msgRole: "Рөлі", msgDriver: "Жүргізуші", msgPartner: "Серіктес",
+          msgVehicle: "Көлік / нүкте", msgTerms: "Келісім / үлес шарты", copied: "Сома көшірілді.", copyFailed: "Соманы көшіру мүмкін болмады.",
+          fillRequired: "Міндетті өрістерді толтырыңыз.", timeMissing: "Сапар уақытын таңдаңыз.", openingWhatsApp: "WhatsApp ашылуда…"
+        },
+        ru: {
+          htmlTitle: "Jairem Taxi — поездки по Жайрему", metaDescription: "Удобное такси по Жайрему: 400 ₸ за поездку.",
+          languageLabel: "Выбор языка", routeGroupLabel: "Маршрут поездки",
+          brandSubtitle: "Поездки по Жайрему", eyebrow: "ЖАЙРЕМ · МЕСТНОЕ ТАКСИ",
+          heroTitle: "По Жайрему — одна цена.", heroCopy: "Укажите, откуда и куда едете. Цена известна заранее, заявка сразу откроется в WhatsApp.",
+          bookRide: "Заказать поездку", joinTeam: "Стать водителем / партнёром", fixedPrice: "В пределах посёлка Жайрем", perRide: "за одну поездку · фиксированный тариф",
+          bookingEyebrow: "БЫСТРЫЙ ЗАКАЗ", bookingTitle: "Данные поездки", bookingIntro: "Выберите количество поездок — сумма и доли рассчитаются автоматически.",
+          routeTitle: "Маршрут и время", routeIntro: "Откуда и куда едете? Выберите точку из списка или введите свой адрес.",
+          fromLabel: "Откуда", toLabel: "Куда", fromPlaceholder: "Например: Центральная площадь", toPlaceholder: "Например: Больница",
+          nameLabel: "Ваше имя", namePlaceholder: "Ваше имя", phoneLabel: "Номер телефона", phonePlaceholder: "+7 7XX XXX XX XX",
+          timeLabel: "Когда нужна машина?", nowOption: "Сейчас", laterOption: "Выбрать время", scheduledLabel: "Время поездки",
+          rideCountLabel: "Количество поездок", manualCount: "Ввести вручную", totalPrice: "Итого", countHint: "Пустое, нулевое или отрицательное значение считается как 1 поездка.",
+          paymentMethod: "Способ оплаты", kaspiOption: "Kaspi QR", cashOption: "Наличные", kaspiConfirm: "Подтверждаю оплату Kaspi",
+          noteLabel: "Дополнительная информация (необязательно)", notePlaceholder: "Подъезд, багаж или другое примечание",
+          sendRide: "Отправить заказ в WhatsApp", waNote: "WhatsApp откроет готовое сообщение — отправьте его, чтобы подтвердить заказ.",
+          paymentTitle: "Оплата и расчёт", paymentIntro: "При изменении количества поездок сумма оплаты обновится автоматически.",
+          kaspiPayTitle: "Оплата Kaspi QR", kaspiPaySubtitle: "Отсканируйте QR-код водителя в приложении Kaspi.",
+          payThisAmount: "Сумма к оплате", copyAmount: "Скопировать сумму", openKaspi: "Открыть Kaspi.kz",
+          qrHonestTitle: "Настоящий QR — у получателя", qrHonestCopy: "QR-код получателя Kaspi не предоставлен, поэтому здесь не показан платёжный код. Отсканируйте QR водителя и введите сумму выше.",
+          kaspiLink: "Kaspi.kz →", paymentDisclaimer: "Эта страница не принимает и не проверяет оплату Kaspi. Отметка лишь передаёт ваше подтверждение в заявке WhatsApp.",
+          benefitsEyebrow: "ПРОЗРАЧНЫЙ РАСЧЁТ", benefitsTitle: "Выгода для всех трёх сторон", benefitsIntro: "Доли от тарифа 400 ₸ показаны открыто. При изменении числа поездок расчёт обновится.",
+          projectTitle: "Моя выгода", projectDesc: "Доля проекта / партнёрства: 50 ₸ с поездки.", selectedTrips: "за выбранные поездки",
+          perTripShare: "Доля / поездка", totalShare: "Общая доля", day20: "20 поездок в день", day50: "50 поездок в день",
+          driverTitle: "Доход водителя такси", driverDesc: "Водителю остаётся 350 ₸ с одной поездки.",
+          driverPerTrip: "Водителю / поездка", driverForTrips: "Всего водителю",
+          peopleTitle: "Выгода для жителей", peopleDesc: "Понятный тариф и сумма известна заранее.",
+          perRideFixed: "фиксированная цена за поездку", fastOrder: "Быстрый вызов", fastOrderValue: "через WhatsApp",
+          openCalc: "Прозрачный расчёт", openCalcValue: "400 = 50 + 350 ₸", easyPay: "Удобная оплата", easyPayValue: "Kaspi QR / наличные",
+          explainTitle: "Как считается сумма?", explainCopy: "Из тарифа 400 ₸ за каждую поездку 50 ₸ учитываются как доля проекта/партнёрства, 350 ₸ — как доля водителя. Это открытая расчётная модель этой страницы; условия оплаты подтвердите с водителем до поездки. При 20 поездках в день доля проекта составит 1 000 ₸, при 50 — 2 500 ₸. Это прогноз, а не гарантированный доход.",
+          localEyebrow: "ВНУТРИ ЖАЙРЕМА", placesTitle: "Популярные точки", placesIntro: "Выберите точку из списка или введите свой адрес вручную.",
+          partnerEyebrow: "РАЗВИВАЕМ ВМЕСТЕ", partnerTitle: "Присоединяйтесь как водитель или партнёр", partnerIntro: "Заявка откроется в WhatsApp как готовое сообщение.",
+          partnerOfferTitle: "Создаём полезный сервис для Жайрема", partnerOfferCopy: "Если вы водитель — укажите автомобиль и время работы. Если партнёр — предложите свою точку и условия доли. Пример расчёта: из тарифа 400 ₸ — 50 ₸ проекту/партнёрству и 350 ₸ водителю.",
+          partnerName: "Имя и фамилия", partnerNamePlaceholder: "Ваше имя и фамилия", partnerPhone: "Контактный телефон",
+          partnerRole: "Формат участия", driverOption: "Водитель", partnerOption: "Партнёр",
+          vehiclePoint: "Ваш автомобиль / точка", vehiclePlaceholder: "Марка авто или точка",
+          shareTerms: "Соглашение / условия доли", termsPlaceholder: "Например: обсудить долю проекта 50 ₸ с каждой поездки",
+          shareTermsHint: "Сумму и долю согласуем заранее, до начала сотрудничества.",
+          sendPartner: "Отправить заявку в WhatsApp", footerText: "Jairem Taxi · Фиксированный тариф 400 ₸ по Жайрему",
+          swapLabel: "Поменять маршрут местами", swapTitle: "Поменять местами пункты откуда и куда",
+          places: [
+            ["Центральная площадь", "Центр посёлка"], ["Железнодорожный вокзал", "Вокзал"], ["Больница", "Больница"],
+            ["Школа", "Школа"], ["Детский сад", "Детский сад"], ["Магазин", "Магазин"], ["Базар", "Базар"],
+            ["Акимат", "Акимат"], ["Спортивный комплекс", "Спорткомплекс"], ["Домашний адрес", "Жилой адрес"]
+          ],
+          msgRideTitle: "JAIREM TAXI — ЗАКАЗ ПОЕЗДКИ", msgName: "Имя", msgPhone: "Телефон", msgRoute: "Маршрут",
+          msgFrom: "Откуда", msgTo: "Куда", msgTime: "Время", msgNow: "Сейчас", msgCount: "Количество поездок",
+          msgTotal: "Итого", msgEach: "За поездку", msgProjectShare: "Доля проекта", msgDriverShare: "Доля водителя",
+          msgPayType: "Способ оплаты", msgKaspi: "Kaspi QR", msgCash: "Наличные", msgConfirmed: "Подтверждает оплату Kaspi",
+          yes: "Да", no: "Нет", msgNote: "Примечание", msgDisclaimer: "Пожалуйста, подтвердите сумму и время с водителем.",
+          msgPartnerTitle: "ЗАЯВКА ВОДИТЕЛЯ / ПАРТНЁРА", msgRole: "Роль", msgDriver: "Водитель", msgPartner: "Партнёр",
+          msgVehicle: "Автомобиль / точка", msgTerms: "Соглашение / условия доли", copied: "Сумма скопирована.", copyFailed: "Не удалось скопировать сумму.",
+          fillRequired: "Заполните обязательные поля.", timeMissing: "Выберите время поездки.", openingWhatsApp: "Открываем WhatsApp…"
+        }
+      };
+
+      let language = "kk";
+      let toastTimer;
+      const $ = (selector, root = document) => root.querySelector(selector);
+      const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
+      const t = (key) => translations[language][key] ?? translations.kk[key] ?? key;
+      const formatMoney = (value) => `${new Intl.NumberFormat(language === "kk" ? "kk-KZ" : "ru-RU").format(value)} ₸`;
+      const countInput = $("#rideCount");
+      const locale = () => translations[language];
+
+      function normalizedCount(updateField = false) {
+        const parsed = Number.parseInt(countInput.value, 10);
+        const count = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+        if (updateField && String(count) !== countInput.value) countInput.value = String(count);
+        return count;
+      }
+
+      function refreshPlaces() {
+        const items = locale().places;
+        $("#places").replaceChildren(...items.map(([name]) => {
+          const option = document.createElement("option");
+          option.value = name;
+          return option;
+        }));
+        $("#routePoints").replaceChildren(...items.slice(0, 4).map(([name, description], index) => {
+          const article = document.createElement("div");
+          article.className = "route-point";
+          const icons = ["⌖", "🚉", "＋", "⌂"];
+          article.innerHTML = `<span aria-hidden="true">${icons[index]}</span><strong></strong><small></small>`;
+          $("strong", article).textContent = name;
+          $("small", article).textContent = description;
+          return article;
+        }));
+      }
+
+      function updateAmounts(updateCountField = false) {
+        const count = normalizedCount(updateCountField);
+        const total = PRICE_PER_RIDE * count;
+        const project = PROJECT_SHARE_PER_RIDE * count;
+        const driver = DRIVER_SHARE_PER_RIDE * count;
+        $("#rideTotal").textContent = formatMoney(total);
+        $("#paymentTotal").textContent = formatMoney(total);
+        $("#projectTotal").textContent = formatMoney(project);
+        $("#projectBreakdown").textContent = formatMoney(project);
+        $("#driverTotal").textContent = formatMoney(driver);
+        $("#driverBreakdown").textContent = formatMoney(driver);
+        $$(".trip-choice").forEach((button) => {
+          button.setAttribute("aria-pressed", Number(button.dataset.count) === count ? "true" : "false");
+        });
+        return { count, total, project, driver };
+      }
+
+      function setLanguage(nextLanguage) {
+        language = nextLanguage === "ru" ? "ru" : "kk";
+        document.documentElement.lang = language;
+        $$("[data-i18n]").forEach((element) => {
+          const key = element.dataset.i18n;
+          if (t(key)) element.textContent = t(key);
+        });
+        $$("[data-i18n-placeholder]").forEach((element) => {
+          element.placeholder = t(element.dataset.i18nPlaceholder);
+        });
+        $$("[data-i18n-aria-label]").forEach((element) => {
+          element.setAttribute("aria-label", t(element.dataset.i18nAriaLabel));
+        });
+        document.title = t("htmlTitle");
+        $('meta[name="description"]').content = t("metaDescription");
+        $$("[data-language]").forEach((button) => {
+          button.setAttribute("aria-pressed", button.dataset.language === language ? "true" : "false");
+        });
+        $("#swapRoute").setAttribute("aria-label", t("swapLabel"));
+        $("#swapRoute").title = t("swapTitle");
+        refreshPlaces();
+        updateAmounts();
+      }
+
+      function showToast(message) {
+        const toast = $("#toast");
+        toast.textContent = message;
+        toast.classList.add("show");
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => toast.classList.remove("show"), 2600);
+      }
+
+      function openWhatsApp(lines) {
+        const url = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(lines.join("\n"))}`;
+        window.open(url, "_blank", "noopener,noreferrer");
+        showToast(t("openingWhatsApp"));
+      }
+
+      function formatDateTime(value) {
+        if (!value) return "";
+        const date = new Date(value);
+        return new Intl.DateTimeFormat(language === "kk" ? "kk-KZ" : "ru-RU", {
+          dateStyle: "medium", timeStyle: "short"
+        }).format(date);
+      }
+
+      $$(".language button").forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.language)));
+      $$(".trip-choice").forEach((button) => button.addEventListener("click", () => {
+        countInput.value = button.dataset.count;
+        updateAmounts(true);
+      }));
+      countInput.addEventListener("input", () => updateAmounts());
+      countInput.addEventListener("blur", () => updateAmounts(true));
+      $$('input[name="rideTimeType"]').forEach((radio) => radio.addEventListener("change", () => {
+        const later = $('input[name="rideTimeType"]:checked')?.value === "later";
+        $("#scheduledTimeWrap").hidden = !later;
+        $("#scheduledTime").required = later;
+      }));
+      $("#swapRoute").addEventListener("click", () => {
+        const from = $("#from");
+        const to = $("#to");
+        [from.value, to.value] = [to.value, from.value];
+      });
+      $("#copyAmount").addEventListener("click", async () => {
+        const amount = String(updateAmounts(true).total);
+        try {
+          await navigator.clipboard.writeText(amount);
+          showToast(t("copied"));
+        } catch {
+          const temporary = document.createElement("textarea");
+          temporary.value = amount;
+          temporary.style.position = "fixed";
+          temporary.style.opacity = "0";
+          document.body.append(temporary);
+          temporary.select();
+          const copied = document.execCommand("copy");
+          temporary.remove();
+          showToast(copied ? t("copied") : t("copyFailed"));
+        }
+      });
+
+      $("#rideForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        updateAmounts(true);
+        if (!form.reportValidity()) {
+          showToast(t("fillRequired"));
+          return;
+        }
+        const { count, total, project, driver } = updateAmounts(true);
+        const scheduled = $('input[name="rideTimeType"]:checked').value === "later";
+        const time = scheduled ? $("#scheduledTime").value : "";
+        if (scheduled && !time) {
+          $("#scheduledTime").focus();
+          showToast(t("timeMissing"));
+          return;
+        }
+        const payment = $('input[name="paymentType"]:checked').value;
+        const details = [
+          t("msgRideTitle"),
+          `${t("msgName")}: ${$("#rideName").value.trim()}`,
+          `${t("msgPhone")}: ${$("#ridePhone").value.trim()}`,
+          `${t("msgRoute")}:`,
+          `• ${t("msgFrom")}: ${$("#from").value.trim()}`,
+          `• ${t("msgTo")}: ${$("#to").value.trim()}`,
+          `${t("msgTime")}: ${scheduled ? formatDateTime(time) : t("msgNow")}`,
+          `${t("msgCount")}: ${count}`,
+          `${t("msgTotal")}: ${formatMoney(total)} (${formatMoney(PRICE_PER_RIDE)} × ${count})`,
+          `${t("msgProjectShare")}: ${formatMoney(project)}`,
+          `${t("msgDriverShare")}: ${formatMoney(driver)}`,
+          `${t("msgPayType")}: ${payment === "kaspi" ? t("msgKaspi") : t("msgCash")}`,
+          `${t("msgConfirmed")}: ${$("#kaspiConfirmed").checked ? t("yes") : t("no")}`,
+          ...($("#rideNote").value.trim() ? [`${t("msgNote")}: ${$("#rideNote").value.trim()}`] : []),
+          "",
+          t("msgDisclaimer")
+        ];
+        openWhatsApp(details);
+      });
+
+      $("#partnerForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const form = event.currentTarget;
+        if (!form.reportValidity()) {
+          showToast(t("fillRequired"));
+          return;
+        }
+        const role = $("#partnerRole").value;
+        openWhatsApp([
+          t("msgPartnerTitle"),
+          `${t("msgName")}: ${$("#partnerName").value.trim()}`,
+          `${t("msgPhone")}: ${$("#partnerPhone").value.trim()}`,
+          `${t("msgRole")}: ${role === "driver" ? t("msgDriver") : t("msgPartner")}`,
+          `${t("msgVehicle")}: ${$("#partnerCar").value.trim()}`,
+          `${t("msgTerms")}: ${$("#partnerTerms").value.trim()}`
+        ]);
+      });
+
+      setLanguage("kk");
+    })();
+  </script>
+</body>
+</html>
