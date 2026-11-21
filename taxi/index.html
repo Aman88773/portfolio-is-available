@@ -3,9 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#102a43">
+  <meta name="theme-color" content="#111315">
   <meta name="description" content="Жайрем ішіндегі ыңғайлы такси: әр сапар 400 ₸.">
-  <title>Jairem Taxi — Жайрем ішіндегі сапар</title>
+  <title>Zhairem Taxi — Жайрем ішіндегі сапар</title>
   <style>
     :root {
       color-scheme: light;
@@ -381,6 +381,123 @@
       html { scroll-behavior: auto; }
       *, *::before, *::after { transition-duration: .01ms !important; }
     }
+    /* Zhairem Taxi dark application theme */
+    :root {
+      --ink: #f4f6f1;
+      --muted: #a7ada5;
+      --paper: #111315;
+      --card: #1a1d1f;
+      --line: #303539;
+      --green: #c1f11d;
+      --green-dark: #a9d51a;
+      --lime: #c1f11d;
+      --blue: #24282a;
+      --shadow: 0 18px 55px rgba(0, 0, 0, .28);
+    }
+    body { background: #111315; color: #f4f6f1; }
+    .topbar { border-bottom: 1px solid #25292b; }
+    .brand { color: #f5f7f2; }
+    .brand small { color: #9da39a; }
+    .brand-mark { background: #c1f11d; color: #111315; }
+    .menu-button, .language, .header-tariff, .drawer-close,
+    .screen-heading button, .home-booking-bar, .service-tile {
+      border-color: #303539;
+      background: #1a1d1f;
+      color: #f4f6f1;
+    }
+    .language button { color: #aeb4aa; }
+    .language button[aria-pressed="true"] { background: #c1f11d; color: #111315; }
+    .header-tariff span { color: #9da39a; }
+    .drawer { background: #17191b; border-right: 1px solid #303539; }
+    .drawer-profile, .drawer-nav button:hover, .drawer-nav button:focus-visible {
+      background: #24282a;
+    }
+    .drawer-nav button { color: #f4f6f1; }
+    .drawer-profile span { color: #a7ada5; }
+    .drawer-driver { background: #c1f11d; color: #111315; }
+    .map-hero {
+      border-color: #303539;
+      background:
+        radial-gradient(circle at 70% 25%, rgba(193,241,29,.12), transparent 24%),
+        linear-gradient(145deg, #202426, #17191b);
+    }
+    .map-heading .eyebrow, .map-area-name, .map-caption { color: #aeb4aa; }
+    .map-heading h1 { color: #f4f6f1; }
+    .map-ride-status { border-color: #303539; background: #202426; color: #c3c8bf; }
+    .map-area { border-color: #303539; background: #252a2c; }
+    .map-area::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .38;
+      background-image:
+        linear-gradient(30deg, transparent 48%, #3a403d 49%, #3a403d 51%, transparent 52%),
+        linear-gradient(120deg, transparent 48%, #343936 49%, #343936 51%, transparent 52%);
+      background-size: 92px 92px;
+    }
+    .map-streets { opacity: .2; }
+    .map-road { stroke: #6c746f; }
+    .map-block { fill: #343a36; stroke: #454c48; }
+    .map-pin { border-color: #3a3f41; background: #1a1d1f; color: #f4f6f1; }
+    .map-pin > span { background: #303539; }
+    .map-pin[aria-pressed="true"], .map-pin:hover { border-color: #c1f11d; background: #303825; color: #fff; }
+    .map-caption { background: rgba(26,29,31,.92); }
+    .home-booking-bar { box-shadow: 0 10px 28px rgba(0,0,0,.24); }
+    .home-booking-bar strong { color: #f4f6f1; }
+    .home-booking-bar span { color: #a7ada5; }
+    .service-tile small { color: #c1f11d; }
+    .card, .history-item, .saved-address-item, .install-step {
+      border-color: #303539;
+      background: #1a1d1f;
+      color: #f4f6f1;
+      box-shadow: 0 12px 35px rgba(0,0,0,.16);
+    }
+    .card-intro, .service-note, .muted-note, .history-item span,
+    .saved-address-list, .community-card p, .community-card li { color: #a7ada5; }
+    input, select, textarea {
+      border-color: #3a3f41;
+      background: #222628;
+      color: #f4f6f1;
+    }
+    input::placeholder, textarea::placeholder { color: #7d847a; }
+    .route-line input, .ride-extra-fields input, .ride-extra-fields textarea {
+      border-color: #3a3f41;
+      background: #222628;
+    }
+    .route-swap, .destination-shortcuts button, .trip-choice,
+    .choice-card, .count-row .total-box, .amount-panel, .qr-note,
+    .benefit-icon, .forecast, .driver-report-total, .admin-number,
+    .income-total, .partner-aside {
+      border-color: #303539;
+      background: #222628;
+      color: #f4f6f1;
+    }
+    .destination-shortcuts button[aria-pressed="true"],
+    .ride-card .trip-choice[aria-pressed="true"] {
+      border-color: #c1f11d;
+      background: #303825;
+      color: #c1f11d;
+    }
+    .total-box span { color: #a7ada5; }
+    .total-box strong { color: #c1f11d; }
+    .button, .send-button, .button.call-taxi-button {
+      background: #c1f11d;
+      color: #111315;
+    }
+    .button:hover, .send-button:hover, .button.call-taxi-button:hover {
+      background: #b0df18;
+      color: #111315;
+    }
+    .button.secondary { border-color: #3a3f41; background: #222628; color: #f4f6f1; }
+    .button.whatsapp { background: #c1f11d; color: #111315; }
+    .kaspi-banner, .qr-note { background: #24282a; }
+    .kaspi-banner span, .qr-note p { color: #adb3a9; }
+    .safety-call { background: #d44b42; color: #fff; }
+    .role-switch { border-color: #303539; background: #1a1d1f; }
+    .role-switch button { color: #dfe3db; }
+    .role-switch button[aria-pressed="true"] { background: #c1f11d; color: #111315; }
+    .screen-heading h1 { color: #f4f6f1; }
+    .toast { background: #c1f11d; color: #111315; }
     :root {
       --ink: #202124;
       --muted: #747a80;
@@ -586,8 +703,8 @@
         <button type="button" class="drawer-close" id="closeDrawer" aria-label="Мәзірді жабу" data-i18n-aria-label="closeMenuLabel">×</button>
       </div>
       <div class="drawer-profile">
-      <strong id="drawerProfileName">Жолаушы профилі</strong>
-        <span data-i18n="profileRating">Рейтинг әлі есептелмеді</span>
+        <strong id="drawerProfileName">Аманжол</strong>
+        <span>★ 5,0</span>
       </div>
       <nav class="drawer-nav" aria-label="Бөлімдер" data-i18n-aria-label="menuSectionsLabel">
         <button type="button" data-open-screen="profile"><span aria-hidden="true">👤</span><span data-i18n="menuProfile">Профиль / рейтинг</span></button>
@@ -601,6 +718,7 @@
         <button type="button" data-open-screen="group"><span aria-hidden="true">💬</span><span data-i18n="menuGroup">WhatsApp тобы</span></button>
         <button type="button" data-open-screen="safety"><span aria-hidden="true">🛡️</span><span data-i18n="menuSafety">Қауіпсіздік · 112</span></button>
         <button type="button" data-open-screen="settings"><span aria-hidden="true">⚙️</span><span data-i18n="menuSettings">Баптаулар</span></button>
+        <button type="button" data-open-screen="support"><span aria-hidden="true">🎧</span><span>Қолдау қызметі</span></button>
       </nav>
       <button type="button" class="button drawer-driver" data-open-screen="driverSignup" data-i18n="becomeDriver">Жүргізуші болу</button>
     </aside>
@@ -1048,13 +1166,19 @@
       <section class="card page-content" id="ordersScreen" data-screen-content="orders">
         <h2 data-i18n="menuOrders">Тапсырыстар тарихы</h2>
         <p class="card-intro" data-i18n="historyIntro">Осы құрылғыда жасалған тапсырыстар мен олардың күйлері.</p>
+        <div class="destination-shortcuts history-filters" role="group" aria-label="Тапсырыстарды сүзу">
+          <button type="button" data-history-filter="all" aria-pressed="true">Барлығы</button>
+          <button type="button" data-history-filter="active" aria-pressed="false">Белсенді</button>
+          <button type="button" data-history-filter="completed" aria-pressed="false">Аяқталған</button>
+          <button type="button" data-history-filter="cancelled" aria-pressed="false">Болдырылған</button>
+        </div>
         <ul class="history-list" id="orderHistory" aria-live="polite"></ul>
       </section>
 
       <section class="card page-content" id="profileScreen" data-screen-content="profile">
         <div class="profile-summary">
           <span class="profile-avatar" aria-hidden="true">👤</span>
-          <div><h2 id="profileDisplayName">Жолаушы профилі</h2><p data-i18n="profileRating">Рейтинг әлі есептелмеді</p></div>
+          <div><h2 id="profileDisplayName">Аманжол</h2><p>★ 5,0</p></div>
         </div>
         <label for="profileNameInput" data-i18n="nameLabel">Атыңыз</label>
         <input id="profileNameInput" autocomplete="name" data-i18n-placeholder="namePlaceholder" placeholder="Атыңыз">
@@ -1080,6 +1204,11 @@
       <section class="card page-content" data-screen-content="intercity">
         <h2 data-i18n="menuIntercity">Қалааралық</h2>
         <p class="service-note" data-i18n="intercityInfo">Қалааралық бағыттың бағасы мен уақытын жүргізушімен бөлек келісіңіз. Жайрем ішіндегі 400 ₸ тариф бұл бағытқа қолданылмайды.</p>
+        <div class="destination-shortcuts" role="group" aria-label="Қалааралық қызмет түрі">
+          <button type="button" data-intercity-type="Жолаушылармен" aria-pressed="true">Жолаушылармен</button>
+          <button type="button" data-intercity-type="Сәлемдеме" aria-pressed="false">Сәлемдеме</button>
+          <button type="button" data-intercity-type="Бүкіл салон" aria-pressed="false">Бүкіл салон</button>
+        </div>
         <button type="button" class="button" data-contact-service="intercity" data-i18n="contactService">WhatsApp арқылы сұрау</button>
       </section>
 
@@ -1107,6 +1236,12 @@
           <button type="button" data-language="kk" aria-pressed="true">ҚАЗ</button>
           <button type="button" data-language="ru" aria-pressed="false">РУС</button>
         </nav>
+      </section>
+
+      <section class="card page-content" data-screen-content="support">
+        <h2>Қолдау қызметі</h2>
+        <p class="service-note">Сұрақтарыңыз, шағымдар немесе тапсырыс мәселесі бойынша WhatsApp арқылы әкімшіге хабарласыңыз.</p>
+        <a class="button" href="https://wa.me/77478632459" target="_blank" rel="noopener noreferrer">WhatsApp қолдау</a>
       </section>
 
       <footer class="footer" data-screen-content="settings">
@@ -1156,7 +1291,7 @@
           cargoInfo: "Жүк көлемі, алып кету орны және уақытын хабарлаңыз. Бағасы жүк пен бағытқа қарай бөлек келісіледі.",
           contactService: "WhatsApp арқылы сұрау", serviceRequestTitle: "ЖАЙРЕМ TAXI — ҚЫЗМЕТ СҰРАУЫ",
           serviceRequestNote: "Бағыт, уақыт және қызмет шарттарын осы чатта нақтылаңыз.",
-          settingsLanguage: "Қолданба тілін таңдаңыз.", safetyInfo: "Шұғыл қауіп төнсе, Қазақстандағы бірыңғай жедел қызмет нөміріне қоңырау шалыңыз.",
+          settingsLanguage: "Қолданба тілін таңдаңыз.", supportTitle: "Қолдау қызметі", safetyInfo: "Шұғыл қауіп төнсе, Қазақстандағы бірыңғай жедел қызмет нөміріне қоңырау шалыңыз.",
           call112: "112 нөміріне қоңырау шалу",
           townFare: "Кент ішінде", mapLabel: "Жайрем картасы", mapTitle: "Жайрем картасы",
           mapPointsLabel: "Жайремдегі бағыт нүктелері", mapAreaNorth: "Орталық", mapAreaSouth: "Жайрем",
@@ -1299,7 +1434,7 @@
           cargoInfo: "Укажите объём груза, место и время подачи. Стоимость согласуется отдельно с учётом груза и маршрута.",
           contactService: "Запросить в WhatsApp", serviceRequestTitle: "JAIREM TAXI — ЗАПРОС УСЛУГИ",
           serviceRequestNote: "Уточните маршрут, время и условия услуги в этом чате.",
-          settingsLanguage: "Выберите язык приложения.", safetyInfo: "При непосредственной угрозе звоните по единому номеру экстренных служб Казахстана.",
+          settingsLanguage: "Выберите язык приложения.", supportTitle: "Служба поддержки", safetyInfo: "При непосредственной угрозе звоните по единому номеру экстренных служб Казахстана.",
           call112: "Позвонить по номеру 112",
           townFare: "По посёлку", mapLabel: "Карта Жайрема", mapTitle: "Карта Жайрема",
           mapPointsLabel: "Точки маршрута в Жайреме", mapAreaNorth: "Центр", mapAreaSouth: "Жайрем",
@@ -1429,6 +1564,8 @@
       const savedAddresses = [];
       let orderCreationPending = false;
       let activeScreen = "home";
+      let historyFilter = "all";
+      let intercityType = "Жолаушылармен";
       const $ = (selector, root = document) => root.querySelector(selector);
       const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
       const t = (key) => translations[language][key] ?? translations.kk[key] ?? key;
@@ -1439,9 +1576,9 @@
         booking: "routeTitle", profile: "menuProfile", town: "menuTown", orders: "menuOrders",
         courier: "menuCourier", intercity: "menuIntercity", addresses: "menuAddresses",
         cargo: "menuCargo", notifications: "menuNotifications", group: "communityTitle", safety: "menuSafety",
-        settings: "menuSettings", driver: "driverPanelTitle", driverSignup: "partnerTitle"
+        settings: "menuSettings", support: "supportTitle", driver: "driverPanelTitle", driverSignup: "partnerTitle"
       };
-      let profileName = "";
+      let profileName = "Аманжол";
 
       $("#ordersScreen").append($("#orderStatusCard"));
 
@@ -1491,14 +1628,20 @@
       function renderOrderHistory() {
         const list = $("#orderHistory");
         list.replaceChildren();
-        if (orderHistory.length === 0) {
+        const filtered = orderHistory.filter((order) => {
+          if (historyFilter === "active") return order.status !== "completed";
+          if (historyFilter === "completed") return order.status === "completed";
+          if (historyFilter === "cancelled") return false;
+          return true;
+        });
+        if (filtered.length === 0) {
           const empty = document.createElement("li");
           empty.className = "history-item";
           empty.textContent = t("historyEmpty");
           list.append(empty);
           return;
         }
-        [...orderHistory].reverse().forEach((order) => {
+        [...filtered].reverse().forEach((order) => {
           const item = document.createElement("li");
           item.className = "history-item";
           const route = document.createElement("strong");
@@ -1753,6 +1896,19 @@
       }
 
       $$(".language button").forEach((button) => button.addEventListener("click", () => setLanguage(button.dataset.language)));
+      $$("[data-history-filter]").forEach((button) => button.addEventListener("click", () => {
+        historyFilter = button.dataset.historyFilter;
+        $$("[data-history-filter]").forEach((item) => {
+          item.setAttribute("aria-pressed", item === button ? "true" : "false");
+        });
+        renderOrderHistory();
+      }));
+      $$("[data-intercity-type]").forEach((button) => button.addEventListener("click", () => {
+        intercityType = button.dataset.intercityType;
+        $$("[data-intercity-type]").forEach((item) => {
+          item.setAttribute("aria-pressed", item === button ? "true" : "false");
+        });
+      }));
       $("#openDrawer").addEventListener("click", openDrawer);
       $("#closeDrawer").addEventListener("click", closeDrawer);
       $("#drawerBackdrop").addEventListener("click", closeDrawer);
@@ -1827,7 +1983,8 @@
             intercity: "menuIntercity",
             cargo: "menuCargo"
           }[button.dataset.contactService];
-          openWhatsApp([t("serviceRequestTitle"), t(serviceKey), t("serviceRequestNote")]);
+          const extra = button.dataset.contactService === "intercity" ? `Қызмет түрі: ${intercityType}` : "";
+          openWhatsApp([t("serviceRequestTitle"), t(serviceKey), extra, t("serviceRequestNote")].filter(Boolean));
         });
       });
       $("#copyAmount").addEventListener("click", async () => {
