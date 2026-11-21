@@ -624,6 +624,7 @@
       const ADMIN_PHONE = "+77478632459";
       const WHATSAPP_NUMBER = ADMIN_PHONE.replace(/\D/g, "");
       const WHATSAPP_GROUP_LINK = "https://chat.whatsapp.com/BWrWRS63CfN9B5i9irs5su?s=cl&p=i&mlu=4&ilr=4&iam=2";
+      const APP_URL = "https://portfolio-is-available.vercel.app/taxi/";
       const PRICE_PER_RIDE = 400;
       const PROJECT_SHARE_PER_RIDE = 50;
       const DRIVER_SHARE_PER_RIDE = PRICE_PER_RIDE - PROJECT_SHARE_PER_RIDE;
@@ -1027,11 +1028,10 @@
       });
 
       $("#copyGroupInvite").addEventListener("click", async () => {
-        const appUrl = window.location.origin + "/taxi/";
         const rule = language === "kk"
           ? "Жайрем кенті ішінде 1 сапар = 400 ₸; 350 ₸ жүргізушіге / 50 ₸ қызмет үлесі.\nТапсырыс беру үшін осы сілтемені ашыңыз."
           : "В посёлке Жайрем 1 поездка = 400 ₸; 350 ₸ водителю / 50 ₸ доля сервиса.\nЧтобы оформить заказ, откройте эту ссылку.";
-        const copied = await copyText(`${appUrl}\n\n${rule}`);
+        const copied = await copyText(`${APP_URL}\n\n${rule}`);
         showToast(copied ? t("groupInviteCopied") : t("copyFailed"));
       });
 
