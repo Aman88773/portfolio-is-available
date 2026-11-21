@@ -679,6 +679,112 @@
       .screen-heading h1 { padding-top: 8px; }
       .saved-address-form { align-items: stretch; flex-direction: column; }
     }
+    /* Full dark inDrive-style application theme */
+    :root {
+      --ink: #f4f6f1;
+      --muted: #a7ada5;
+      --paper: #111315;
+      --card: #1c1f24;
+      --line: #303539;
+      --green: #c1f11d;
+      --green-dark: #a9d51a;
+      --lime: #c1f11d;
+      --blue: #24282a;
+      --shadow: 0 18px 55px rgba(0, 0, 0, .28);
+      color-scheme: dark;
+    }
+    html, body, #mainView { background: #111315 !important; }
+    body { color: #f4f6f1; }
+    .topbar, .drawer-head, .screen-heading, .footer { border-color: #303539; }
+    .topbar, .drawer, .map-hero, .card, .page-card, .install-step, .history-item,
+    .saved-address-item, .route-point, .partner-aside, .role-switch, .home-booking-bar,
+    .service-tile, .language, .header-tariff, .screen-heading button {
+      background: #1c1f24 !important;
+      color: #f4f6f1;
+      border-color: #303539;
+    }
+    .drawer { background: #111315 !important; }
+    .drawer-profile { background: #1c1f24; }
+    .drawer-profile strong { color: #fff; }
+    .drawer-profile span { color: #c1f11d; }
+    .drawer-nav button { color: #f4f6f1; }
+    .drawer-nav button:hover, .drawer-nav button:focus-visible { background: #24282a; }
+    .drawer-close { background: #24282a; color: #fff; }
+    h1, h2, h3, strong, label, .field-label { color: #f4f6f1; }
+    p, small, .card-intro, .muted-note, .service-note, .history-item span,
+    .saved-address-list, .community-card p, .community-card li { color: #a7ada5; }
+    input, select, textarea {
+      border-color: #3a3f41 !important;
+      background: #222628 !important;
+      color: #f4f6f1 !important;
+    }
+    input::placeholder, textarea::placeholder { color: #858c83; }
+    .map-hero {
+      background: radial-gradient(circle at 70% 25%, rgba(193,241,29,.10), transparent 26%), #1c1f24 !important;
+    }
+    .map-area { background: #252a2c; border-color: #303539; }
+    .map-area::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .35;
+      background-image: linear-gradient(30deg, transparent 48%, #3a403d 49%, #3a403d 51%, transparent 52%), linear-gradient(120deg, transparent 48%, #343936 49%, #343936 51%, transparent 52%);
+      background-size: 92px 92px;
+    }
+    .map-road { stroke: #68706b; }
+    .map-block { fill: #343a36; stroke: #454c48; }
+    .map-pin { background: #1c1f24; border-color: #303539; color: #f4f6f1; }
+    .map-pin > span { background: #303539; }
+    .map-caption, .map-ride-status { background: #1c1f24; color: #a7ada5; border-color: #303539; }
+    .button, .button.call-taxi-button, .button.whatsapp, .send-button {
+      background: #c1f11d !important;
+      color: #111315 !important;
+      border-color: #c1f11d;
+    }
+    .button:hover, .button.call-taxi-button:hover, .button.whatsapp:hover { background: #b0df18 !important; }
+    .button.secondary { background: #222628 !important; color: #f4f6f1 !important; border-color: #3a3f41; }
+    .drawer-driver { background: #c1f11d !important; color: #111315 !important; }
+    .destination-shortcuts button, .trip-choice, .choice-card, .route-swap {
+      background: #222628;
+      color: #f4f6f1;
+      border-color: #303539;
+    }
+    .destination-shortcuts button[aria-pressed="true"], .trip-choice[aria-pressed="true"],
+    .ride-card .trip-choice[aria-pressed="true"] {
+      background: #303825;
+      color: #c1f11d;
+      border-color: #c1f11d;
+    }
+    .total-box, .amount-panel, .qr-note, .kaspi-banner, .forecast,
+    .driver-report-total, .admin-number, .income-total { background: #222628; border-color: #303539; }
+    .total-box strong, .amount-panel strong { color: #c1f11d; }
+    .safety-call { background: #d44b42 !important; color: #fff !important; }
+    .role-switch { padding: 4px; }
+    .role-switch button { background: #222628; color: #f4f6f1; }
+    .role-switch button[aria-pressed="true"] { background: #c1f11d; color: #111315; }
+    .profile-avatar { background: #303825; color: #c1f11d; }
+    .toast { background: #c1f11d; color: #111315; }
+    .tab-switch { display: flex; gap: 8px; margin: 14px 0; overflow-x: auto; }
+    .tab-switch button { flex: 0 0 auto; min-height: 42px; border: 1px solid #303539; border-radius: 12px; padding: 8px 12px; background: #222628; color: #f4f6f1; font-weight: 800; }
+    .tab-switch button[aria-pressed="true"] { background: #c1f11d; color: #111315; border-color: #c1f11d; }
+    .feature-grid, .intercity-tabs, .address-categories, .emergency-grid, .safety-grid,
+    .settings-list, .support-faq { display: grid; gap: 10px; }
+    .feature-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .feature-card, .address-category, .emergency-card, .safety-card, .settings-row, .faq-item {
+      border: 1px solid #303539;
+      border-radius: 14px;
+      padding: 12px;
+      background: #222628;
+    }
+    .address-category { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .safety-grid { grid-template-columns: repeat(2, minmax(0,1fr)); }
+    .settings-row { display:flex; align-items:center; justify-content:space-between; gap:12px; }
+    .toggle { width:44px; height:24px; accent-color:#c1f11d; }
+    .emergency-card { text-align:center; }
+    .emergency-card button { width:100%; }
+    @media (max-width:560px) {
+      .feature-grid, .safety-grid { grid-template-columns:1fr; }
+    }
   </style>
 </head>
 <body>
@@ -708,7 +814,7 @@
       </div>
       <nav class="drawer-nav" aria-label="Бөлімдер" data-i18n-aria-label="menuSectionsLabel">
         <button type="button" data-open-screen="profile"><span aria-hidden="true">👤</span><span data-i18n="menuProfile">Профиль / рейтинг</span></button>
-        <button type="button" data-open-screen="town"><span aria-hidden="true">📍</span><span data-i18n="menuTown">Кент · Жайрем</span></button>
+        <button type="button" data-open-screen="booking"><span aria-hidden="true">📍</span><span data-i18n="menuTown">Кент · Жайрем</span></button>
         <button type="button" data-open-screen="orders"><span aria-hidden="true">🧾</span><span data-i18n="menuOrders">Тапсырыстар тарихы</span></button>
         <button type="button" data-open-screen="courier"><span aria-hidden="true">📦</span><span data-i18n="menuCourier">Курьер</span></button>
         <button type="button" data-open-screen="intercity"><span aria-hidden="true">🛣️</span><span data-i18n="menuIntercity">Қалааралық</span></button>
@@ -1105,6 +1211,19 @@
           </aside>
           <form class="partner-form" id="partnerForm">
             <div class="field-grid">
+              <div class="field full">
+                <span class="field-label">Жүргізуші бағыты</span>
+                <div class="trip-choices" id="driverDirections">
+                  <button type="button" class="trip-choice" aria-pressed="true" data-driver-direction="Кент ішіндегі сапарлар — 350 ₸ таза табыс">Кент ішіндегі сапарлар — 350 ₸ таза табыс</button>
+                  <button type="button" class="trip-choice" aria-pressed="false" data-driver-direction="Курьер">Курьер</button>
+                  <button type="button" class="trip-choice" aria-pressed="false" data-driver-direction="Қалааралық">Қалааралық</button>
+                  <button type="button" class="trip-choice" aria-pressed="false" data-driver-direction="Жүк көлігі">Жүк көлігі</button>
+                </div>
+              </div>
+              <div class="field full">
+                <label for="driverSignupLocation">Елді мекен</label>
+                <input id="driverSignupLocation" value="Жайрем кенті" readonly>
+              </div>
               <div class="field">
                 <label for="partnerName" data-i18n="partnerName">Аты-жөні</label>
                 <input id="partnerName" name="name" autocomplete="name" required data-i18n-placeholder="partnerNamePlaceholder" placeholder="Аты-жөніңіз">
@@ -1130,7 +1249,7 @@
                 <p class="muted-note" data-i18n="shareTermsHint">Сома мен үлес алдын ала келісіліп, серіктестік басталғанша расталады.</p>
               </div>
             </div>
-            <button type="submit" class="button whatsapp"><span aria-hidden="true">◉</span><span data-i18n="sendPartner">Өтінімді WhatsApp-қа жіберу</span></button>
+            <button type="submit" class="button whatsapp"><span aria-hidden="true">◉</span><span>Жүргізуші ретінде WhatsApp тобына тіркелу</span></button>
           </form>
         </div>
       </section>
@@ -1177,17 +1296,42 @@
 
       <section class="card page-content" id="profileScreen" data-screen-content="profile">
         <div class="profile-summary">
-          <span class="profile-avatar" aria-hidden="true">👤</span>
+          <img id="profileAvatarPreview" class="profile-avatar" alt="Аватар" hidden>
+          <span id="profileAvatarFallback" class="profile-avatar" aria-hidden="true">A</span>
           <div><h2 id="profileDisplayName">Аманжол</h2><p>★ 5,0</p></div>
         </div>
-        <label for="profileNameInput" data-i18n="nameLabel">Атыңыз</label>
-        <input id="profileNameInput" autocomplete="name" data-i18n-placeholder="namePlaceholder" placeholder="Атыңыз">
-        <button type="button" class="button" id="saveProfileName" data-i18n="saveProfile">Сақтау</button>
+        <div class="field-grid">
+          <div class="field">
+            <label for="profileAvatarInput">Аватар суретін жүктеу / өзгерту</label>
+            <input id="profileAvatarInput" type="file" accept="image/*">
+          </div>
+          <div class="field">
+            <label for="profileNameInput">Аты</label>
+            <input id="profileNameInput" autocomplete="given-name" value="Аманжол" placeholder="Аты">
+          </div>
+          <div class="field">
+            <label for="profileSurnameInput">Тегі</label>
+            <input id="profileSurnameInput" autocomplete="family-name" placeholder="Тегі">
+          </div>
+          <div class="field">
+            <label for="profilePhoneInput">Телефон нөмірі</label>
+            <input id="profilePhoneInput" type="tel" autocomplete="tel" value="+7 747 863 24 59">
+          </div>
+          <div class="field full">
+            <label for="profileLocationInput">Елді мекен</label>
+            <input id="profileLocationInput" autocomplete="address-level2" value="Жайрем кенті">
+          </div>
+        </div>
+        <button type="button" class="button" id="saveProfileName" style="margin-top:14px">Сақтау</button>
       </section>
 
       <section class="card page-content" id="addressesScreen" data-screen-content="addresses">
         <h2 data-i18n="savedAddressesTitle">Менің мекенжайларым</h2>
         <p class="card-intro" data-i18n="savedAddressesIntro">Мекенжайды сақтап, тапсырысқа бір түртумен қосыңыз.</p>
+        <div class="address-categories">
+          <button type="button" class="address-category" id="saveHomeAddress"><span>🏠 Үй мекенжайын сақтау</span><strong>›</strong></button>
+          <button type="button" class="address-category" id="saveWorkAddress"><span>💼 Жұмыс мекенжайын сақтау</span><strong>›</strong></button>
+        </div>
         <form class="saved-address-form" id="savedAddressForm">
           <input id="savedAddressInput" required data-i18n-placeholder="addressPlaceholder" placeholder="Мекенжайды енгізіңіз">
           <button type="submit" class="button" data-i18n="addAddress">Қосу</button>
@@ -1197,31 +1341,92 @@
 
       <section class="card page-content" data-screen-content="courier">
         <h2 data-i18n="menuCourier">Курьер</h2>
-        <p class="service-note" data-i18n="courierInfo">Жайрем ішіндегі шағын сәлемдемені жеткізуге өтінім қалдырыңыз. Қызмет бағасы мен шартын орындаушымен алдын ала келісіңіз.</p>
-        <button type="button" class="button" data-contact-service="courier" data-i18n="contactService">WhatsApp арқылы сұрау</button>
+        <div class="field-grid">
+          <div class="field"><label for="courierFrom">Қайдан</label><input id="courierFrom" value="Жайрем кенті"></div>
+          <div class="field"><label for="courierTo">Қайда</label><input id="courierTo" placeholder="Жеткізу мекенжайы"></div>
+          <div class="field full"><label for="courierPhone">Алушының телефоны</label><input id="courierPhone" type="tel" placeholder="+7 7XX XXX XX XX"></div>
+          <div class="field full"><label for="courierDescription">Сәлемдеме сипаттамасы</label><textarea id="courierDescription" placeholder="Өлшемі, мазмұны және тапсырыс ескертулері"></textarea></div>
+        </div>
+        <button type="button" class="button whatsapp" id="sendCourierWhatsApp" style="margin-top:14px">WhatsApp арқылы тапсырыс беру</button>
       </section>
 
       <section class="card page-content" data-screen-content="intercity">
         <h2 data-i18n="menuIntercity">Қалааралық</h2>
-        <p class="service-note" data-i18n="intercityInfo">Қалааралық бағыттың бағасы мен уақытын жүргізушімен бөлек келісіңіз. Жайрем ішіндегі 400 ₸ тариф бұл бағытқа қолданылмайды.</p>
+        <div class="feature-grid">
+          <article class="feature-card"><strong>🛡 Сәлемдемені қорғау</strong></article>
+          <article class="feature-card"><strong>✓ Тексерілген жүргізушілер</strong></article>
+          <article class="feature-card"><strong>🔒 Қауіпсіз сапар</strong></article>
+          <article class="feature-card"><strong>🤝 Тікелей келісім</strong></article>
+        </div>
         <div class="destination-shortcuts" role="group" aria-label="Қалааралық қызмет түрі">
           <button type="button" data-intercity-type="Жолаушылармен" aria-pressed="true">Жолаушылармен</button>
-          <button type="button" data-intercity-type="Сәлемдеме" aria-pressed="false">Сәлемдеме</button>
+          <button type="button" data-intercity-type="Сәлемдеме жіберу" aria-pressed="false">Сәлемдеме жіберу</button>
           <button type="button" data-intercity-type="Бүкіл салон" aria-pressed="false">Бүкіл салон</button>
         </div>
-        <button type="button" class="button" data-contact-service="intercity" data-i18n="contactService">WhatsApp арқылы сұрау</button>
+        <div class="field-grid">
+          <div class="field"><label for="intercityFrom">Қайдан</label><input id="intercityFrom" value="Жайрем кенті"></div>
+          <div class="field"><label for="intercityTo">Қайда</label><input id="intercityTo" list="intercityPlaces" placeholder="Жезқазған, Қарағанды, Астана"></div>
+          <datalist id="intercityPlaces"><option value="Жезқазған"></option><option value="Қарағанды"></option><option value="Астана"></option></datalist>
+          <div class="field"><label for="intercityDate">Күні мен уақыты</label><input id="intercityDate" type="datetime-local"></div>
+          <div class="field"><label for="intercityPrice">Ұсынылатын баға (₸)</label><input id="intercityPrice" type="number" min="0" placeholder="Баға"></div>
+          <div class="field full"><label for="intercityComment">Пікірлер</label><textarea id="intercityComment" placeholder="Пікір немесе қосымша шарт"></textarea></div>
+        </div>
+        <button type="button" class="button whatsapp" id="sendIntercityWhatsApp" style="margin-top:14px">WhatsApp арқылы тапсырыс беру</button>
+        <div class="tab-switch" role="tablist" aria-label="Қалааралық қойындылар">
+          <button type="button" data-intercity-tab="order" aria-pressed="true">Тапсырыс</button>
+          <button type="button" data-intercity-tab="popular" aria-pressed="false">Танымал бағыттар</button>
+          <button type="button" data-intercity-tab="mine" aria-pressed="false">Менің тапсырыстарым</button>
+        </div>
+        <div id="intercityTabOrder" class="feature-card"><strong>Қалааралық тапсырыс қалыптасады.</strong></div>
+        <div id="intercityTabPopular" class="feature-grid" hidden>
+          <button type="button" class="feature-card intercity-route" data-route="Жезқазған">Жайрем – Жезқазған</button>
+          <button type="button" class="feature-card intercity-route" data-route="Қарағанды">Жайрем – Қарағанды</button>
+          <button type="button" class="feature-card intercity-route" data-route="Астана">Жайрем – Астана</button>
+        </div>
+        <div id="intercityTabMine" class="feature-card" hidden>Әзірге қалааралық тапсырыс жоқ.</div>
       </section>
 
       <section class="card page-content" data-screen-content="cargo">
         <h2 data-i18n="menuCargo">Жүк тасымалы</h2>
-        <p class="service-note" data-i18n="cargoInfo">Жүк көлемі, алып кету орны және уақытын хабарлаңыз. Бағасы жүк пен бағытқа қарай бөлек келісіледі.</p>
-        <button type="button" class="button" data-contact-service="cargo" data-i18n="contactService">WhatsApp арқылы сұрау</button>
+        <div class="field-grid">
+          <div class="field"><label for="cargoFrom">Қайдан</label><input id="cargoFrom" value="Жайрем кенті"></div>
+          <div class="field"><label for="cargoTo">Қайда</label><input id="cargoTo" placeholder="Жеткізу мекенжайы"></div>
+          <div class="field full">
+            <span class="field-label">Беру уақыты</span>
+            <div class="trip-choices" id="cargoTime">
+              <button type="button" class="trip-choice" aria-pressed="true" data-cargo-time="10–20 мин">10–20 мин</button>
+              <button type="button" class="trip-choice" aria-pressed="false" data-cargo-time="1 сағатқа дейін">1 сағатқа дейін</button>
+              <button type="button" class="trip-choice" aria-pressed="false" data-cargo-time="Жоспарлау">Жоспарлау</button>
+            </div>
+          </div>
+          <div class="field full"><label for="cargoDescription">Жүк сипаттамасы</label><textarea id="cargoDescription" placeholder="Жүктің түрі, салмағы және саны"></textarea></div>
+          <div class="field full">
+            <span class="field-label">Кузов өлшемі</span>
+            <div class="trip-choices" id="cargoSize">
+              <button type="button" class="trip-choice" aria-pressed="true" data-cargo-size="Шағын S">Шағын S</button>
+              <button type="button" class="trip-choice" aria-pressed="false" data-cargo-size="Орташа M">Орташа M</button>
+              <button type="button" class="trip-choice" aria-pressed="false" data-cargo-size="Үлкен L">Үлкен L</button>
+            </div>
+          </div>
+          <div class="field full"><label for="cargoPrice">Бағасы (₸)</label><input id="cargoPrice" type="number" min="0" placeholder="Ұсынылатын баға"></div>
+        </div>
+        <button type="button" class="button whatsapp" id="sendCargoWhatsApp" style="margin-top:14px">WhatsApp арқылы жіберу</button>
       </section>
 
       <section class="card page-content" data-screen-content="safety">
         <h2 data-i18n="menuSafety">Қауіпсіздік · 112</h2>
-        <p class="safety-warning" data-i18n="safetyInfo">Шұғыл қауіп төнсе, Қазақстандағы бірыңғай жедел қызмет нөміріне қоңырау шалыңыз.</p>
+        <div class="emergency-grid">
+          <div class="emergency-card"><button type="button" class="button secondary" id="supportEmergency">Қолдау қызметі</button></div>
+          <div class="emergency-card"><button type="button" class="button secondary" id="saveTrustedNumber">Шұғыл байланыстар (сенімді нөмірді сақтау)</button></div>
+        </div>
+        <p class="safety-warning" style="margin:14px 0">Шұғыл қауіп төнсе, 112 нөміріне дереу қоңырау шалыңыз.</p>
         <a class="button safety-call" href="tel:112" data-i18n="call112">112 нөміріне қоңырау шалу</a>
+        <div class="safety-grid" style="margin-top:14px">
+          <article class="safety-card"><strong>Маршрутты бөлісіңіз</strong><p>Сапардан бұрын жақын адамыңызға бағытты жіберіңіз.</p></article>
+          <article class="safety-card"><strong>Көлікті тексеріңіз</strong><p>Көлік нөмірі мен жүргізушіні растаңыз.</p></article>
+          <article class="safety-card"><strong>Шашырау жанармайы</strong><p>Құпия деректерді бейтаныс адамға бермеңіз.</p></article>
+          <article class="safety-card"><strong>Қауіпте — 112</strong><p>Қауіп жағдайында аудио/мәліметтерді сақтап, дереу хабарласыңыз.</p></article>
+        </div>
       </section>
 
       <section class="card page-content" data-screen-content="notifications">
@@ -1231,17 +1436,26 @@
 
       <section class="card page-content" data-screen-content="settings">
         <h2 data-i18n="menuSettings">Баптаулар</h2>
-        <p class="card-intro" data-i18n="settingsLanguage">Қолданба тілін таңдаңыз.</p>
-        <nav class="language" aria-label="Тілді таңдау" data-i18n-aria-label="languageLabel">
-          <button type="button" data-language="kk" aria-pressed="true">ҚАЗ</button>
-          <button type="button" data-language="ru" aria-pressed="false">РУС</button>
-        </nav>
+        <div class="settings-list">
+          <div class="settings-row"><strong>Тіл таңдау</strong><div class="language"><button type="button" data-language="kk" aria-pressed="true">ҚАЗ</button><button type="button" data-language="ru" aria-pressed="false">РУС</button></div></div>
+          <div class="settings-row"><strong>Қашықтық бірлігі</strong><span>км</span></div>
+          <div class="settings-row"><strong>Жүргізушіге геолокацияны көрсету</strong><input class="toggle" id="geoToggle" type="checkbox"></div>
+          <div class="settings-row"><strong>Құпиялылық саясаты</strong><button type="button" class="button secondary" id="privacyPolicy">Ашу</button></div>
+          <div class="settings-row"><strong>Қолданба нұсқасы</strong><span>v1.0 • Жайрем кенті</span></div>
+          <div class="settings-row"><strong>Жоба табысы</strong><span>50 ₸ / 350 ₸</span></div>
+        </div>
       </section>
 
       <section class="card page-content" data-screen-content="support">
         <h2>Қолдау қызметі</h2>
-        <p class="service-note">Сұрақтарыңыз, шағымдар немесе тапсырыс мәселесі бойынша WhatsApp арқылы әкімшіге хабарласыңыз.</p>
-        <a class="button" href="https://wa.me/77478632459" target="_blank" rel="noopener noreferrer">WhatsApp қолдау</a>
+        <div class="support-faq">
+          <details class="faq-item"><summary>Кент ішінде — 400 ₸?</summary><p>Жайрем кентінде әр сапар 400 ₸: жүргізушіге 350 ₸, әкімшіге 50 ₸.</p></details>
+          <details class="faq-item"><summary>Қалааралық баға қалай есептеледі?</summary><p>Баға бағыт пен келісімге қарай жүргізушімен бөлек анықталады.</p></details>
+          <details class="faq-item"><summary>Курьер қызметі қалай жұмыс істейді?</summary><p>Қайдан/қайда, алушы телефоны және сипаттаманы жазыңыз.</p></details>
+          <details class="faq-item"><summary>Жүк тасымалы қандай өлшемге қолжетімді?</summary><p>S, M және L кузов өлшемдері бар.</p></details>
+          <details class="faq-item"><summary>Kaspi төлемі қандай?</summary><p>Kaspi немесе қолма-қол төлем түрін таңдап, әкімшіге тапсырыс жібере аласыз.</p></details>
+        </div>
+        <a class="button whatsapp" style="margin-top:14px" href="https://wa.me/77478632459?text=%D0%9A%D0%BE%D0%BB%D0%B4%D0%B0%D1%83%20%D1%82%D3%99%D0%B6%D1%96%D1%80%D1%96%D0%B1%D3%99%D1%81%D1%96%D0%BD%D0%B5%D0%BD%20%D1%81%D1%8F%D2%9B%D1%82%D1%83" target="_blank" rel="noopener noreferrer">WhatsApp арқылы әкімшіге жазу</a>
       </section>
 
       <footer class="footer" data-screen-content="settings">
@@ -1664,7 +1878,8 @@
           select.className = "button secondary";
           select.textContent = address;
           select.addEventListener("click", () => {
-            $("#to").value = address;
+            const destination = address.includes(": ") ? address.slice(address.indexOf(": ") + 2) : address;
+            $("#to").value = destination;
             refreshMapSelection();
             showScreen("booking");
           });
@@ -1956,26 +2171,6 @@
           if (button.hasAttribute("data-map-place")) showScreen("booking");
         });
       });
-      $("#savedAddressForm").addEventListener("submit", (event) => {
-        event.preventDefault();
-        const address = $("#savedAddressInput").value.trim();
-        if (!address) return;
-        if (!savedAddresses.includes(address)) savedAddresses.push(address);
-        $("#savedAddressInput").value = "";
-        renderSavedAddresses();
-      });
-      $("#saveProfileName").addEventListener("click", () => {
-        const name = $("#profileNameInput").value.trim();
-        if (!name) {
-          showToast(t("fillRequired"));
-          $("#profileNameInput").focus();
-          return;
-        }
-        profileName = name;
-        $("#rideName").value = name;
-        renderProfileName();
-        showToast(t("profileSaved"));
-      });
       $$("[data-contact-service]").forEach((button) => {
         button.addEventListener("click", () => {
           const serviceKey = {
@@ -2165,12 +2360,161 @@
           `${t("msgName")}: ${$("#partnerName").value.trim()}`,
           `${t("msgPhone")}: ${$("#partnerPhone").value.trim()}`,
           `${t("msgRole")}: ${role === "driver" ? t("msgDriver") : t("msgPartner")}`,
+          `Жүргізуші бағыты: ${$('button[data-driver-direction][aria-pressed="true"]')?.dataset.driverDirection || "Кент ішіндегі сапарлар"}`,
+          `Елді мекен: ${$("#driverSignupLocation").value}`,
           `${t("msgVehicle")}: ${$("#partnerCar").value.trim()}`,
           `${t("msgTerms")}: ${$("#partnerTerms").value.trim()}`
         ]);
+        window.open(WHATSAPP_GROUP_LINK, "_blank", "noopener,noreferrer");
       });
 
-      $("#profileNameInput").value = $("#rideName").value;
+      function saveJson(key, value) {
+        try { localStorage.setItem(key, JSON.stringify(value)); } catch (error) { showToast("Деректерді сақтау мүмкін болмады."); }
+      }
+      function loadJson(key, fallback) {
+        try { const value = JSON.parse(localStorage.getItem(key)); return value ?? fallback; } catch (error) { return fallback; }
+      }
+
+      const storedProfile = loadJson("zhairemProfile", null);
+      if (storedProfile) {
+        profileName = storedProfile.name || "Аманжол";
+        $("#profileNameInput").value = profileName;
+        $("#profileSurnameInput").value = storedProfile.surname || "";
+        $("#profilePhoneInput").value = storedProfile.phone || "+7 747 863 24 59";
+        $("#profileLocationInput").value = storedProfile.location || "Жайрем кенті";
+        if (storedProfile.avatar) {
+          $("#profileAvatarPreview").src = storedProfile.avatar;
+          $("#profileAvatarPreview").hidden = false;
+          $("#profileAvatarFallback").hidden = true;
+        }
+        renderProfileName();
+      } else {
+        $("#profileNameInput").value = $("#rideName").value || "Аманжол";
+        $("#profilePhoneInput").value = "+7 747 863 24 59";
+        $("#profileLocationInput").value = "Жайрем кенті";
+      }
+
+      $("#profileAvatarInput").addEventListener("change", (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = () => {
+          $("#profileAvatarPreview").src = reader.result;
+          $("#profileAvatarPreview").hidden = false;
+          $("#profileAvatarFallback").hidden = true;
+        };
+        reader.readAsDataURL(file);
+      });
+
+      $("#saveProfileName").addEventListener("click", () => {
+        const name = $("#profileNameInput").value.trim();
+        if (!name) { showToast(t("fillRequired")); return; }
+        const profile = {
+          name,
+          surname: $("#profileSurnameInput").value.trim(),
+          phone: $("#profilePhoneInput").value.trim(),
+          location: $("#profileLocationInput").value.trim(),
+          avatar: $("#profileAvatarPreview").hidden ? "" : $("#profileAvatarPreview").src
+        };
+        profileName = name;
+        saveJson("zhairemProfile", profile);
+        renderProfileName();
+        showToast(t("profileSaved"));
+      });
+
+      const storedAddresses = loadJson("zhairemSavedAddresses", []);
+      storedAddresses.forEach((address) => {
+        if (!savedAddresses.includes(address)) savedAddresses.push(address);
+      });
+
+      $("#savedAddressForm").addEventListener("submit", (event) => {
+        event.preventDefault();
+        const address = $("#savedAddressInput").value.trim();
+        if (!address) return;
+        const label = window.prompt("Мекенжай атауы (мысалы: Үй немесе Жұмыс)", "Басқа")?.trim();
+        const value = label && label !== "Басқа" ? `${label}: ${address}` : address;
+        if (!savedAddresses.includes(value)) savedAddresses.push(value);
+        saveJson("zhairemSavedAddresses", savedAddresses);
+        $("#savedAddressInput").value = "";
+        renderSavedAddresses();
+      });
+
+      function saveAddressCategory(label) {
+        const address = window.prompt(`${label} мекенжайын енгізіңіз`, "");
+        if (!address?.trim()) return;
+        const value = `${label}: ${address.trim()}`;
+        if (!savedAddresses.includes(value)) savedAddresses.push(value);
+        saveJson("zhairemSavedAddresses", savedAddresses);
+        renderSavedAddresses();
+      }
+      $("#saveHomeAddress").addEventListener("click", () => saveAddressCategory("Үй"));
+      $("#saveWorkAddress").addEventListener("click", () => saveAddressCategory("Жұмыс"));
+
+      $("#sendCourierWhatsApp").addEventListener("click", () => openWhatsApp([
+        "ЖАЙРЕМ TAXI — КУРЬЕР",
+        `Қайдан: ${$("#courierFrom").value.trim()}`,
+        `Қайда: ${$("#courierTo").value.trim()}`,
+        `Алушының телефоны: ${$("#courierPhone").value.trim()}`,
+        `Сәлемдеме сипаттамасы: ${$("#courierDescription").value.trim()}`
+      ]));
+
+      $("#sendIntercityWhatsApp").addEventListener("click", () => openWhatsApp([
+        "ЖАЙРЕМ TAXI — ҚАЛААРАЛЫҚ",
+        `Қызмет: ${intercityType}`,
+        `Қайдан: ${$("#intercityFrom").value.trim()}`,
+        `Қайда: ${$("#intercityTo").value.trim()}`,
+        `Күні мен уақыты: ${$("#intercityDate").value ? formatDateTime($("#intercityDate").value) : "Келісу керек"}`,
+        `Ұсынылатын баға: ${$("#intercityPrice").value ? formatMoney(Number($("#intercityPrice").value)) : "Келісу керек"}`,
+        `Пікірлер: ${$("#intercityComment").value.trim() || "Жоқ"}`
+      ]));
+
+      $$("[data-intercity-tab]").forEach((button) => button.addEventListener("click", () => {
+        $$("[data-intercity-tab]").forEach((item) => item.setAttribute("aria-pressed", item === button ? "true" : "false"));
+        const tab = button.dataset.intercityTab;
+        $("#intercityTabOrder").hidden = tab !== "order";
+        $("#intercityTabPopular").hidden = tab !== "popular";
+        $("#intercityTabMine").hidden = tab !== "mine";
+      }));
+      $$(".intercity-route").forEach((button) => button.addEventListener("click", () => {
+        $("#intercityTo").value = button.dataset.route;
+        $("[data-intercity-tab]").click();
+      }));
+
+      $$("[data-cargo-time]").forEach((button) => button.addEventListener("click", () => {
+        $$("[data-cargo-time]").forEach((item) => item.setAttribute("aria-pressed", item === button ? "true" : "false"));
+      }));
+      $$("[data-cargo-size]").forEach((button) => button.addEventListener("click", () => {
+        $$("[data-cargo-size]").forEach((item) => item.setAttribute("aria-pressed", item === button ? "true" : "false"));
+      }));
+      $("#sendCargoWhatsApp").addEventListener("click", () => openWhatsApp([
+        "ЖАЙРЕМ TAXI — ЖҮК ТАСЫМАЛЫ",
+        `Қайдан: ${$("#cargoFrom").value.trim()}`,
+        `Қайда: ${$("#cargoTo").value.trim()}`,
+        `Беру уақыты: ${$('button[data-cargo-time][aria-pressed="true"]').dataset.cargoTime}`,
+        `Жүк сипаттамасы: ${$("#cargoDescription").value.trim()}`,
+        `Кузов өлшемі: ${$('button[data-cargo-size][aria-pressed="true"]').dataset.cargoSize}`,
+        `Баға: ${$("#cargoPrice").value ? formatMoney(Number($("#cargoPrice").value)) : "Келісу керек"}`
+      ]));
+
+      $$("[data-driver-direction]").forEach((button) => button.addEventListener("click", () => {
+        $$("[data-driver-direction]").forEach((item) => item.setAttribute("aria-pressed", item === button ? "true" : "false"));
+      }));
+
+      const storedGeo = loadJson("zhairemGeoEnabled", false);
+      $("#geoToggle").checked = Boolean(storedGeo);
+      $("#geoToggle").addEventListener("change", () => saveJson("zhairemGeoEnabled", $("#geoToggle").checked));
+      $("#privacyPolicy").addEventListener("click", () => showToast("Құпиялылық саясаты: деректер тек осы құрылғыда сақталады."));
+      $("#supportEmergency").addEventListener("click", () => showScreen("support"));
+      $("#saveTrustedNumber").addEventListener("click", () => {
+        const number = window.prompt("Сенімді адамның телефон нөмірін енгізіңіз", "");
+        if (number?.trim()) {
+          saveJson("zhairemTrustedNumber", number.trim());
+          showToast("Сенімді нөмір сақталды.");
+        }
+      });
+
+      $("#rideName").value = storedProfile?.name || "Аманжол";
+      renderSavedAddresses();
       setLanguage("kk");
       showScreen("home");
     })();
