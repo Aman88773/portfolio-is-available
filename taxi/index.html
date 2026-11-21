@@ -812,16 +812,16 @@
       const locale = () => translations[language];
 
       function normalizedCount(updateField = false) {
-        const parsed = Number.parseInt(countInput.value, 10);
-        const count = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+        const parsed = Number(countInput.value);
+        const count = Number.isSafeInteger(parsed) && parsed > 0 ? parsed : 1;
         if (updateField && String(count) !== countInput.value) countInput.value = String(count);
         return count;
       }
 
       function normalizedDriverTrips(updateField = false) {
         const input = $("#driverTodayTrips");
-        const parsed = Number.parseInt(input.value, 10);
-        const count = Number.isFinite(parsed) && parsed >= 0 ? parsed : 0;
+        const parsed = Number(input.value);
+        const count = Number.isSafeInteger(parsed) && parsed >= 0 ? parsed : 0;
         if (updateField && String(count) !== input.value) input.value = String(count);
         return count;
       }
@@ -873,7 +873,15 @@
       }
 
       function setLanguage(nextLanguage) {
-        language = nextLanguage === "ru" ? "ru" : "kk";
+        const next = nextLanguage === "ru" ? "ru" : "kk";
+        const previousPlaces = locale().places;
+        const nextPlaces = translations[next].places;
+        for (const selector of ["#from", "#to"]) {
+          const input = $(selector);
+          const placeIndex = previousPlaces.findIndex(([name]) => name === input.value);
+          if (placeIndex >= 0) input.value = nextPlaces[placeIndex][0];
+        }
+        language = next;
         document.documentElement.lang = language;
         $$("[data-i18n]").forEach((element) => {
           const key = element.dataset.i18n;
