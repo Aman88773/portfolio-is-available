@@ -157,6 +157,20 @@
     .output-block { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #10131a; }
     .output-block strong { display: block; margin-bottom: 6px; color: #d3b27e; font-size: 10px; }
     .output-block p { margin: 0; color: #d8dce4; font-size: 11px; line-height: 1.55; white-space: pre-wrap; }
+    .command-result { margin: 13px 0; scroll-margin-top: 16px; }
+    .command-result:focus { outline: none; }
+    .command-plan { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 12px; }
+    .command-plan article { min-width: 0; padding: 11px; border: 1px solid var(--line); border-radius: 12px; background: #141821; }
+    .command-plan strong { display: block; font-size: 10px; }
+    .command-plan p { min-height: 42px; margin: 6px 0 9px; color: var(--muted); font-size: 10px; line-height: 1.45; }
+    .command-output { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; margin-top: 12px; }
+    .command-links { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 10px; }
+    .command-links a { padding: 7px 9px; border: 1px solid #414958; border-radius: 9px; color: #e7d2ab; background: #201e1a; font-size: 10px; text-decoration: none; }
+    .command-links a:hover { border-color: #9c8057; }
+    .command-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
+    .command-episodes { margin: 11px 0 0; padding-left: 20px; color: #d8dce4; font-size: 10px; line-height: 1.55; }
+    .managed-apps { display: grid; gap: 8px; }
+    .managed-apps a { color: #e7d2ab; font-size: 10px; overflow-wrap: anywhere; }
     .episode-controls { display: flex; align-items: center; gap: 9px; margin-top: 12px; }
     .episode-controls label { color: var(--muted); font-size: 10px; }
     .episode-controls select { flex: 1; min-width: 0; }
@@ -196,6 +210,8 @@
       .robot-icon { width: 37px; height: 37px; }
       .tab-copy strong { font-size: 10px; }
       .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .command-plan, .command-output { grid-template-columns: 1fr; }
+      .command-plan p { min-height: 0; }
       .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .projects-grid { grid-template-columns: 1fr; }
       .projects { margin-top: 30px; padding-top: 22px; }
@@ -311,7 +327,22 @@
         ],
         robot:"Робот", orchestrator:"Басқарушы", legend:"Legend Studio", apps:"Қосымшалар және бақылау", release:"Релиз және қорғаныс",
         overview:"Басқару орталығы", overviewSub:"Төрт роботтың күйі, тапсырмалар және шешімдер бір жерде.",
-        systemStatus:"РОБОТТАР КҮЙІ", routeTask:"Тапсырманы бағыттау", routeHelp:"Тапсырманы орындаушы роботқа жіберіңіз. Төлем, жариялау және жойғыш өзгерістер алдымен мақұлдауды талап етеді.",
+        systemStatus:"РОБОТТАР КҮЙІ", routeTask:"Тапсырманы бағыттау", routeHelp:"Тапсырма 2, 3 және 4-роботтармен үйлестіріледі. Төлем, жариялау және жойғыш өзгерістер үшін «РАСТАЙМЫН» растауы қажет.",
+        readyResult:"ДАЙЫН НӘТИЖЕ", commandTask:"Тапсырма", commandPlan:"Үйлестірілген жоспар", primaryRoute:"Негізгі бағыт",
+        planLegend:"{track}. Барлық бағыт: YouTube Legend, US TikTok Football & Famous Footballers, US TikTok Movies & Famous Actors. 1080×1920, English 9:16, қабаттаспайтын субтитрлер; 1–20 жеке эпизод, саны: {episodes}.",
+        planApps:"Қосымша саулығын, жоба сілтемелерін және deployment дайындығын қолмен тексеру; live тексеріс орындалмайды.",
+        planReleaseClean:"Жергілікті құпия деректер сканері таза; жариялау, төлем немесе жойғыш әрекет анықталмады.",
+        planReleaseRedacted:"Құпияға ұқсас дерек сақтауға дейін жергілікті түрде жасырылды.",
+        planReleaseApproval:"Құпия дерек жасырылды; қауіпті әрекет алдында «РАСТАЙМЫН» мақұлдауы қажет.",
+        approvalPending:"Мақұлдау күтілуде · «РАСТАЙМЫН» қажет", approvalNotNeeded:"Қосымша мақұлдау қажет емес",
+        approvalGranted:"Мақұлдау берілді", approvalRejected:"Мақұлдау қабылданбады", planRouted:"Бағытталды", planReady:"Дайын", planManual:"Қолмен тексеру",
+        planReleaseApproved:"«РАСТАЙМЫН» демо-мақұлдауы тіркелді; бұл қолданба сыртқы әрекет орындамайды.", planReleaseRejected:"Сұрау қабылданбады; әрекет орындалмайды.",
+        commandHook:"Ағылшынша hook", commandScript:"9:16 сценарий нобайы", episodeBreakdown:"Эпизод жоспары", openWorkspace:"Жұмыс кеңістігін ашу",
+        copyResult:"Нәтижені көшіру", downloadResult:"Нәтижені жүктеу", copiedResult:"Нәтиже көшірілді.", downloadedResult:"Нәтиже жүктелді.",
+        copyFailed:"Көшіру мүмкін болмады. Браузердің алмасу буфері рұқсатын тексеріңіз.",
+        managedApps:"Бақыланатын жобалар", deploymentReadiness:"Deployment дайындығы", manualCheck:"Қолмен тексеру қажет · live health probe жоқ",
+        deploymentChecklist:"Өндірістік құрастыру мен бағыттарды тексеру; smoke test іске қосу; орта айнымалылары мен құпияларды тексеру; мобильді көрініс пен rollback жоспарын растау.",
+        portfolioLink:"Portfolio · Vercel", taxiLink:"Zhairem Taxi", tariffLink:"Tariff Calculator",
         taskPlaceholder:"Мысалы: мобильді экрандағы профиль батырмасын тексеру",
         destination:"Орындаушы", automatic:"Автоматты бағыттау", toLegend:"Legend Studio", toApps:"Қосымшалар роботы", toRelease:"Релиз роботы",
         sendTask:"Тапсырманы жіберу", approvals:"Мақұлдау кезегі", noApprovals:"Мақұлдауды қажет ететін тапсырма жоқ.",
@@ -322,7 +353,7 @@
         approvalNotice:"Мақұлдау тек демо сұрауын растайды. Бұл қолданба ешбір есепшотты төлемейді, файлды өзгертпейді немесе жарияламайды.",
         studioSub:"9:16 · 1080p · English short-form контент", aspect:"9:16 тік формат", studioTitle:"Legend Studio",
         topic:"Тақырып / идея", topicPlaceholder:"Мысалы: күнделікті әдеттер туралы таңғаларлық факт",
-        track:"Контент бағыты", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Футбол", moviesTrack:"US TikTok · Фильмдер",
+        track:"Контент бағыты", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Футбол және әйгілі футболшылар", moviesTrack:"US TikTok · Фильмдер және әйгілі актерлер",
         trackYouTubeHelp:"Аңызға айналған оқиғалар, қызықты деректер және 9:16 форматындағы баяндау.",
         trackFootballHelp:"Футболдағы әсерлі сәттер мен әйгілі футболшылар туралы АҚШ аудиториясына арналған қысқа видео.",
         trackMoviesHelp:"Есте қаларлық кино көріністері, деректер және әйгілі актерлер туралы қысқа видео.",
@@ -383,7 +414,22 @@
         ],
         robot:"Робот", orchestrator:"Управляющий", legend:"Legend Studio", apps:"Конструктор и мониторинг приложений", release:"Релиз и защита",
         overview:"Центр управления", overviewSub:"Статус четырёх роботов, задачи и решения в одном месте.",
-        systemStatus:"СТАТУС РОБОТОВ", routeTask:"Маршрутизация задачи", routeHelp:"Отправьте задачу исполнителю. Платежи, публикация и разрушительные изменения требуют согласования.",
+        systemStatus:"СТАТУС РОБОТОВ", routeTask:"Маршрутизация задачи", routeHelp:"Задача координируется роботами 2, 3 и 4. Для платежей, публикации и разрушительных действий требуется подтверждение «РАСТАЙМЫН».",
+        readyResult:"ГОТОВЫЙ РЕЗУЛЬТАТ", commandTask:"Задача", commandPlan:"Согласованный план", primaryRoute:"Основной маршрут",
+        planLegend:"{track}. Все направления: YouTube Legend, US TikTok Football & Famous Footballers, US TikTok Movies & Famous Actors. 1080×1920, English 9:16, без наложения субтитров; 1–20 отдельных эпизодов, выбрано: {episodes}.",
+        planApps:"Проверить состояние приложений, ссылки проектов и готовность к deployment вручную; live-проверка не выполняется.",
+        planReleaseClean:"Локальный сканер не обнаружил секретов; публикация, платежи или разрушительные действия не запрошены.",
+        planReleaseRedacted:"Похожие на секреты данные скрыты локально до сохранения.",
+        planReleaseApproval:"Секретные данные скрыты; перед опасным действием требуется подтверждение «РАСТАЙМЫН».",
+        approvalPending:"Ожидает согласования · нужно «РАСТАЙМЫН»", approvalNotNeeded:"Дополнительное согласование не требуется",
+        approvalGranted:"Согласование выдано", approvalRejected:"Согласование отклонено", planRouted:"Направлено", planReady:"Готово", planManual:"Нужна ручная проверка",
+        planReleaseApproved:"Демо-согласование «РАСТАЙМЫН» записано; приложение не выполняет внешних действий.", planReleaseRejected:"Запрос отклонён; действие не выполняется.",
+        commandHook:"Хук на английском", commandScript:"Черновик сценария 9:16", episodeBreakdown:"План эпизодов", openWorkspace:"Открыть рабочее пространство",
+        copyResult:"Копировать результат", downloadResult:"Скачать результат", copiedResult:"Результат скопирован.", downloadedResult:"Результат скачан.",
+        copyFailed:"Не удалось скопировать. Проверьте разрешение браузера на буфер обмена.",
+        managedApps:"Подключённые проекты", deploymentReadiness:"Готовность к deployment", manualCheck:"Нужна ручная проверка · live health probe недоступен",
+        deploymentChecklist:"Проверить production-сборку и маршруты; выполнить smoke-тесты; проверить настройки окружения и секреты; подтвердить мобильный вид и план отката.",
+        portfolioLink:"Portfolio · Vercel", taxiLink:"Zhairem Taxi", tariffLink:"Калькулятор тарифа",
         taskPlaceholder:"Например: проверить кнопку профиля на мобильном экране",
         destination:"Исполнитель", automatic:"Автоматически", toLegend:"Legend Studio", toApps:"Робот приложений", toRelease:"Робот релиза",
         sendTask:"Отправить задачу", approvals:"Очередь согласования", noApprovals:"Нет задач, требующих согласования.",
@@ -394,7 +440,7 @@
         approvalNotice:"Согласование подтверждает только демо-запрос. Приложение не проводит платежи, не меняет файлы и ничего не публикует.",
         studioSub:"9:16 · 1080p · короткий контент на английском", aspect:"Вертикальный формат 9:16", studioTitle:"Legend Studio",
         topic:"Тема / идея", topicPlaceholder:"Например: удивительный факт о повседневных привычках",
-        track:"Контент-направление", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Футбол", moviesTrack:"US TikTok · Фильмы",
+        track:"Контент-направление", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Футбол и известные футболисты", moviesTrack:"US TikTok · Фильмы и известные актёры",
         trackYouTubeHelp:"Легендарные истории, интересные факты и повествование в формате 9:16.",
         trackFootballHelp:"Короткие видео для аудитории США о ярких футбольных моментах и известных футболистах.",
         trackMoviesHelp:"Короткие видео для аудитории США о памятных сценах, фактах и знаменитых актёрах.",
@@ -455,7 +501,22 @@
         ],
         robot:"Robot", orchestrator:"Orchestrator", legend:"Legend Studio", apps:"Apps Builder & Monitor", release:"Release & Shield",
         overview:"Orchestrator", overviewSub:"Current status, tasks, and decisions for all four robots.",
-        systemStatus:"ROBOT STATUS", routeTask:"Route a task", routeHelp:"Send a task to a specialist. Payments, publishing, and destructive changes require approval.",
+        systemStatus:"ROBOT STATUS", routeTask:"Route a task", routeHelp:"Each task is coordinated across Robots 2, 3, and 4. Publishing, billing, and destructive actions require “РАСТАЙМЫН” approval.",
+        readyResult:"READY RESULT", commandTask:"Task", commandPlan:"Coordinated plan", primaryRoute:"Primary route",
+        planLegend:"{track}. All tracks: YouTube Legend, US TikTok Football & Famous Footballers, US TikTok Movies & Famous Actors. 1080×1920, English 9:16, non-overlapping captions; 1–20 individual episodes, selected: {episodes}.",
+        planApps:"Review app health, project links, and deployment readiness manually; no live probe is run.",
+        planReleaseClean:"Local secret scan found no patterns; no publishing, billing, or destructive action was requested.",
+        planReleaseRedacted:"Secret-like input was redacted locally before it was saved.",
+        planReleaseApproval:"Sensitive input was redacted; “РАСТАЙМЫН” approval is required before the requested action.",
+        approvalPending:"Approval pending · “РАСТАЙМЫН” required", approvalNotNeeded:"No extra approval required",
+        approvalGranted:"Approval granted", approvalRejected:"Approval rejected", planRouted:"Routed", planReady:"Ready", planManual:"Manual check",
+        planReleaseApproved:"Demo “РАСТАЙМЫН” approval recorded; this app performs no external action.", planReleaseRejected:"Request rejected; no action is performed.",
+        commandHook:"English hook", commandScript:"9:16 script draft", episodeBreakdown:"Episode breakdown", openWorkspace:"Open workspace",
+        copyResult:"Copy result", downloadResult:"Download result", copiedResult:"Result copied.", downloadedResult:"Result downloaded.",
+        copyFailed:"Could not copy. Check the browser clipboard permission.",
+        managedApps:"Managed projects", deploymentReadiness:"Deployment readiness", manualCheck:"Manual check required · no live health probe",
+        deploymentChecklist:"Verify production build and routes; run smoke tests; review environment settings and secrets; confirm mobile layout and rollback plan.",
+        portfolioLink:"Portfolio · Vercel", taxiLink:"Zhairem Taxi", tariffLink:"Tariff Calculator",
         taskPlaceholder:"e.g. Check the profile button on the mobile screen",
         destination:"Destination", automatic:"Automatic routing", toLegend:"Legend Studio", toApps:"Apps Builder", toRelease:"Release & Shield",
         sendTask:"Route task", approvals:"Approval queue", noApprovals:"No tasks need approval.",
@@ -466,7 +527,7 @@
         approvalNotice:"Approval only confirms a demo request. This app does not charge accounts, modify files, or publish anything.",
         studioSub:"9:16 · 1080p · English short-form content", aspect:"9:16 vertical format", studioTitle:"Legend Studio",
         topic:"Topic / theme", topicPlaceholder:"e.g. a surprising fact about everyday habits",
-        track:"Content track", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Football", moviesTrack:"US TikTok · Movies",
+        track:"Content track", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Football & Famous Footballers", moviesTrack:"US TikTok · Movies & Famous Actors",
         trackYouTubeHelp:"Legendary stories, intriguing facts, and 9:16 storytelling.",
         trackFootballHelp:"Short videos for US audiences about exciting football moments and famous footballers.",
         trackMoviesHelp:"Short videos for US audiences about memorable movie scenes, facts, and famous actors.",
@@ -521,7 +582,7 @@
     const emptyState = () => ({
       lang: "kk", active: "orchestrator", tasks: [], approvals: [], logs: [],
       checks: { apps: [false, false, false, false], store: [false, false, false, false], studio: [false, false, false] },
-      studio: { track: "youtube", topic: "", hookStyle: "curiosity", episodeCount: "" }, generated: null
+      studio: { track: "youtube", topic: "", hookStyle: "curiosity", episodeCount: "" }, generated: null, commandResult: null
     });
     let state = emptyState();
     let devPrompt = "";
@@ -571,7 +632,8 @@
             hookStyle: ["curiosity", "bold", "question"].includes(saved.studio?.hookStyle) ? saved.studio.hookStyle : fresh.studio.hookStyle,
             episodeCount: /^(?:[1-9]|1\d|20)$/.test(String(saved.studio?.episodeCount ?? "")) ? String(saved.studio.episodeCount) : ""
           },
-          generated: restoreGenerated(saved.generated)
+          generated: restoreGenerated(saved.generated),
+          commandResult: restoreCommandResult(saved.commandResult)
         };
         persist();
       } catch (error) {
@@ -678,9 +740,62 @@
       if (!state.logs.length) return `<div class="empty">${esc(t("noActivity"))}</div>`;
       return `<div class="list">${state.logs.slice(0, 12).map(log => `<div class="activity-item"><div class="activity-copy">${esc(log.message)}${log.note ? `<small>${esc(log.note)}</small>` : ""}<small>${esc(new Date(log.time).toLocaleString(state.lang === "kk" ? "kk-KZ" : state.lang === "ru" ? "ru-RU" : "en-US", { dateStyle:"short", timeStyle:"short" }))}</small></div></div>`).join("")}</div>`;
     }
+    function renderCommandResult() {
+      const result = state.commandResult;
+      if (!result) return "";
+      const trackName = t(({ youtube:"youtubeTrack", football:"footballTrack", movies:"moviesTrack" })[result.track]);
+      const approvalItem = state.approvals.find(item => item.taskId === result.taskId);
+      const approvalPending = result.reason && (!approvalItem || approvalItem.status === "pending");
+      const approval = result.reason
+        ? approvalItem?.status === "approved" ? t("approvalGranted")
+          : approvalItem?.status === "rejected" ? t("approvalRejected") : t("approvalPending")
+        : t("approvalNotNeeded");
+      const releaseCopy = result.reason
+        ? approvalItem?.status === "approved" ? t("planReleaseApproved")
+          : approvalItem?.status === "rejected" ? t("planReleaseRejected") : t("planReleaseApproval")
+        : result.sensitive ? t("planReleaseRedacted") : t("planReleaseClean");
+      const appsPlanStatus = result.primary === "apps" ? t("planRouted") : t("planManual");
+      const releasePlanStatus = result.reason
+        ? approvalItem?.status === "approved" ? t("approvalGranted")
+          : approvalItem?.status === "rejected" ? t("approvalRejected") : t("approvalPending")
+        : t("planReady");
+      const plans = [
+        { id:"legend", text:t("planLegend").replace("{track}", trackName).replace("{episodes}", String(result.episodeCount)), status:result.primary === "legend" ? t("planRouted") : t("planReady") },
+        { id:"apps", text:t("planApps"), status:appsPlanStatus },
+        { id:"release", text:releaseCopy, status:releasePlanStatus }
+      ];
+      return `<section id="command-result" class="card command-result" tabindex="-1" aria-labelledby="command-result-title">
+        <div class="card-heading"><h3 id="command-result-title">${esc(t("readyResult"))}</h3><span class="badge ${approvalPending ? "pending" : "success"}">${esc(approval)}</span></div>
+        <p class="card-copy"><strong>${esc(t("primaryRoute"))}:</strong> ${esc(robotName(result.primary))} · ${esc(result.task)}</p>
+        <h4 class="section-label" style="margin-top:14px">${esc(t("commandPlan"))}</h4>
+        <div class="command-plan">${plans.map((plan, index) => `<article>
+          <div class="task-top"><strong>${esc(TEXT[state.lang].robots[ROBOT_IDS.indexOf(plan.id)])}</strong><span class="badge ${plan.status === t("approvalPending") ? "pending" : ""}">${esc(`${t("robot")} ${index + 2} · ${plan.status}`)}</span></div>
+          <p>${esc(plan.text)}</p>
+          <button type="button" class="button small" data-action="open-robot" data-robot="${plan.id}">${esc(t("openWorkspace"))}</button>
+        </article>`).join("")}</div>
+        <div class="command-links">
+          <a href="https://portfolio-is-available.vercel.app" target="_blank" rel="noopener noreferrer">${esc(t("portfolioLink"))}</a>
+          <a href="./taxi/index.html">${esc(t("taxiLink"))}</a>
+          <a href="./tools.html#tariffCalculator">${esc(t("tariffLink"))}</a>
+        </div>
+        <div class="command-output">
+          <div class="output-block"><strong>${esc(t("commandHook"))}</strong><p>${esc(result.hook)}</p></div>
+          <div class="output-block"><strong>${esc(t("commandScript"))}</strong><p>${esc(result.script)}</p></div>
+        </div>
+        ${result.hasEpisodePlan ? `<h4 class="section-label" style="margin-top:13px">${esc(t("episodeBreakdown"))} · ${esc(String(result.episodes.length))}</h4>
+          <ol class="command-episodes">${result.episodes.map(episode => `<li><strong>${esc(episode.title)}</strong> — ${esc(episode.hook)}</li>`).join("")}</ol>` : ""}
+        <div class="safety-note" style="margin-top:12px">${esc(`${releaseCopy} · ${approval}`)}${result.reason ? ` · ${esc(approvalReason({ reason:result.reason }))}` : ""}</div>
+        <div class="command-actions">
+          ${result.reason ? `<button type="button" class="button primary small" data-action="show-approvals">${esc(t("approvals"))}</button>` : ""}
+          <button type="button" class="button small" data-action="copy-result">${esc(t("copyResult"))}</button>
+          <button type="button" class="button small" data-action="download-result">${esc(t("downloadResult"))}</button>
+        </div>
+      </section>`;
+    }
     function renderOrchestrator() {
       return `${head("orchestrator", t("overview"), t("overviewSub"), `<span class="badge"><i class="status-dot"></i>${esc(t("active"))}</span>`)}
         <section class="card" style="margin-bottom:13px"><div class="card-heading"><h3>${esc(t("systemStatus"))}</h3><span class="badge">4 / 4</span></div>${statusCards()}</section>
+        ${renderCommandResult()}
         <div class="grid two">
           <section class="card"><div class="card-heading"><h3>${esc(t("routeTask"))}</h3><span class="badge">${esc(t("robot"))} 1 → 2–4</span></div>
             <p class="card-copy">${esc(t("routeHelp"))}</p>
@@ -690,7 +805,7 @@
               <button class="button primary" type="submit">${esc(t("sendTask"))}</button>
             </form>
           </section>
-          <section class="card"><div class="card-heading"><h3>${esc(t("approvals"))}</h3><span class="badge ${state.approvals.some(a => a.status === "pending") ? "pending" : ""}">${state.approvals.filter(a => a.status === "pending").length}</span></div>
+          <section class="card" id="approval-queue"><div class="card-heading"><h3>${esc(t("approvals"))}</h3><span class="badge ${state.approvals.some(a => a.status === "pending") ? "pending" : ""}">${state.approvals.filter(a => a.status === "pending").length}</span></div>
             <div class="safety-note" style="margin-bottom:11px">${esc(t("approvalNotice"))}</div>${renderApprovals()}
           </section>
         </div>
@@ -766,6 +881,16 @@
           </section>
           ${renderCheckList("apps", CHECKS.apps, t("appHealth"))}
         </div>
+        <section class="card" style="margin-top:13px"><div class="card-heading"><h3>${esc(t("managedApps"))}</h3><span class="badge pending">${esc(t("manualCheck"))}</span></div>
+          <div class="managed-apps">
+            <a href="https://portfolio-is-available.vercel.app" target="_blank" rel="noopener noreferrer">${esc(t("portfolioLink"))} · portfolio-is-available.vercel.app</a>
+            <a href="./taxi/index.html">${esc(t("taxiLink"))} · ./taxi/index.html</a>
+            <a href="./tools.html#tariffCalculator">${esc(t("tariffLink"))} · ./tools.html#tariffCalculator</a>
+          </div>
+          <p class="card-copy" style="margin-top:12px"><strong>${esc(t("deploymentReadiness"))}:</strong> ${esc(t("manualCheck"))}</p>
+          <p class="card-copy">${esc(t("deploymentChecklist"))}</p>
+          <p class="card-copy">${esc(t("noExternal"))}</p>
+        </section>
         <section class="card" style="margin-top:13px"><div class="card-heading"><h3>${esc(t("tasks"))}</h3></div>${renderTasks("apps")}</section>`;
     }
     function renderRelease() {
@@ -838,16 +963,39 @@
       }];
       return restored;
     }
+    function restoreCommandResult(value) {
+      if (!value || typeof value !== "object" || !ROBOT_IDS.includes(value.primary) || !TRACK_IDS.includes(value.track)) return null;
+      const episodes = Array.isArray(value.episodes) ? value.episodes.slice(0, 20).filter(item => item && typeof item === "object").map((item, index) => ({
+        number: index + 1,
+        title: redact(item.title, 160),
+        hook: redact(item.hook, 300)
+      })) : [];
+      const episodeCount = Number(value.episodeCount);
+      if (!Number.isInteger(episodeCount) || episodeCount < 1 || episodeCount > 20 || !episodes.length) return null;
+      return {
+        taskId: typeof value.taskId === "string" ? value.taskId.slice(0, 100) : "",
+        task: redact(value.task, 600),
+        primary: value.primary,
+        track: value.track,
+        episodeCount,
+        hasEpisodePlan: value.hasEpisodePlan === true,
+        sensitive: value.sensitive === true,
+        reason: ["billing", "publish", "destructive"].includes(value.reason) ? value.reason : "",
+        hook: redact(value.hook, 300),
+        script: redact(value.script, 1200),
+        episodes
+      };
+    }
     function approvalReasonFor(text) {
-      if (/\b(?:pay(?:ment)?s?|billing|invoice|charge|subscription)\b|төлем|шот|оплат[а-я]*|плат[её]ж[а-я]*|сч[её]т|биллинг/iu.test(text)) return "billing";
-      if (/\b(?:publish(?:ing)?|post(?:ing)?|store submission|release to store|account)\b|жариялау|жарияла|тіркелгі|аккаунт|публик[а-я]*/iu.test(text)) return "publish";
-      if (/\b(?:delete|deletion|remove|overwrite|replace all|drop table|destructive)\b|жою|өшір|қайта жаз|толық ауыстыр|удалить|удаление|перезапис|заменить весь/iu.test(text)) return "destructive";
+      if (/\b(?:pay(?:ment|ing)?s?|bill(?:ing)?|invoice|charge|subscription)\b|төлем|шот|оплат[а-я]*|плат[её]ж[а-я]*|сч[её]т|биллинг/iu.test(text)) return "billing";
+      if (/\b(?:publish(?:ing)?|post(?:ing)?|deploy(?:ing)?|store submission|release to store|account)\b|жариялау|жарияла|тіркелгі|аккаунт|публик[а-я]*|развернуть|развёртывать/iu.test(text)) return "publish";
+      if (/\b(?:delete|deletion|remove|overwrite|replace all|drop table|destroy|wipe|truncate|destructive)\b|жою|өшір|қайта жаз|толық ауыстыр|удалить|удаление|перезапис|заменить весь/iu.test(text)) return "destructive";
       return "";
     }
     function routeFor(text, choice = "auto") {
       if (choice !== "auto") return choice;
       if (/\b(?:store|release|security|privacy|app store|google play)\b|дүкен|релиз|қауіпсіздік|магазин|публик[а-я]*/iu.test(text)) return "release";
-      if (/\b(?:video|youtube|tiktok|script|story)\b|контент|видео|сценар[а-я]*/iu.test(text)) return "legend";
+      if (/\b(?:video|youtube|tiktok|script|story|series|episodes?|shorts?|football|soccer|footballers?|movies?|films?|actors?)\b|контент|видео|сценар[а-я]*/iu.test(text)) return "legend";
       return "apps";
     }
     function newTask(text, robot, forcedReason = "") {
@@ -881,14 +1029,100 @@
       const data = new FormData(form);
       const text = String(data.get("task") || "").trim();
       if (!text) return showToast(t("emptyTask"));
-      newTask(text, routeFor(text, String(data.get("robot") || "auto")));
+      const approvalReason = approvalReasonFor(text);
+      const primary = approvalReason ? "release" : routeFor(text, String(data.get("robot") || "auto"));
+      const task = newTask(text, primary);
+      state.commandResult = buildCommandResult(task, text, primary);
+      if (primary === "legend") {
+        state.studio = {
+          ...state.studio,
+          track: state.commandResult.track,
+          topic: state.commandResult.task.slice(0, 300),
+          episodeCount: state.commandResult.hasEpisodePlan ? String(state.commandResult.episodeCount) : ""
+        };
+        state.generated = generatedFromCommand(state.commandResult);
+        selectedEpisode = 0;
+      }
+      persist();
       form.reset();
       render();
+      const resultPanel = root.querySelector("#command-result");
+      resultPanel?.scrollIntoView({ behavior:"smooth", block:"start" });
+      resultPanel?.focus({ preventScroll:true });
     }
     function detectEpisodeCount(topic) {
-      const match = String(topic).match(/(?:^|[^\p{N}])(\d{1,2})\s*(?:episodes?|сер(?:ия|ии|ий|иям|иями|иях)?)(?=$|[^\p{L}])/iu);
+      const text = String(topic);
+      const match = text.match(/(?:^|[^\p{N}])(\d{1,2})\s*(?:-?\s*(?:episodes?|parts?|сер(?:ия|ии|ий|иям|иями|иях)?))(?=$|[^\p{L}])/iu)
+        || text.match(/(?:episodes?|parts?|сер(?:ия|ии|ий|иям|иями|иях)?)\s*(?:count)?\s*[:=]?\s*(\d{1,2})(?=$|[^\p{N}])/iu)
+        || text.match(/\bseries\s+of\s+(\d{1,2})\b/iu);
       const count = match ? Number(match[1]) : 0;
-      return count >= 1 && count <= 20 ? count : 0;
+      return count >= 1 ? Math.min(count, 20) : 0;
+    }
+    function commandTrack(text, primary) {
+      if (/\b(?:football|soccer|footballers?|famous footballers?)\b/iu.test(text)) return "football";
+      if (/\b(?:movies?|films?|actors?|famous actors?)\b/iu.test(text)) return "movies";
+      if (/\b(?:youtube|legend)\b/iu.test(text)) return "youtube";
+      if (/\b(?:tiktok|video|script|story|series|episodes?)\b/iu.test(text)) return state.studio.track;
+      if (primary === "legend") return state.studio.track;
+      return "youtube";
+    }
+    function buildCommandResult(task, originalText, primary) {
+      const safeTask = redact(task.text).trim();
+      const track = commandTrack(safeTask, primary);
+      const topic = conciseTopic(englishTopic(safeTask), 38);
+      const explicitCount = detectEpisodeCount(safeTask);
+      const hasEpisodePlan = explicitCount > 0 || /\b(?:series|episodes?|parts?)\b|сер(?:ия|ии|ий|иям|иями|иях)/iu.test(safeTask);
+      const episodeCount = explicitCount || (hasEpisodePlan ? 3 : 1);
+      const hook = track === "football"
+        ? `The football moment that changed everything about ${topic}.`
+        : track === "movies"
+          ? `This detail changes how you see ${topic}.`
+          : `The detail behind ${topic} is not what you expect.`;
+      const script = `0:00 — ${hook}\n0:03 — Set the scene: what made ${topic} stand out?\n0:08 — Reveal one surprising detail and why it matters.\n0:14 — What should viewers notice next?`;
+      const angles = [
+        "Set up the central question.",
+        "Reveal the detail most people miss.",
+        "Explain why this story still matters.",
+        "Explore the turning point.",
+        "Challenge a common assumption.",
+        "Follow an unexpected connection.",
+        "Revisit the moment from a new angle.",
+        "Share the lasting impact.",
+        "Connect the story to today.",
+        "End with the detail worth remembering."
+      ];
+      const episodes = Array.from({ length: episodeCount }, (_, index) => ({
+        number: index + 1,
+        title: `Episode ${index + 1}: ${topic}`,
+        hook: index === 0 ? hook : `Episode ${index + 1}: ${angles[(index - 1) % angles.length]}`
+      }));
+      const reason = approvalReasonFor(originalText);
+      return restoreCommandResult({
+        taskId: task.id, task: safeTask, primary, track, episodeCount, hasEpisodePlan,
+        sensitive: containsSensitive(originalText), reason, hook, script, episodes
+      });
+    }
+    function generatedFromCommand(result) {
+      const topic = result.task.slice(0, 300);
+      const shortTopic = conciseTopic(englishTopic(topic));
+      const hashtags = result.track === "football" ? "#football #soccer #footballtok #fyp"
+        : result.track === "movies" ? "#movies #film #movietok #fyp" : "#Shorts #Legend #Storytelling";
+      const youtube = result.track === "youtube";
+      const output = {
+        track: result.track,
+        topic,
+        platform: youtube ? "YouTube Shorts" : "US TikTok",
+        title: `${shortTopic}: The Detail That Made It Legendary`,
+        hook: result.hook,
+        script: result.script,
+        description: `A short ${youtube ? "YouTube Legend" : "US TikTok"} story about ${shortTopic}, made for vertical 9:16 video.\n\n${hashtags}`,
+        tags: `${shortTopic}, legendary stories, storytelling, 9:16 video`,
+        caption: `${result.hook} What detail did you notice?`,
+        question: `What stands out most about ${shortTopic}?`,
+        hashtags
+      };
+      output.episodes = createEpisodes(output, result.episodeCount, shortTopic);
+      return restoreGenerated(output);
     }
     function englishTopic(topic) {
       const cleanTopic = String(topic)
@@ -1035,6 +1269,32 @@
       const slug = state.generated.topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "legend-script";
       downloadBlob(new Blob([scriptMetadata()], { type: "text/plain;charset=utf-8" }), `${slug}-metadata.txt`);
       showToast(t("downloadComplete"));
+    }
+    function commandResultText() {
+      const result = state.commandResult;
+      if (!result) return "";
+      const approvalItem = state.approvals.find(item => item.taskId === result.taskId);
+      const approval = result.reason
+        ? approvalItem?.status === "approved" ? t("approvalGranted")
+          : approvalItem?.status === "rejected" ? t("approvalRejected") : t("approvalPending")
+        : t("approvalNotNeeded");
+      const trackName = t(({ youtube:"youtubeTrack", football:"footballTrack", movies:"moviesTrack" })[result.track]);
+      const releaseCopy = result.reason
+        ? approvalItem?.status === "approved" ? t("planReleaseApproved")
+          : approvalItem?.status === "rejected" ? t("planReleaseRejected") : t("planReleaseApproval")
+        : result.sensitive ? t("planReleaseRedacted") : t("planReleaseClean");
+      return [
+        t("readyResult"),
+        `${t("commandTask")}: ${result.task}`,
+        `${t("primaryRoute")}: ${robotName(result.primary)}`,
+        `${t("commandPlan")}:\nRobot 2 · ${t("planLegend").replace("{track}", trackName).replace("{episodes}", String(result.episodeCount))}\nRobot 3 · ${t("planApps")}\nRobot 4 · ${releaseCopy}`,
+        "Project links: https://portfolio-is-available.vercel.app · ./taxi/index.html · ./tools.html#tariffCalculator",
+        `${t("commandHook")}: ${result.hook}`,
+        `${t("commandScript")}:\n${result.script}`,
+        result.hasEpisodePlan ? `${t("episodeBreakdown")}:\n${result.episodes.map(episode => `${episode.number}. ${episode.title} — ${episode.hook}`).join("\n")}` : "",
+        `${t("securityScan")}: ${releaseCopy}`,
+        `${t("approvals")}: ${approval}`
+      ].filter(Boolean).join("\n\n");
     }
     function wrapCanvasText(context, text, maxWidth, maxLines) {
       const words = String(text).trim().split(/\s+/).filter(Boolean);
@@ -1320,6 +1580,19 @@
         render();
       } else if (action === "download-metadata") {
         downloadMetadata();
+      } else if (action === "copy-result") {
+        if (!navigator.clipboard?.writeText) return showToast(t("copyFailed"));
+        navigator.clipboard.writeText(commandResultText()).then(() => showToast(t("copiedResult"))).catch(error => {
+          console.error("Could not copy the command result:", error);
+          showToast(t("copyFailed"));
+        });
+      } else if (action === "download-result") {
+        if (!state.commandResult) return;
+        const slug = state.commandResult.task.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "command-result";
+        downloadBlob(new Blob([commandResultText()], { type:"text/plain;charset=utf-8" }), `${slug}-command-result.txt`);
+        showToast(t("downloadedResult"));
+      } else if (action === "show-approvals") {
+        document.getElementById("approval-queue")?.scrollIntoView({ behavior:"smooth", block:"center" });
       } else if (action === "render-video") {
         void recordVerticalVideo(button);
       } else if (action === "store-submit") {
