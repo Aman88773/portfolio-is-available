@@ -1,1125 +1,928 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="kk">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#6c5ce7">
-    <title>Amanjol — пайдалы қосымшалар</title>
-    <style>
-        :root {
-            --primary: #6c5ce7;
-            --primary-dark: #5541c7;
-            --accent: #0984e3;
-            --success: #00b894;
-            --danger: #d63031;
-            --text: #253048;
-            --muted: #667085;
-            --surface: rgba(255, 255, 255, 0.94);
-            --border: rgba(99, 110, 134, 0.14);
-        }
-        * {
-            box-sizing: border-box;
-        }
-        html {
-            scroll-behavior: smooth;
-        }
-        body {
-            min-height: 100vh;
-            margin: 0;
-            background:
-                radial-gradient(circle at top left, rgba(116, 185, 255, 0.45), transparent 32rem),
-                linear-gradient(135deg, #eef2ff, #f7f8fc);
-            text-align: left;
-            padding: 24px;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            color: var(--text);
-            transition: background 0.3s ease, color 0.3s ease;
-        }
-        body.dark-mode {
-            --text: #f1f5f9;
-            --muted: #cbd5e1;
-            --surface: rgba(30, 41, 59, 0.96);
-            --border: rgba(148, 163, 184, 0.18);
-            background: linear-gradient(145deg, #0f172a, #1e293b);
-        }
-        body.dark-mode .card {
-            background: var(--surface);
-            color: var(--text);
-        }
-        body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
-            background-color: #334155;
-            color: #fff;
-            border-color: #475569;
-        }
-        body.dark-mode li {
-            background: #485460;
-            color: white;
-        }
-        body.neon-mode {
-            --text: #dffff7;
-            --muted: #9be7d7;
-            --surface: rgba(26, 26, 46, 0.96);
-            --border: rgba(0, 255, 204, 0.25);
-            background: linear-gradient(145deg, #09091f, #151537);
-            color: var(--text);
-        }
-        body.neon-mode .card {
-            background: var(--surface);
-            color: var(--text);
-            box-shadow: 0 0 15px rgba(0,255,204,0.3);
-            border-color: #00ffcc;
-        }
-        body.neon-mode input, body.neon-mode select, body.neon-mode textarea {
-            background-color: #16213e;
-            color: #00ffcc;
-            border: 1px solid #00ffcc;
-        }
-        .dashboard {
-            width: min(1180px, 100%);
-            margin: 0 auto;
-        }
-        .hero {
-            margin-bottom: 18px;
-            padding: 28px;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            background: var(--surface);
-            box-shadow: 0 16px 40px rgba(71, 85, 105, 0.10);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 20px;
-        }
-        .hero h1 {
-            margin: 0 0 6px;
-            font-size: clamp(1.6rem, 4vw, 2.5rem);
-        }
-        .hero p {
-            margin: 0;
-            color: var(--muted);
-        }
-        .hero-clock {
-            flex: 0 0 auto;
-            min-width: 150px;
-            text-align: center;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 16px;
-            align-items: start;
-        }
-        .card {
-            min-width: 0;
-            background: var(--surface);
-            margin: 0;
-            padding: 20px;
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            box-shadow: 0 10px 28px rgba(71, 85, 105, 0.09);
-        }
-        .card h3 {
-            margin-top: 0;
-            line-height: 1.35;
-        }
-        input, select, textarea {
-            width: 100%;
-            min-height: 42px;
-            padding: 10px 12px;
-            border: 1px solid #d5dae3;
-            border-radius: 9px;
-            margin: 0 0 10px;
-            font: inherit;
-            font-size: 14px;
-            background: #fff;
-            color: var(--text);
-            outline: none;
-        }
-        input:focus, select:focus, textarea:focus {
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.14);
-        }
-        textarea {
-            min-height: 82px;
-            resize: vertical;
-        }
-        .btn {
-            min-height: 42px;
-            padding: 10px 14px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 9px;
-            font-size: 14px;
-            cursor: pointer;
-            font-weight: 700;
-            margin: 4px 2px;
-            transition: transform 0.16s ease, opacity 0.16s ease, box-shadow 0.16s ease;
-        }
-        .btn:hover {
-            transform: translateY(-1px);
-            box-shadow: 0 6px 14px rgba(79, 70, 229, 0.18);
-        }
-        .btn:focus-visible, a:focus-visible {
-            outline: 3px solid rgba(108, 92, 231, 0.35);
-            outline-offset: 2px;
-        }
-        .theme-card {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-        }
-        .theme-card h3 {
-            flex-basis: 100%;
-        }
-        ul {
-            list-style-type: none;
-            padding: 0;
-            text-align: left;
-            margin-top: 10px;
-        }
-        li {
-            background: #f1f2f6;
-            padding: 10px;
-            margin-top: 6px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 8px;
-            overflow-wrap: anywhere;
-        }
-        li span:first-child {
-            min-width: 0;
-        }
-        li input[type="checkbox"] {
-            width: 18px;
-            min-height: 18px;
-            margin: 0 6px 0 0;
-            accent-color: var(--primary);
-        }
-        .completed {
-            text-decoration: line-through;
-            opacity: 0.6;
-        }
-        .clock {
-            font-size: clamp(18px, 3vw, 24px);
-            font-weight: bold;
-            color: var(--primary);
-        }
-        .full-width {
-            grid-column: 1 / -1;
-        }
-        .projects-section {
-            margin-top: 18px;
-        }
-        .projects-section-header {
-            padding: 22px;
-            margin-bottom: 16px;
-        }
-        .projects-section-header h2 {
-            margin: 0 0 6px;
-        }
-        .projects-section-header p {
-            margin: 0;
-            color: var(--muted);
-        }
-        .project-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 16px;
-            margin-bottom: 16px;
-        }
-        .project-card {
-            position: relative;
-            overflow: hidden;
-            border-top: 4px solid var(--primary);
-        }
-        .project-card:nth-child(2) {
-            border-top-color: var(--success);
-        }
-        .project-card:nth-child(3) {
-            border-top-color: #fdcb6e;
-        }
-        .project-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: grid;
-            place-items: center;
-            margin-bottom: 12px;
-            background: rgba(108, 92, 231, 0.12);
-            font-size: 24px;
-        }
-        .project-card p {
-            color: var(--muted);
-            line-height: 1.55;
-        }
-        .project-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 6px;
-            margin: 12px 0;
-        }
-        .project-tag {
-            padding: 5px 8px;
-            border-radius: 999px;
-            background: rgba(108, 92, 231, 0.10);
-            color: var(--primary);
-            font-size: 12px;
-            font-weight: 700;
-        }
-        .project-details {
-            display: none;
-            margin-top: 10px;
-            padding: 10px 12px;
-            border-radius: 9px;
-            background: rgba(108, 92, 231, 0.08);
-            color: var(--text);
-        }
-        .project-details.open {
-            display: block;
-        }
-        .tariff-calculator {
-            max-width: 620px;
-        }
-        .tariff-summary {
-            display: grid;
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
-            margin: 12px 0;
-        }
-        .tariff-summary-item {
-            padding: 12px;
-            border-radius: 10px;
-            background: rgba(108, 92, 231, 0.08);
-        }
-        .tariff-summary-item span {
-            display: block;
-            color: var(--muted);
-            font-size: 13px;
-        }
-        .tariff-summary-item strong {
-            display: block;
-            margin-top: 4px;
-            color: var(--primary);
-            font-size: 18px;
-        }
-        #tripResult {
-            min-height: 24px;
-            margin: 12px 0 0;
-            font-weight: 800;
-            color: var(--success);
-        }
-        @media (max-width: 980px) {
-            .grid {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-            }
-            .project-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        @media (max-width: 640px) {
-            body {
-                padding: 12px;
-            }
-            .hero {
-                align-items: flex-start;
-                flex-direction: column;
-                padding: 20px;
-            }
-            .hero-clock {
-                min-width: 0;
-                text-align: left;
-            }
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            .card {
-                padding: 16px;
-            }
-            .btn {
-                width: 100%;
-                margin: 4px 0;
-            }
-            .theme-card .btn {
-                width: calc(50% - 4px);
-            }
-        }
-        @media (prefers-reduced-motion: reduce) {
-            html {
-                scroll-behavior: auto;
-            }
-            * {
-                transition: none !important;
-            }
-        }
-    </style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Clina Hub">
+  <link rel="icon" type="image/svg+xml" href="./icon.svg">
+  <link rel="apple-touch-icon" href="./icon.svg">
+  <link rel="manifest" href="./manifest.json">
+  <title>Clina 4-Robots Hub</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b0d12;
+      --surface: #12151d;
+      --surface-raised: #181c26;
+      --surface-soft: #1d222e;
+      --line: #282e3a;
+      --text: #f3f5fa;
+      --muted: #929bad;
+      --subtle: #687184;
+      --accent: #c4a16a;
+      --green: #64d6a5;
+      --red: #f18188;
+      --blue: #86a9ff;
+      --radius: 18px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    * { box-sizing: border-box; }
+    body {
+      min-width: 320px;
+      min-height: 100vh;
+      margin: 0;
+      color: var(--text);
+      background:
+        radial-gradient(ellipse at 82% -10%, rgba(80, 68, 109, .20), transparent 38rem),
+        radial-gradient(ellipse at -14% 34%, rgba(82, 105, 117, .11), transparent 34rem),
+        var(--bg);
+    }
+    button, input, select, textarea { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+      outline: 2px solid #d6bd91;
+      outline-offset: 3px;
+    }
+    .shell { width: min(1120px, calc(100% - 32px)); margin: 0 auto; padding: 22px 0 56px; }
+    .topbar { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .brand-mark {
+      display: grid; width: 42px; height: 42px; place-items: center; flex: 0 0 auto;
+      border: 1px solid #54483a; border-radius: 14px; color: #e8c990;
+      background: linear-gradient(145deg, #30291f, #191a1d);
+    }
+    .brand-mark svg { width: 25px; height: 25px; }
+    .brand-name { font-size: 15px; font-weight: 780; letter-spacing: -.025em; }
+    .brand-caption { margin-top: 3px; color: var(--muted); font-size: 11px; }
+    .top-actions { display: flex; align-items: center; gap: 9px; }
+    .language-switch { display: flex; padding: 4px; border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+    .language-switch button {
+      min-width: 39px; min-height: 34px; padding: 0 8px; border: 0; border-radius: 8px;
+      color: var(--muted); background: transparent; font-size: 11px; font-weight: 800; cursor: pointer;
+    }
+    .language-switch button[aria-pressed="true"] { color: #f2dfbd; background: #30291f; }
+    .icon-button, .button {
+      min-height: 42px; border: 1px solid var(--line); border-radius: 12px;
+      background: var(--surface-raised); color: var(--text); padding: 9px 13px;
+      font-size: 12px; font-weight: 720; cursor: pointer; transition: background .15s, border-color .15s, transform .15s;
+    }
+    .icon-button:hover, .button:hover { border-color: #4a5262; background: #222733; }
+    .button:active, .icon-button:active { transform: translateY(1px); }
+    .button.primary { border-color: #b08d58; color: #17130e; background: #d3b27e; }
+    .button.primary:hover { background: #e2c491; }
+    .button.danger { border-color: #5e3237; color: #ffc0c2; background: #2b191e; }
+    .button.subtle { background: transparent; }
+    .button.small { min-height: 34px; padding: 7px 10px; font-size: 11px; }
+    .button:disabled { cursor: not-allowed; opacity: .45; }
+    .intro { display: flex; justify-content: space-between; align-items: end; gap: 18px; margin-bottom: 18px; }
+    .eyebrow { color: var(--accent); font-size: 10px; font-weight: 850; letter-spacing: .16em; text-transform: uppercase; }
+    h1 { margin: 5px 0 0; font-size: clamp(24px, 5vw, 34px); letter-spacing: -.045em; line-height: 1.12; }
+    .intro-note { color: var(--muted); font-size: 12px; }
+    .greeting {
+      display: flex; align-items: center; gap: 14px; margin-bottom: 18px; padding: 16px;
+      border: 1px solid #3c3327; border-radius: var(--radius);
+      background: linear-gradient(110deg, rgba(91, 70, 43, .22), rgba(20, 23, 30, .88) 65%);
+    }
+    .greeting-icon { display: grid; width: 43px; height: 43px; flex: 0 0 auto; place-items: center; border-radius: 14px; background: #322a20; }
+    .greeting-icon svg { width: 25px; height: 25px; }
+    .greeting-label { margin-bottom: 4px; color: #d6b982; font-size: 10px; font-weight: 850; letter-spacing: .08em; text-transform: uppercase; }
+    .greeting p { margin: 0; color: #e9e9eb; font-size: 13px; line-height: 1.5; }
+    .robot-nav { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 9px; margin-bottom: 18px; }
+    .robot-tab {
+      display: flex; min-width: 0; min-height: 70px; align-items: center; gap: 10px; padding: 11px;
+      border: 1px solid var(--line); border-radius: 15px; background: rgba(18, 21, 29, .86);
+      text-align: left; cursor: pointer; transition: border-color .18s, background .18s, transform .18s;
+    }
+    .robot-tab:hover { transform: translateY(-1px); border-color: #444c59; }
+    .robot-tab[aria-current="page"] { border-color: var(--robot-color); background: color-mix(in srgb, var(--robot-color) 9%, #141720); }
+    .robot-icon { display: grid; width: 42px; height: 42px; flex: 0 0 auto; place-items: center; border: 1px solid color-mix(in srgb, var(--robot-color) 32%, transparent); border-radius: 13px; color: var(--robot-color); background: color-mix(in srgb, var(--robot-color) 10%, #141720); }
+    .robot-icon svg { width: 26px; height: 26px; }
+    .tab-copy { min-width: 0; }
+    .tab-copy strong { display: block; overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }
+    .tab-copy span { display: flex; align-items: center; gap: 6px; margin-top: 5px; color: var(--muted); font-size: 10px; }
+    .status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); box-shadow: 0 0 9px rgba(100, 214, 165, .42); }
+    .main-panel { min-height: 480px; }
+    .workspace-head { display: flex; justify-content: space-between; align-items: center; gap: 14px; margin-bottom: 15px; }
+    .workspace-title { display: flex; align-items: center; gap: 11px; min-width: 0; }
+    .workspace-title h2 { margin: 0; font-size: 18px; letter-spacing: -.025em; }
+    .workspace-title p { margin: 4px 0 0; color: var(--muted); font-size: 11px; }
+    .badge { display: inline-flex; align-items: center; gap: 6px; min-height: 26px; padding: 5px 9px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); background: #151821; font-size: 10px; font-weight: 700; white-space: nowrap; }
+    .badge.pending { border-color: #604c2f; color: #e3c18d; background: #2b241b; }
+    .badge.success { border-color: #295841; color: #8de0b7; background: #15241d; }
+    .grid { display: grid; gap: 13px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { min-width: 0; padding: 16px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(145deg, rgba(24, 28, 38, .94), rgba(17, 20, 28, .96)); }
+    .card h3 { margin: 0; font-size: 13px; letter-spacing: -.01em; }
+    .card > p, .card-copy { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.55; }
+    .card-heading { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 13px; }
+    .section-label { margin: 0 0 9px; color: var(--subtle); font-size: 9px; font-weight: 850; letter-spacing: .13em; text-transform: uppercase; }
+    .field { display: grid; gap: 6px; margin-bottom: 12px; }
+    .field label { color: #cdd2dd; font-size: 11px; font-weight: 700; }
+    input, select, textarea {
+      width: 100%; min-height: 42px; padding: 10px 11px; border: 1px solid #303645; border-radius: 11px;
+      color: var(--text); background: #0f1219; font-size: 12px;
+    }
+    textarea { min-height: 84px; resize: vertical; line-height: 1.5; }
+    input::placeholder, textarea::placeholder { color: #697285; }
+    select { cursor: pointer; }
+    .form-row { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .inline-form { display: flex; align-items: center; gap: 8px; }
+    .inline-form > input { flex: 1; }
+    .status-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+    .status-card { display: flex; align-items: center; gap: 9px; min-width: 0; padding: 11px 9px; border: 1px solid var(--line); border-radius: 13px; background: #141821; }
+    .status-card .robot-icon { width: 34px; height: 34px; border-radius: 11px; }
+    .status-card .robot-icon svg { width: 21px; height: 21px; }
+    .status-card strong { display: block; overflow: hidden; font-size: 10px; text-overflow: ellipsis; white-space: nowrap; }
+    .status-card span { display: block; margin-top: 4px; color: var(--muted); font-size: 9px; }
+    .list { display: grid; gap: 8px; }
+    .empty { padding: 19px 12px; border: 1px dashed #303644; border-radius: 13px; color: var(--muted); text-align: center; font-size: 11px; line-height: 1.5; }
+    .task-item, .approval-item, .activity-item { padding: 12px; border: 1px solid var(--line); border-radius: 13px; background: #141821; }
+    .task-top, .approval-top { display: flex; justify-content: space-between; align-items: start; gap: 10px; }
+    .task-item strong, .approval-item strong { font-size: 11px; line-height: 1.45; }
+    .task-meta { margin-top: 5px; color: var(--muted); font-size: 10px; }
+    .activity-item { display: grid; grid-template-columns: 8px 1fr; gap: 9px; }
+    .activity-item:before { content: ""; width: 6px; height: 6px; margin-top: 4px; border-radius: 50%; background: var(--accent); }
+    .activity-copy { color: #d7dbe3; font-size: 10px; line-height: 1.45; }
+    .activity-copy small { display: block; margin-top: 4px; color: var(--subtle); font-size: 9px; }
+    .checklist { display: grid; gap: 8px; }
+    .check-row { display: flex; align-items: flex-start; gap: 9px; padding: 9px 10px; border: 1px solid #292f3b; border-radius: 11px; background: #131720; cursor: pointer; }
+    .check-row input { width: 15px; min-height: 15px; height: 15px; margin: 1px 0 0; accent-color: #c3a16c; }
+    .check-row span { color: #cbd1dc; font-size: 10px; line-height: 1.45; }
+    .check-row input:checked + span { color: var(--green); }
+    .output-grid { display: grid; gap: 9px; margin-top: 14px; }
+    .output-block { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #10131a; }
+    .output-block strong { display: block; margin-bottom: 6px; color: #d3b27e; font-size: 10px; }
+    .output-block p { margin: 0; color: #d8dce4; font-size: 11px; line-height: 1.55; white-space: pre-wrap; }
+    .safety-note { padding: 10px 11px; border: 1px solid #51432d; border-radius: 11px; color: #ddc69f; background: #241f18; font-size: 10px; line-height: 1.5; }
+    .notice { margin-bottom: 12px; padding: 11px 12px; border: 1px solid #5b3738; border-radius: 12px; color: #ffc5c5; background: #291a1c; font-size: 11px; line-height: 1.5; }
+    .toast { position: fixed; z-index: 20; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); width: min(380px, calc(100% - 32px)); padding: 12px 14px; border: 1px solid #51432d; border-radius: 13px; color: #f2dfbd; background: #201d19; box-shadow: 0 14px 40px #0008; font-size: 11px; line-height: 1.5; }
+    .footer { margin-top: 18px; color: var(--subtle); font-size: 10px; text-align: center; }
+    .projects { margin-top: 38px; padding-top: 27px; border-top: 1px solid var(--line); }
+    .projects-heading { margin-bottom: 15px; }
+    .projects-heading h2 { margin: 5px 0 0; font-size: 21px; letter-spacing: -.03em; }
+    .projects-heading p { margin: 7px 0 0; color: var(--muted); font-size: 11px; line-height: 1.5; }
+    .projects-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .project-card { display: flex; min-width: 0; flex-direction: column; padding: 15px; border: 1px solid var(--line); border-radius: 15px; background: linear-gradient(145deg, rgba(24, 28, 38, .94), rgba(17, 20, 28, .96)); }
+    .project-card-icon { display: grid; width: 38px; height: 38px; margin-bottom: 12px; place-items: center; border: 1px solid #363d4a; border-radius: 12px; background: #1b2029; font-size: 18px; }
+    .project-card h3 { margin: 0; font-size: 13px; }
+    .project-card p { flex: 1; margin: 7px 0 13px; color: var(--muted); font-size: 10px; line-height: 1.55; }
+    .project-link { display: inline-flex; min-height: 37px; align-items: center; justify-content: center; border: 1px solid #414958; border-radius: 10px; color: #e7d2ab; background: #201e1a; font-size: 10px; font-weight: 750; text-align: center; text-decoration: none; }
+    .project-link:hover { border-color: #9c8057; background: #29251f; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    @media (max-width: 760px) {
+      .shell { width: min(100% - 24px, 580px); padding-top: max(14px, env(safe-area-inset-top)); }
+      .topbar { align-items: flex-start; margin-bottom: 20px; }
+      .brand-name { font-size: 13px; }
+      .brand-caption { font-size: 10px; }
+      .top-actions { gap: 6px; }
+      .language-switch button { min-width: 34px; padding: 0 6px; }
+      .reset-button { width: 40px; padding: 0; overflow: hidden; font-size: 0; }
+      .reset-button::before { content: "↻"; font-size: 20px; }
+      .intro { display: block; margin-bottom: 13px; }
+      .intro-note { margin-top: 7px; }
+      .greeting { align-items: flex-start; padding: 13px; }
+      .robot-nav { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-bottom: 14px; }
+      .robot-tab { min-height: 64px; padding: 9px; gap: 8px; }
+      .robot-icon { width: 37px; height: 37px; }
+      .tab-copy strong { font-size: 10px; }
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .status-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .projects-grid { grid-template-columns: 1fr; }
+      .projects { margin-top: 30px; padding-top: 22px; }
+      .main-panel { min-height: 400px; }
+      .workspace-head { align-items: flex-start; }
+      .workspace-title h2 { font-size: 16px; }
+      .form-row { gap: 8px; }
+      .card { padding: 14px; }
+    }
+    @media (max-width: 390px) {
+      .shell { width: calc(100% - 20px); }
+      .brand { gap: 8px; }
+      .brand-mark { width: 36px; height: 36px; }
+      .brand-name { font-size: 11px; }
+      .brand-caption { font-size: 9px; }
+      .robot-tab { gap: 7px; }
+      .robot-icon { width: 33px; height: 33px; }
+      .tab-copy strong { font-size: 9px; }
+      .tab-copy span { font-size: 9px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; transition-duration: .01ms !important; animation-duration: .01ms !important; }
+    }
+  </style>
 </head>
-<body id="mainBody">
-    <main class="dashboard">
-    <header class="hero">
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none"><path d="M16 3 27 9v14l-11 6L5 23V9l11-6Z" stroke="currentColor" stroke-width="1.7"/><path d="m11 16 3.2 3.2L21.5 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><circle cx="16" cy="3" r="1.8" fill="currentColor"/></svg>
+        </div>
         <div>
-            <h1 id="welcomeUser">Сәлем! Менің атым Аманжол</h1>
-            <p>Телефонға да, компьютерге де ыңғайлы пайдалы құралдар.</p>
+          <div class="brand-name">Clina 4-Robots Hub</div>
+          <div class="brand-caption" data-i18n="personalWorkspace"></div>
         </div>
-        <div class="hero-clock">
-            <div id="liveClock" class="clock">00:00:00</div>
+      </div>
+      <div class="top-actions">
+        <div class="language-switch" role="group" aria-label="Language">
+          <button type="button" data-lang="kk">KZ</button>
+          <button type="button" data-lang="ru">RU</button>
+          <button type="button" data-lang="en">EN</button>
         </div>
+        <button type="button" class="icon-button reset-button" data-action="reset" data-i18n="reset"></button>
+      </div>
     </header>
-
-    <div class="grid">
-    <div class="card theme-card">
-        <h3>Дизайнды өзгерту</h3>
-        <button class="btn" style="background-color: #6c5ce7;" onclick="setTheme('dark')">🌙 Түнгі</button>
-        <button class="btn" style="background-color: #00cec9;" onclick="setTheme('neon')">⚡ Неон</button>
-        <button class="btn" style="background-color: #e84393;" onclick="ozgertuFon()">🎨 Түс</button>
+    <div class="intro">
+      <div><div class="eyebrow" data-i18n="privateWorkspace"></div><h1 data-i18n="hubTitle"></h1></div>
+      <div class="intro-note" data-i18n="demoMode"></div>
     </div>
-    
-    <div class="card">
-        <h3>👤 Есіміңізді енгізіңіз:</h3>
-        <input type="text" id="usernameInput" placeholder="Атыңыз...">
-        <br>
-        <button class="btn" onclick="saveName()">Сақтау</button>
-    </div>
-
-    <!-- 1. GPS & Мекенжай -->
-    <div class="card">
-        <h3>🛰️ Спутниктік GPS & Мекенжай</h3>
-        <button class="btn" style="background-color: #0984e3; width: 85%;" onclick="getLocationGPS()">📍 GPS координат табу</button><br>
-        <input type="text" id="addressInput" placeholder="Қала немесе мекенжай..."><br>
-        <button class="btn" style="background-color: #00b894;" onclick="openMapAddress()">🗺️ Картадан ашу</button>
-        <h4 id="gpsResult" style="margin-top: 10px;"></h4>
-    </div>
-
-    <!-- 2. Телефон нөмірін анықтау -->
-    <div class="card">
-        <h3>📱 Телефон нөмірін анықтау</h3>
-        <input type="text" id="phoneInput" placeholder="+7 (701) ХХХ-ХХ-ХХ"><br>
-        <button class="btn" style="background-color: #e17055;" onclick="checkPhone()">Нөмірді тексеру</button>
-        <h4 id="phoneResult" style="margin-top: 10px;"></h4>
-    </div>
-
-
-    <!-- Жазбалар кітапшасы -->
-    <div class="card">
-        <h3>📌 Жеке жазбалар кітапшасы</h3>
-        <textarea id="noteInput" placeholder="Ойларыңызды жазыңыз..." style="height: 60px;"></textarea>
-        <br>
-        <button class="btn" style="background-color: #0984e3;" onclick="saveNote()">Жазбаны сақтау</button>
-        <ul id="noteList"></ul>
-    </div>
-
-    <!-- Тас, қайшы, қағаз -->
-    <div class="card">
-        <h3>✌️ Тас, қайшы, қағаз</h3>
-        <button class="btn" style="background-color: #6c5ce7;" onclick="playRPS('Тас')">✊ Тас</button>
-        <button class="btn" style="background-color: #00b894;" onclick="playRPS('Қағаз')">✋ Қағаз</button>
-        <button class="btn" style="background-color: #d63031;" onclick="playRPS('Қайшы')">✌️ Қайшы</button>
-        <h4 id="rpsResult" style="margin-top: 10px;"></h4>
-    </div>
-
-    <!-- Спорттық таймер -->
-    <div class="card">
-        <h3>⏱️ Спорттық таймер</h3>
-        <h2 id="workoutDisplay" style="color: #e17055; margin: 10px 0;">00:30</h2>
-        <button class="btn" style="background-color: #00b894;" onclick="startWorkout()">Бастау</button>
-        <button class="btn" style="background-color: #d63031;" onclick="stopWorkout()">Тоқтату</button>
-    </div>
-
-    <!-- Әзілдер -->
-    <div class="card">
-        <h3>😂 Күн әзілі</h3>
-        <p id="jokeText" style="font-weight: bold; color: #6c5ce7; min-height: 40px;">Күлкі — өмірді ұзартады!</p>
-        <button class="btn" style="background-color: #fdcb6e; color: #2d3436;" onclick="showJoke()">Әзіл оқу 🎭</button>
-    </div>
-
-    <!-- BMI -->
-    <div class="card">
-        <h3>⚖️ Дене салмағының индексі (BMI)</h3>
-        <input type="number" id="heightInput" placeholder="Бойыңыз (см)"><br>
-        <input type="number" id="weightInput" placeholder="Салмағыңыз (кг)"><br>
-        <button class="btn" style="background-color: #00b894;" onclick="calcBMI()">Есептеу</button>
-        <h4 id="bmiResult" style="margin-top: 10px;"></h4>
-    </div>
-
-    <!-- Санды тап -->
-    <div class="card">
-        <h3>🎯 Санды тап ойыны (1-100)</h3>
-        <input type="number" id="guessInput" placeholder="Сан енгізіңіз..."><br>
-        <button class="btn" style="background-color: #e17055;" onclick="checkGuess()">Тексеру</button>
-        <h4 id="guessResult" style="margin-top: 10px;"></h4>
-    </div>
-
-    <!-- Істер тізімі -->
-    <div class="card">
-        <h3>📝 Істер тізімі</h3>
-        <input type="text" id="taskInput" placeholder="Жаңа тапсырма...">
-        <br>
-        <button class="btn" onclick="taskQosu()">Қосу</button>
-        <ul id="taskList"></ul>
-    </div>
-
-    <!-- Цитаталар -->
-    <div class="card">
-        <h3>💡 Күн цитатасы</h3>
-        <p id="quoteText" style="font-style: italic; color: #0984e3; min-height: 40px;">"Бүгін ең жақсы күн!"</p>
-        <button class="btn" style="background-color: #00cec9; color: white;" onclick="showQuote()">Шабыт алу 🌟</button>
-    </div>
-
-    <!-- Секундомер -->
-    <div class="card">
-        <h3>⏱️ Секундомер</h3>
-        <h2 id="stopwatchDisplay" style="color: #e17055; margin: 10px 0;">00:00</h2>
-        <button class="btn" style="background-color: #00b894;" onclick="startStopwatch()">Бастау</button>
-        <button class="btn" style="background-color: #e17055;" onclick="stopStopwatch()">Тоқтату</button>
-        <button class="btn" style="background-color: #d63031;" onclick="resetStopwatch()">Нөлдеу</button>
-    </div>
-
-    <!-- Викторина -->
-    <div class="card">
-        <h3>🧠 Мини-викторина</h3>
-        <p id="quizQuestion">HTML нені білдіреді?</p>
-        <button class="btn" style="background-color: #6c5ce7; width: 85%;" onclick="checkQuiz(true)">А) Markup Language</button><br>
-        <button class="btn" style="background-color: #6c5ce7; width: 85%;" onclick="checkQuiz(false)">Б) Hyper Tool Machine</button>
-        <h4 id="quizResult" style="margin-top: 10px;"></h4>
-    </div>
-
-    <!-- Пікірлер -->
-    <div class="card">
-        <h3>💬 Пікір қалдыру</h3>
-        <select id="ratingSelect" style="width: 74%;">
-            <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (Керемет)</option>
-            <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (Жақсы)</option>
-            <option value="⭐⭐⭐">⭐⭐⭐ (Жаман емес)</option>
-        </select><br>
-        <input type="text" id="feedbackInput" placeholder="Пікіріңізді жазыңыз..."><br>
-        <button class="btn" style="background-color: #0984e3;" onclick="saveFeedback()">Жіберу</button>
-        <ul id="feedbackList"></ul>
-    </div>
-
-    <!-- Ауа райы -->
-    <div class="card">
-        <h3>☀️ Ауа райы болжамы</h3>
-        <input type="text" id="cityInput" placeholder="Қала аты (Мысалы: Astana)"><br>
-        <button class="btn" style="background-color: #0984e3;" onclick="getWeather()">Тексеру</button>
-        <h4 id="weatherResult" style="margin-top: 10px;"></h4>
-    </div>
-
-    <!-- Пароль -->
-    <div class="card">
-        <h3>🔐 Құпиясөз генераторы</h3>
-        <button class="btn" style="background-color: #e17055;" onclick="generatePassword()">Пароль жасау</button>
-        <input type="text" id="passwordOutput" placeholder="Шыққан пароль..." readonly style="margin-top: 10px; text-align: center; font-weight: bold;">
-    </div>
-
-    <!-- Валюта -->
-    <div class="card">
-        <h3>💱 Валюта конвертері</h3>
-        <input type="number" id="tengeInput" placeholder="Теңге мөлшері (₸)"><br>
-        <select id="currencySelect" style="width: 74%;">
-            <option value="usd">USD (Доллар ~ 500₸)</option>
-            <option value="eur">EUR (Еуро ~ 540₸)</option>
-        </select><br>
-        <button class="btn" style="background-color: #00b894;" onclick="convertCurrency()">Айырбастау</button>
-        <h4 id="currencyResult" style="margin-top: 10px;">Нәтиже: </h4>
-    </div>
-
-    <!-- Бюджет -->
-    <div class="card">
-        <h3>💰 Бюджет есептегіш</h3>
-        <input type="number" id="incomeInput" placeholder="Кіріс (Табыс) ₸"><br>
-        <input type="number" id="expenseInput" placeholder="Шығыс (Жұмсау) ₸"><br>
-        <button class="btn" style="background-color: #00b894;" onclick="calcBudget()">Есептеу</button>
-        <h4 id="budgetResult" style="margin-top: 10px;">Қалдық: 0 ₸</h4>
-    </div>
-
-    <!-- Калькулятор -->
-    <div class="card">
-        <h3>🧮 Толық калькулятор</h3>
-        <input type="number" id="num1" placeholder="Сан 1"><br>
-        <input type="number" id="num2" placeholder="Сан 2"><br>
-        <select id="operator" style="width: 74%;">
-            <option value="+">Қосу (+)</option>
-            <option value="-">Азайту (-)</option>
-            <option value="*">Көбейту (*)</option>
-            <option value="/">Бөлу (/)</option>
-        </select><br>
-        <button class="btn" onclick="eseptert()">Есептеу</button>
-        <h3 id="calcResult" style="color: #0984e3; margin-top: 10px;"></h3>
-    </div>
-
-    <!-- Кликер -->
-    <div class="card">
-        <h3>🎮 Кликер ойыны</h3>
-        <p>Басқан саны: <span id="clickCount" style="font-weight: bold; color: #e17055; font-size: 20px;">0</span></p>
-        <button class="btn" style="background-color: #00b894;" onclick="basu()">Бас мені! 🚀</button>
-        <br>
-        <button class="btn" style="background-color: #d63031; padding: 5px 10px; font-size: 12px;" onclick="qalpynaKeltyru()">Қалпына келтіру</button>
-    </div>
-
-    <!-- ИИ Көмекші -->
-    <div class="card">
-        <h3>🤖 ИИ Көмекші</h3>
-        <input type="text" id="aiQuestion" placeholder="Сұрақ қойыңыз">
-        <button class="btn" onclick="askAI()">Сұрау</button>
-        <p id="aiAnswer" style="margin-top: 10px; font-weight: 500;">Жауап осында шығады...</p>
-    </div>
-
-    <!-- Ұзындық конвертері -->
-    <div class="card">
-        <h3>📏 Ұзындық конвертері</h3>
-        <input type="number" id="metersInput" min="0" step="0.01" placeholder="Метр енгізіңіз (м)">
-        <button class="btn" onclick="convertLength()">Өзгерту</button>
-        <p id="lengthResult">Нәтиже: -</p>
-    </div>
-    </div>
-
-    <section class="projects-section" aria-labelledby="projectsHeading">
-        <div class="card projects-section-header">
-            <h2 id="projectsHeading">Жобалар мен құралдар</h2>
-            <p>Қолданылған жобалар және Жайремге арналған локальді сапар калькуляторы.</p>
-        </div>
-
-        <div class="project-grid">
-            <article class="card project-card">
-                <div class="project-icon" aria-hidden="true">🚕</div>
-                <h3>Жайрем такси қызметі</h3>
-                <p>Жайрем ауданындағы жергілікті жолақыға арналған ыңғайлы такси қызметі концепті.</p>
-                <div class="project-tags" aria-label="Технологиялар">
-                    <span class="project-tag">Қызмет</span>
-                    <span class="project-tag">Жергілікті тариф</span>
-                </div>
-                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'taxiDetails')">Толығырақ</button>
-                <a class="btn" href="taxi/" style="display: inline-flex; align-items: center; text-decoration: none;">Такси қосымшасын ашу</a>
-                <div class="project-details" id="taxiDetails">Сапар санын және жолақы сомасын калькулятор арқылы жылдам есептеуге арналған.</div>
-            </article>
-
-            <article class="card project-card">
-                <div class="project-icon" aria-hidden="true">🧮</div>
-                <h3>Веб-калькулятор</h3>
-                <p>Қарапайым арифметикалық есептер мен күнделікті сандарды жылдам есептейтін веб-құрал.</p>
-                <div class="project-tags" aria-label="Технологиялар">
-                    <span class="project-tag">HTML</span>
-                    <span class="project-tag">JavaScript</span>
-                </div>
-                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'calculatorDetails')">Толығырақ</button>
-                <div class="project-details" id="calculatorDetails">Қосу, азайту, көбейту және бөлу амалдарын телефон мен компьютерден орындауға болады.</div>
-            </article>
-
-            <article class="card project-card">
-                <div class="project-icon" aria-hidden="true">🎬</div>
-                <h3>Бейнемонтаж / контент</h3>
-                <p>Әлеуметтік желілерге арналған қысқа видео, монтаж және контент дайындау бағыты.</p>
-                <div class="project-tags" aria-label="Технологиялар">
-                    <span class="project-tag">Монтаж</span>
-                    <span class="project-tag">Контент</span>
-                </div>
-                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'videoDetails')">Толығырақ</button>
-                <div class="project-details" id="videoDetails">Қысқа роликтер, субтитрлер, өңдеу және әлеуметтік желі форматтарына бейімдеу ұсынылады.</div>
-            </article>
-        </div>
-
-        <div class="card tariff-calculator">
-            <h3>🚕 Жайрем локальді тариф калькуляторы</h3>
-            <p style="color: var(--muted);">Бір сапардың бағасы: <strong>400 ₸</strong></p>
-            <label for="tripCount">Сапар саны</label>
-            <input type="number" id="tripCount" min="1" step="1" placeholder="Мысалы: 5" inputmode="numeric">
-            <button class="btn" type="button" style="background-color: #00b894;" onclick="calculateTrips()">Жалпы соманы есептеу</button>
-            <div class="tariff-summary">
-                <div class="tariff-summary-item">
-                    <span>Бір сапар</span>
-                    <strong>400 ₸</strong>
-                </div>
-                <div class="tariff-summary-item">
-                    <span>Сапар саны</span>
-                    <strong id="tripCountResult">0</strong>
-                </div>
-            </div>
-            <p id="tripResult" role="status" aria-live="polite">Жалпы сома: 0 ₸</p>
-        </div>
+    <section class="greeting" aria-live="polite">
+      <div class="greeting-icon" id="greeting-icon"></div>
+      <div><div class="greeting-label" id="greeting-label"></div><p id="greeting-text"></p></div>
     </section>
+    <nav class="robot-nav" id="robot-nav" aria-label="Robot workspaces"></nav>
+    <main class="main-panel" id="workspace" aria-live="polite"></main>
+    <footer class="footer" data-i18n="localOnly"></footer>
+    <section class="projects" aria-labelledby="projects-heading">
+      <header class="projects-heading">
+        <div class="eyebrow" data-i18n="projectsEyebrow"></div>
+        <h2 id="projects-heading" data-i18n="projectsTitle"></h2>
+        <p data-i18n="projectsIntro"></p>
+      </header>
+      <div class="projects-grid">
+        <article class="project-card">
+          <div class="project-card-icon" aria-hidden="true">🚕</div>
+          <h3>Zhairem Taxi</h3>
+          <p data-i18n="taxiDesc"></p>
+          <a class="project-link" href="./taxi/index.html" data-i18n="openProject"></a>
+        </article>
+        <article class="project-card">
+          <div class="project-card-icon" aria-hidden="true">🧮</div>
+          <h3 data-i18n="tariffTitle"></h3>
+          <p data-i18n="tariffDesc"></p>
+          <a class="project-link" href="./tools.html#tariffCalculator" data-i18n="openProject"></a>
+        </article>
+        <article class="project-card">
+          <div class="project-card-icon" aria-hidden="true">🧰</div>
+          <h3 data-i18n="toolsTitle"></h3>
+          <p data-i18n="toolsDesc"></p>
+          <a class="project-link" href="./tools.html" data-i18n="openProject"></a>
+        </article>
+      </div>
+    </section>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
 
-    <footer class="card" style="margin-top: 18px;">
-        <h2>Байланыс</h2>
-        <a href="tel:+77478632459">+7 (747) 863-24-59</a>
-    </footer>
-    </main>
-
-    <script>
-        let targetNumber = Math.floor(Math.random() * 100) + 1;
-
-        function readArray(key) {
-            try {
-                const value = JSON.parse(localStorage.getItem(key) || '[]');
-                return Array.isArray(value) ? value : [];
-            } catch (error) {
-                localStorage.removeItem(key);
-                return [];
-            }
-        }
-
-        window.onload = function() {
-            let savedTheme = localStorage.getItem('appTheme');
-            if(savedTheme) {
-                document.body.classList.add(savedTheme);
-            }
-            let savedName = localStorage.getItem('userName');
-            if(savedName) {
-                document.getElementById('welcomeUser').textContent = "Сәлем! Менің атым " + savedName;
-            }
-            let savedCount = localStorage.getItem('clickCount');
-            if(savedCount) {
-                san = Number(savedCount);
-                document.getElementById('clickCount').textContent = san;
-            }
-            loadTasks();
-            loadFeedbacks();
-            loadNotes();
+  <script>
+    "use strict";
+    const STORE_KEY = "clina-4-robots-hub-v1";
+    const LANGS = ["kk", "ru", "en"];
+    const ROBOT_IDS = ["orchestrator", "legend", "apps", "release"];
+    const CHECKS = {
+      apps: ["loadSpeed", "coreButtons", "mobileReady", "consoleErrors"],
+      store: ["policy", "permissions", "testing", "storeAssets"],
+      studio: ["retention", "views", "watchTime"]
+    };
+    const TEXT = {
+      kk: {
+        personalWorkspace:"Жеке жұмыс кеңістігі", privateWorkspace:"ЖЕКЕ ОРТА · 4 АРНАЙЫ РОБОТ", language:"Тіл", robotNav:"Робот жұмыс кеңістіктері",
+        hubTitle:"Бүгін не жасаймыз?", demoMode:"Демо режим · сыртқы әрекеттер орындалмайды",
+        reset:"Демо деректерін тазарту", resetConfirm:"Барлық тапсырмалар, мақұлдаулар мен журнал тазаланады. Жалғастырасыз ба?",
+        localOnly:"Жеке деректер тек осы құрылғыда сақталады · Құпиясөздер мен токендер сақталмайды",
+        active:"Белсенді", ready:"Дайын", waiting:"Кезекте", needsApproval:"Мақұлдау қажет",
+        robots:["Басқарушы", "Legend студиясы", "Қосымшалар", "Релиз және қорғаныс"],
+        subtitles:["Бағыттау және мақұлдау", "Қысқа видео сценарийлері", "Әзірлеу және бақылау", "Дүкенге шығару және қауіпсіздік"],
+        greetings:[
+          "Сәлем! Мен сіздің Басқарушы роботыңызбын. Бүгін қандай тапсырма орындаймыз?",
+          "Сәлем! Мен сіздің Legend Studio роботыңызбын. Бүгін қандай оқиғаны вирусқа айналдырамыз?",
+          "Сәлем! Мен сіздің Қосымшалар роботыңызбын. Қандай өнімді жақсартамыз?",
+          "Сәлем! Мен сіздің Релиз және қорғаныс роботыңызбын. Жариялауға дайынбыз ба?"
+        ],
+        robot:"Робот", orchestrator:"Басқарушы", legend:"Legend Studio", apps:"Қосымшалар және бақылау", release:"Релиз және қорғаныс",
+        overview:"Басқару орталығы", overviewSub:"Төрт роботтың күйі, тапсырмалар және шешімдер бір жерде.",
+        systemStatus:"РОБОТТАР КҮЙІ", routeTask:"Тапсырманы бағыттау", routeHelp:"Тапсырманы орындаушы роботқа жіберіңіз. Төлем, жариялау және жойғыш өзгерістер алдымен мақұлдауды талап етеді.",
+        taskPlaceholder:"Мысалы: мобильді экрандағы профиль батырмасын тексеру",
+        destination:"Орындаушы", automatic:"Автоматты бағыттау", toLegend:"Legend Studio", toApps:"Қосымшалар роботы", toRelease:"Релиз роботы",
+        sendTask:"Тапсырманы жіберу", approvals:"Мақұлдау кезегі", noApprovals:"Мақұлдауды қажет ететін тапсырма жоқ.",
+        approve:"РАСТАЙМЫН", reject:"Бас тарту", activity:"Әрекеттер журналы", noActivity:"Әрекеттер әзірге жоқ.",
+        tasks:"Тапсырмалар", noTasks:"Тапсырмалар әлі жоқ.", pending:"Күтуде", approved:"Мақұлданды", rejected:"Қабылданбады", inProgress:"Бағытталды", complete:"Аяқталды",
+        created:"Жасалды", approvalReason:"Мақұлдау себебі", billingReason:"Төлем немесе есепшот", publishReason:"Тіркелгі немесе жариялау", destructiveReason:"Файлды жою не маңызды кодты қайта жазу",
+        taskReceived:"Тапсырма бағытталды", approvalRequested:"Мақұлдау кезегіне жіберілді", decisionApproved:"Мақұлдау берілді", decisionRejected:"Сұрау қабылданбады",
+        approvalNotice:"Мақұлдау тек демо сұрауын растайды. Бұл қолданба ешбір есепшотты төлемейді, файлды өзгертпейді немесе жарияламайды.",
+        studioSub:"9:16 · 1080p · English short-form контент", aspect:"9:16 тік формат", studioTitle:"Legend Studio",
+        topic:"Тақырып / идея", topicPlaceholder:"Мысалы: күнделікті әдеттер туралы таңғаларлық факт",
+        platform:"Платформа", youtube:"YouTube Shorts", tiktok:"Шетелдік TikTok",
+        hookStyle:"Hook стилі", curiosity:"Қызығушылық тудыратын", boldClaim:"Батыл мәлімдеме", question:"Күтпеген сұрақ",
+        generate:"Сценарий жасау", generated:"ЖАСАЛҒАН КОНТЕНТ", hook:"Вирустық hook", script:"English script", description:"YouTube сипаттамасы + хэштегтер",
+        caption:"TikTok жазбасы", performance:"Өнімділік тізімі", retention:"Алғашқы секундтарда назарды ұстау", views:"Мақсатты қаралымдарды бақылау", watchTime:"Көру уақытын тексеру",
+        requestPublish:"Жариялауға мақұлдау сұрау", outputEmpty:"Тақырып енгізіп, сценарийді жасаңыз.",
+        appSub:"Жаңа мүмкіндік, қате түзету және жүйе саулығы", appTask:"Әзірлеу тапсырмасы", taskType:"Тапсырма түрі",
+        newFeature:"Жаңа мүмкіндік", bugFix:"Қате түзету", uiux:"UI / UX жақсарту", healthCheck:"Саулықты тексеру",
+        detail:"Тапсырма сипаттамасы", detailPlaceholder:"Не өзгерту керек? Жою немесе негізгі кодты қайта жазу қажет болса, нақты көрсетіңіз.",
+        logTask:"Тапсырманы тіркеу", generatePrompt:"Әзірлеу промптын жасау", developmentPrompt:"ТАЗА ӘЗІРЛЕУ ПРОМПТЫ",
+        appHealth:"Қосымша саулығының тізімі", loadSpeed:"Жүктелу жылдамдығын тексеру", coreButtons:"Негізгі батырмаларды тексеру",
+        mobileReady:"Мобильді бейімделуді тексеру", consoleErrors:"Консоль және істен шығу қателерін тексеру",
+        releaseSub:"App Store / Google Play дайындығы", storeTitle:"Дүкенге шығу дайындығы", storeChecklist:"Дүкен дайындығы тізімі",
+        policy:"Талаптар мен дүкен саясатын тексеру", permissions:"Құпиялық пен қолданба рұқсаттарын тексеру", testing:"Құрылғыда және нұсқаларда сынау", storeAssets:"Скриншоттар мен дүкен материалдарын дайындау",
+        securityScan:"Қауіпсіздік сканері", scannerHelp:"Мәтінді тексеру браузерде орындалады. Құпия деректер енгізілсе, олар сақталмайды және бірден өшіріледі.",
+        scannerPlaceholder:"Мәтінді осында қойып тексеріңіз — ешқашан сақталмайды",
+        scan:"Қауіпсіздікті тексеру", scanClean:"Қауіпті үлгі анықталған жоқ. Дегенмен жеке құпияларды ешқашан қоймаңыз.",
+        scanWarning:"Қауіпті мәтін анықталды: құпиясөз, API кілті/токен немесе төлем нөмірі болуы мүмкін. Мәтін тазартылды және сақталмады.",
+        submission:"Дүкенге жіберу", billing:"Төлем немесе есепшот", requestSubmission:"Дүкенге жіберуді сұрау",
+        storeActions:"Релиз әрекеттері", requestBilling:"Төлемді мақұлдауға жіберу",
+        statusReady:"Жұмыс істеуге дайын", statusBusy:"Тапсырма бар", statusQueue:"Кезекте сұрау бар",
+        emptyTask:"Тапсырма мәтінін енгізіңіз.", emptyTopic:"Алдымен тақырыпты енгізіңіз.", emptyDetail:"Тапсырма сипаттамасын енгізіңіз.",
+        noExternal:"Бұл демонстрация сыртқы сервистерге қосылмайды.",
+        statusLabels:["Орталық бағыттау", "Контент әзірлеу", "Қосымша әзірлеу", "Дүкен және қауіпсіздік"],
+        activityRoute:"{robot} роботы үшін тапсырма жасалды", activityApproval:"Мақұлдау сұрауы жасалды", activityApprove:"Мақұлданды: {task}", activityReject:"Қабылданбады: {task}",
+        noteRedacted:"Қауіпсіздік үшін ықтимал құпия дерек журнал мен сақтауға дейін жасырылды.",
+        errorStorage:"Деректер осы құрылғыда сақталмады. Браузер қоймасын тексеріңіз.",
+        restoreError:"Сақталған демо деректері оқылмады; таза жұмыс кеңістігі ашылды.",
+        doneButton:"Демо аяқталды деп белгілеу", completedToast:"Демо тапсырмасы аяқталды деп белгіленді.",
+        projectsEyebrow:"ҚОСЫМША ЖОБАЛАР", projectsTitle:"Жобаларым мен құралдарым",
+        projectsIntro:"Жайрем таксиі, жолақы калькуляторы және барлық жеке құралдарыңыз осы жерде.",
+        taxiDesc:"Жайремдегі жергілікті жолақыға арналған GPS-навигация және такси құралы.",
+        tariffTitle:"Жайрем жолақы калькуляторы", tariffDesc:"Бір сапарға 400 ₸ тарифімен сапар құнының жалпы сомасын есептеңіз.",
+        toolsTitle:"Жеке құралдар жинағы", toolsDesc:"Калькуляторлар, GPS, жазбалар, таймерлер және бастапқы беттегі басқа құралдар.",
+        openProject:"Құралды ашу →"
+      },
+      ru: {
+        personalWorkspace:"Личное рабочее пространство", privateWorkspace:"ЛИЧНОЕ ПРОСТРАНСТВО · 4 СПЕЦИАЛИЗИРОВАННЫХ РОБОТА", language:"Язык", robotNav:"Рабочие пространства роботов",
+        hubTitle:"Что создаём сегодня?", demoMode:"Демо-режим · внешние действия не выполняются",
+        reset:"Сбросить демо-данные", resetConfirm:"Все задачи, согласования и журнал будут очищены. Продолжить?",
+        localOnly:"Личные данные хранятся только на этом устройстве · Пароли и токены не сохраняются",
+        active:"Активен", ready:"Готов", waiting:"В очереди", needsApproval:"Требует согласования",
+        robots:["Управляющий", "Legend Studio", "Приложения", "Релиз и защита"],
+        subtitles:["Маршрутизация и согласование", "Сценарии коротких видео", "Разработка и мониторинг", "Публикация и безопасность"],
+        greetings:[
+          "Привет! Я ваш Управляющий робот. Какую задачу выполним сегодня?",
+          "Привет! Я ваш робот Legend Studio. Какую историю сегодня сделаем вирусной?",
+          "Привет! Я ваш робот приложений. Какой продукт улучшим?",
+          "Привет! Я ваш робот релиза и защиты. Готовы к публикации?"
+        ],
+        robot:"Робот", orchestrator:"Управляющий", legend:"Legend Studio", apps:"Конструктор и мониторинг приложений", release:"Релиз и защита",
+        overview:"Центр управления", overviewSub:"Статус четырёх роботов, задачи и решения в одном месте.",
+        systemStatus:"СТАТУС РОБОТОВ", routeTask:"Маршрутизация задачи", routeHelp:"Отправьте задачу исполнителю. Платежи, публикация и разрушительные изменения требуют согласования.",
+        taskPlaceholder:"Например: проверить кнопку профиля на мобильном экране",
+        destination:"Исполнитель", automatic:"Автоматически", toLegend:"Legend Studio", toApps:"Робот приложений", toRelease:"Робот релиза",
+        sendTask:"Отправить задачу", approvals:"Очередь согласования", noApprovals:"Нет задач, требующих согласования.",
+        approve:"Подтвердить", reject:"Отклонить", activity:"Журнал действий", noActivity:"Пока нет действий.",
+        tasks:"Задачи", noTasks:"Пока нет задач.", pending:"Ожидает", approved:"Согласовано", rejected:"Отклонено", inProgress:"Направлена", complete:"Завершена",
+        created:"Создано", approvalReason:"Причина согласования", billingReason:"Платёж или счёт", publishReason:"Аккаунт или публикация", destructiveReason:"Удаление файла или важная перезапись кода",
+        taskReceived:"Задача направлена", approvalRequested:"Добавлено в очередь согласования", decisionApproved:"Согласование выдано", decisionRejected:"Запрос отклонён",
+        approvalNotice:"Согласование подтверждает только демо-запрос. Приложение не проводит платежи, не меняет файлы и ничего не публикует.",
+        studioSub:"9:16 · 1080p · короткий контент на английском", aspect:"Вертикальный формат 9:16", studioTitle:"Legend Studio",
+        topic:"Тема / идея", topicPlaceholder:"Например: удивительный факт о повседневных привычках",
+        platform:"Платформа", youtube:"YouTube Shorts", tiktok:"Зарубежный TikTok",
+        hookStyle:"Стиль хука", curiosity:"Любопытство", boldClaim:"Смелое заявление", question:"Неожиданный вопрос",
+        generate:"Создать сценарий", generated:"СОЗДАННЫЙ КОНТЕНТ", hook:"Вирусный хук", script:"Сценарий на английском", description:"Описание YouTube + хэштеги",
+        caption:"Подпись TikTok", performance:"Чек-лист эффективности", retention:"Удержать внимание в первые секунды", views:"Отслеживать целевые просмотры", watchTime:"Проверить время просмотра",
+        requestPublish:"Запросить согласование публикации", outputEmpty:"Введите тему и создайте сценарий.",
+        appSub:"Новые функции, исправления и проверка состояния", appTask:"Задача разработки", taskType:"Тип задачи",
+        newFeature:"Новая функция", bugFix:"Исправление ошибки", uiux:"Улучшение UI / UX", healthCheck:"Проверка состояния",
+        detail:"Описание задачи", detailPlaceholder:"Что нужно изменить? Укажите, если требуется удаление или перезапись основной логики.",
+        logTask:"Добавить задачу", generatePrompt:"Создать промпт разработки", developmentPrompt:"ЧИСТЫЙ ПРОМПТ ДЛЯ РАЗРАБОТКИ",
+        appHealth:"Чек-лист состояния приложения", loadSpeed:"Проверить скорость загрузки", coreButtons:"Проверить основные кнопки",
+        mobileReady:"Проверить адаптацию для мобильных", consoleErrors:"Проверить ошибки консоли и сбои",
+        releaseSub:"Готовность к App Store / Google Play", storeTitle:"Готовность к публикации", storeChecklist:"Чек-лист готовности магазина",
+        policy:"Проверить требования и правила магазина", permissions:"Проверить приватность и разрешения приложения", testing:"Проверить на устройствах и версиях", storeAssets:"Подготовить скриншоты и материалы магазина",
+        securityScan:"Сканер безопасности", scannerHelp:"Текст проверяется в браузере. Введённые секреты не сохраняются и сразу удаляются.",
+        scannerPlaceholder:"Вставьте текст для проверки — он никогда не сохраняется",
+        scan:"Проверить безопасность", scanClean:"Опасные шаблоны не обнаружены. Всё равно не вставляйте секреты.",
+        scanWarning:"Обнаружен потенциально опасный текст: пароль, API-ключ/токен или платёжный номер. Текст очищен и не сохранён.",
+        submission:"Отправка в магазин", billing:"Платёж или счёт", requestSubmission:"Запросить отправку в магазин",
+        storeActions:"Действия релиза", requestBilling:"Запросить согласование платежа",
+        statusReady:"Готов к работе", statusBusy:"Есть задача", statusQueue:"Есть запрос в очереди",
+        emptyTask:"Введите текст задачи.", emptyTopic:"Сначала введите тему.", emptyDetail:"Введите описание задачи.",
+        noExternal:"Демонстрация не подключена к внешним сервисам.",
+        statusLabels:["Центральная маршрутизация", "Создание контента", "Разработка приложения", "Магазин и безопасность"],
+        activityRoute:"Создана задача для робота «{robot}»", activityApproval:"Создан запрос на согласование", activityApprove:"Согласовано: {task}", activityReject:"Отклонено: {task}",
+        noteRedacted:"Потенциальный секрет скрыт перед записью в журнал и хранилище.",
+        errorStorage:"Не удалось сохранить данные на устройстве. Проверьте хранилище браузера.",
+        restoreError:"Не удалось прочитать демо-данные; открыто чистое рабочее пространство.",
+        doneButton:"Отметить демо завершённым", completedToast:"Демо-задача отмечена завершённой.",
+        projectsEyebrow:"ДОПОЛНИТЕЛЬНЫЕ ПРОЕКТЫ", projectsTitle:"Мои проекты и инструменты",
+        projectsIntro:"Zhairem Taxi, калькулятор поездок и другие личные инструменты собраны здесь.",
+        taxiDesc:"GPS-навигация и такси с местными тарифами для Жайрема.",
+        tariffTitle:"Калькулятор тарифа Жайрема", tariffDesc:"Рассчитайте стоимость поездок по тарифу 400 ₸ за поездку.",
+        toolsTitle:"Личные инструменты", toolsDesc:"Калькуляторы, GPS, заметки, таймеры и другие инструменты с исходной страницы.",
+        openProject:"Открыть инструмент →"
+      },
+      en: {
+        personalWorkspace:"Personal workspace", privateWorkspace:"PRIVATE WORKSPACE · 4 SPECIALIST ROBOTS", language:"Language", robotNav:"Robot workspaces",
+        hubTitle:"What are we building today?", demoMode:"Demo mode · no external actions are performed",
+        reset:"Reset demo data", resetConfirm:"All tasks, approvals, and activity will be cleared. Continue?",
+        localOnly:"Personal data stays on this device · Passwords and tokens are never saved",
+        active:"Active", ready:"Ready", waiting:"In queue", needsApproval:"Needs approval",
+        robots:["Orchestrator", "Legend Studio", "Apps Builder", "Release & Shield"],
+        subtitles:["Routing and approvals", "Short-form video scripts", "Development and monitoring", "Store release and security"],
+        greetings:[
+          "Hello! I am your Orchestrator Robot. What task shall we execute today?",
+          "Hello! I am your Legend Studio Robot. What story shall we make go viral today?",
+          "Hello! I am your Apps Builder Robot. What product shall we improve?",
+          "Hello! I am your Release & Shield Robot. Are we ready for release?"
+        ],
+        robot:"Robot", orchestrator:"Orchestrator", legend:"Legend Studio", apps:"Apps Builder & Monitor", release:"Release & Shield",
+        overview:"Orchestrator", overviewSub:"Current status, tasks, and decisions for all four robots.",
+        systemStatus:"ROBOT STATUS", routeTask:"Route a task", routeHelp:"Send a task to a specialist. Payments, publishing, and destructive changes require approval.",
+        taskPlaceholder:"e.g. Check the profile button on the mobile screen",
+        destination:"Destination", automatic:"Automatic routing", toLegend:"Legend Studio", toApps:"Apps Builder", toRelease:"Release & Shield",
+        sendTask:"Route task", approvals:"Approval queue", noApprovals:"No tasks need approval.",
+        approve:"Approve", reject:"Reject", activity:"Activity log", noActivity:"No activity yet.",
+        tasks:"Tasks", noTasks:"No tasks yet.", pending:"Pending", approved:"Approved", rejected:"Rejected", inProgress:"Routed", complete:"Completed",
+        created:"Created", approvalReason:"Approval reason", billingReason:"Payment or billing", publishReason:"Account or publishing", destructiveReason:"File deletion or major code overwrite",
+        taskReceived:"Task routed", approvalRequested:"Added to approval queue", decisionApproved:"Approval granted", decisionRejected:"Request rejected",
+        approvalNotice:"Approval only confirms a demo request. This app does not charge accounts, modify files, or publish anything.",
+        studioSub:"9:16 · 1080p · English short-form content", aspect:"9:16 vertical format", studioTitle:"Legend Studio",
+        topic:"Topic / theme", topicPlaceholder:"e.g. a surprising fact about everyday habits",
+        platform:"Platform", youtube:"YouTube Shorts", tiktok:"Foreign TikTok",
+        hookStyle:"Hook style", curiosity:"Curiosity gap", boldClaim:"Bold claim", question:"Unexpected question",
+        generate:"Generate script", generated:"GENERATED CONTENT", hook:"Viral hook", script:"English script", description:"YouTube description + hashtags",
+        caption:"TikTok caption", performance:"Performance checklist", retention:"Hold attention in the opening seconds", views:"Track target views", watchTime:"Review watch time",
+        requestPublish:"Request publishing approval", outputEmpty:"Enter a topic and generate a script.",
+        appSub:"Feature work, bug fixes, and health checks", appTask:"Development task", taskType:"Task type",
+        newFeature:"New feature", bugFix:"Bug fix", uiux:"UI / UX improvement", healthCheck:"Health check",
+        detail:"Task details", detailPlaceholder:"What should change? Call out any file deletion or major core overwrite.",
+        logTask:"Log development task", generatePrompt:"Generate dev prompt", developmentPrompt:"CLEAN DEVELOPMENT PROMPT",
+        appHealth:"App health checklist", loadSpeed:"Check load speed", coreButtons:"Check core buttons",
+        mobileReady:"Check mobile responsiveness", consoleErrors:"Check console and crash errors",
+        releaseSub:"App Store / Google Play readiness", storeTitle:"Store readiness", storeChecklist:"Store readiness checklist",
+        policy:"Verify requirements and store policy", permissions:"Review privacy and app permissions", testing:"Test across devices and versions", storeAssets:"Prepare screenshots and store assets",
+        securityScan:"Security scanner", scannerHelp:"Scanning runs in your browser. Submitted secrets are never saved and are cleared immediately.",
+        scannerPlaceholder:"Paste text to scan — it is never stored",
+        scan:"Scan for sensitive data", scanClean:"No sensitive patterns detected. Never paste secrets into a demo app.",
+        scanWarning:"Potentially sensitive text detected: a password, API key/token, or payment number. The text was cleared and not saved.",
+        submission:"Store submission", billing:"Payment or billing", requestSubmission:"Request store submission",
+        storeActions:"Release actions", requestBilling:"Request billing approval",
+        statusReady:"Ready to work", statusBusy:"Task in progress", statusQueue:"Request in queue",
+        emptyTask:"Enter a task.", emptyTopic:"Enter a topic first.", emptyDetail:"Enter task details.",
+        noExternal:"This demo is not connected to external services.",
+        statusLabels:["Central routing", "Content creation", "App development", "Store and security"],
+        activityRoute:"Task created for {robot}", activityApproval:"Approval request created", activityApprove:"Approved: {task}", activityReject:"Rejected: {task}",
+        noteRedacted:"Potential sensitive data was redacted before logging and storage.",
+        errorStorage:"Data could not be saved on this device. Check browser storage settings.",
+        restoreError:"Saved demo data could not be read; a clean workspace was opened.",
+        doneButton:"Mark demo as completed", completedToast:"Demo task marked complete.",
+        projectsEyebrow:"MORE PROJECTS", projectsTitle:"My Projects & Tools",
+        projectsIntro:"Zhairem Taxi, the trip tariff calculator, and your other personal tools are all here.",
+        taxiDesc:"GPS navigation and a local-fare taxi tool for Zhairem.",
+        tariffTitle:"Zhairem Tariff Calculator", tariffDesc:"Calculate total trip fares at 400 ₸ per ride.",
+        toolsTitle:"Personal Tools Collection", toolsDesc:"Calculators, GPS, notes, timers, and the other tools from the original landing page.",
+        openProject:"Open tool →"
+      }
+    };
+    const ROBOTS = {
+      orchestrator: { color: "#e5b55f", icon: "command" },
+      legend: { color: "#e477a1", icon: "film" },
+      apps: { color: "#5bd1a6", icon: "monitor" },
+      release: { color: "#86a9ff", icon: "rocket" }
+    };
+    const emptyState = () => ({
+      lang: "kk", active: "orchestrator", tasks: [], approvals: [], logs: [],
+      checks: { apps: [false, false, false, false], store: [false, false, false, false], studio: [false, false, false] }
+    });
+    let state = emptyState();
+    let generated = null;
+    let devPrompt = "";
+    let toastTimer;
+    const root = document.getElementById("workspace");
+    const t = key => TEXT[state.lang][key] ?? key;
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
+      "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
+    })[char]);
+    const robotName = id => ({
+      orchestrator: t("orchestrator"), legend: t("legend"), apps: t("apps"), release: t("release")
+    })[id];
+    function iconSvg(id) {
+      const color = ROBOTS[id].color;
+      const shapes = {
+        command: '<path d="M16 2.8 27 7v8.2c0 6.7-4.5 11.6-11 14-6.5-2.4-11-7.3-11-14V7l11-4.2Z"/><circle cx="16" cy="14" r="4.3"/><path d="M16 9.7V6.8m0 14.4v-2.9m-4.3-4.3H8.8m14.4 0h-2.9M13 17l-2.2 2.2m10.4-10.4L19 11"/><path d="m12.9 14.2 2.1 2.1 4.2-4.4"/>',
+        film: '<rect x="4" y="6" width="17" height="19" rx="3"/><path d="M9 6v19m7-19v19M4 12h5m-5 7h5m7-7h5m-5 7h5"/><path d="m24 8 1.4 2.9 3.1.5-2.3 2.2.5 3.1-2.7-1.5-2.7 1.5.5-3.1-2.3-2.2 3.1-.5L24 8Z"/><path d="m12 13 5 2.5-5 2.5v-5Z"/>',
+        monitor: '<rect x="3" y="5" width="26" height="20" rx="3"/><path d="M8 16h4l2.4-5 4.1 9 2.2-4H25"/><path d="M12 29h8m-4-4v4"/><path d="m10 9-2 2 2 2m12-4 2 2-2 2"/>',
+        rocket: '<path d="M18 5c3.4-2.1 7.3-2.6 9.4-2.4.2 2.1-.3 6-2.4 9.4l-7.8 7.8-7-7L18 5Z"/><circle cx="21.5" cy="8.5" r="2.1"/><path d="m10.2 12.8-4.7.7-3 3 6.7 1.1m8 2.2-.7 4.7-3 3-1.1-6.7"/><path d="M7.5 21.5c-2.4.4-4.1 2.1-4.5 4.5 2.4-.4 4.1-2.1 4.5-4.5Z"/><rect x="14" y="21" width="10" height="8" rx="1.7"/><path d="M16.5 21v-2a2.5 2.5 0 0 1 5 0v2"/>'
+      };
+      return `<svg viewBox="0 0 32 32" fill="none" stroke="${color}" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shapes[ROBOTS[id].icon]}</svg>`;
+    }
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORE_KEY);
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (!saved || typeof saved !== "object") throw new Error("Invalid saved state");
+        const fresh = emptyState();
+        state = {
+          ...fresh,
+          lang: LANGS.includes(saved.lang) ? saved.lang : fresh.lang,
+          active: ROBOT_IDS.includes(saved.active) ? saved.active : fresh.active,
+          tasks: Array.isArray(saved.tasks) ? saved.tasks.filter(item => item && typeof item.id === "string" && typeof item.text === "string").slice(0, 100).map(item => ({ ...item, text: redact(item.text) })) : [],
+          approvals: Array.isArray(saved.approvals) ? saved.approvals.filter(item => item && typeof item.id === "string" && typeof item.taskId === "string").slice(0, 100) : [],
+          logs: Array.isArray(saved.logs) ? saved.logs.filter(item => item && typeof item.message === "string").slice(0, 100).map(item => ({ ...item, message: redact(item.message), note: typeof item.note === "string" ? redact(item.note) : "" })) : [],
+          checks: {
+            apps: Array.isArray(saved.checks?.apps) ? CHECKS.apps.map((_, i) => saved.checks.apps[i] === true) : fresh.checks.apps,
+            store: Array.isArray(saved.checks?.store) ? CHECKS.store.map((_, i) => saved.checks.store[i] === true) : fresh.checks.store,
+            studio: Array.isArray(saved.checks?.studio) ? CHECKS.studio.map((_, i) => saved.checks.studio[i] === true) : fresh.checks.studio
+          }
         };
-
-        function updateClock() {
-            let now = new Date();
-            let hours = String(now.getHours()).padStart(2, '0');
-            let minutes = String(now.getMinutes()).padStart(2, '0');
-            let seconds = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('liveClock').textContent = `⏰ ${hours}:${minutes}:${seconds}`;
+        persist();
+      } catch (error) {
+        console.error("Could not restore Clina demo state:", error);
+        state = emptyState();
+        queueMicrotask(() => showToast(t("restoreError")));
+      }
+    }
+    function persist() {
+      try {
+        localStorage.setItem(STORE_KEY, JSON.stringify(state));
+        return true;
+      } catch (error) {
+        console.error("Could not persist Clina demo state:", error);
+        showToast(t("errorStorage"));
+        return false;
+      }
+    }
+    function showToast(message) {
+      const toast = document.getElementById("toast");
+      toast.textContent = message;
+      toast.hidden = false;
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => { toast.hidden = true; }, 4200);
+    }
+    function addLog(message, note = false) {
+      state.logs.unshift({ message, note: note ? t("noteRedacted") : "", time: new Date().toISOString() });
+      state.logs = state.logs.slice(0, 60);
+    }
+    function statusFor(id) {
+      const pending = state.approvals.some(item => item.status === "pending" && item.robot === id);
+      const active = state.tasks.some(item => item.robot === id && (item.status === "routed" || item.status === "approved"));
+      return pending ? t("statusQueue") : active ? t("statusBusy") : t("statusReady");
+    }
+    function greet() {
+      const id = state.active;
+      document.getElementById("greeting-icon").innerHTML = iconSvg(id);
+      document.getElementById("greeting-label").textContent = robotName(id);
+      document.getElementById("greeting-text").textContent = TEXT[state.lang].greetings[ROBOT_IDS.indexOf(id)];
+    }
+    function renderChrome() {
+      document.documentElement.lang = state.lang;
+      document.querySelectorAll("[data-i18n]").forEach(node => {
+        const key = node.dataset.i18n;
+        node.textContent = t(key);
+      });
+      document.querySelectorAll("[data-lang]").forEach(button => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === state.lang));
+      });
+      const nav = document.getElementById("robot-nav");
+      document.querySelector(".language-switch").setAttribute("aria-label", t("language"));
+      nav.setAttribute("aria-label", t("robotNav"));
+      nav.innerHTML = ROBOT_IDS.map((id, index) => `
+        <button type="button" class="robot-tab" style="--robot-color:${ROBOTS[id].color}" data-robot="${id}" aria-current="${state.active === id ? "page" : "false"}">
+          <span class="robot-icon">${iconSvg(id)}</span>
+          <span class="tab-copy"><strong>${esc(TEXT[state.lang].robots[index])}</strong><span><i class="status-dot"></i>${esc(state.active === id ? t("active") : t("ready"))}</span></span>
+        </button>`).join("");
+      greet();
+    }
+    function head(id, title, subtitle, badge = "") {
+      return `<div class="workspace-head">
+        <div class="workspace-title"><span class="robot-icon" style="--robot-color:${ROBOTS[id].color}">${iconSvg(id)}</span>
+          <div><h2>${esc(title)}</h2><p>${esc(subtitle)}</p></div></div>${badge}</div>`;
+    }
+    function statusCards() {
+      return `<div class="status-grid">${ROBOT_IDS.map((id, i) => `<div class="status-card">
+        <span class="robot-icon" style="--robot-color:${ROBOTS[id].color}">${iconSvg(id)}</span>
+        <div><strong>${esc(TEXT[state.lang].robots[i])}</strong><span>${esc(statusFor(id))}</span></div>
+      </div>`).join("")}</div>`;
+    }
+    function taskStatus(status) {
+      const key = { pending:"pending", approved:"approved", rejected:"rejected", routed:"inProgress", complete:"complete" }[status] || "pending";
+      const cls = status === "approved" || status === "complete" ? "success" : status === "pending" ? "pending" : "";
+      return `<span class="badge ${cls}">${esc(t(key))}</span>`;
+    }
+    function renderTasks(robotFilter) {
+      const items = state.tasks.filter(item => !robotFilter || item.robot === robotFilter);
+      if (!items.length) return `<div class="empty">${esc(t("noTasks"))}</div>`;
+      return `<div class="list">${items.slice(0, 12).map(item => `<article class="task-item">
+        <div class="task-top"><strong>${esc(item.text)}</strong>${taskStatus(item.status)}</div>
+        <div class="task-meta">${esc(robotName(item.robot))} · ${esc(new Date(item.createdAt).toLocaleString(state.lang === "kk" ? "kk-KZ" : state.lang === "ru" ? "ru-RU" : "en-US", { dateStyle:"short", timeStyle:"short" }))}</div>
+        ${item.status === "approved" ? `<div style="margin-top:9px"><button class="button small" data-action="complete-task" data-task="${esc(item.id)}">${esc(t("doneButton"))}</button></div>` : ""}
+      </article>`).join("")}</div>`;
+    }
+    function approvalReason(item) {
+      const key = { billing:"billingReason", publish:"publishReason", destructive:"destructiveReason" }[item.reason] || "approvalReason";
+      return t(key);
+    }
+    function renderApprovals() {
+      const items = state.approvals.filter(item => item.status === "pending");
+      if (!items.length) return `<div class="empty">${esc(t("noApprovals"))}</div>`;
+      return `<div class="list">${items.map(item => {
+        const task = state.tasks.find(row => row.id === item.taskId);
+        if (!task) return "";
+        return `<article class="approval-item"><div class="approval-top"><strong>${esc(task.text)}</strong><span class="badge pending">${esc(t("needsApproval"))}</span></div>
+          <div class="task-meta">${esc(robotName(item.robot))} · ${esc(t("approvalReason"))}: ${esc(approvalReason(item))}</div>
+          <div class="inline-form" style="margin-top:10px">
+            <button type="button" class="button primary small" data-action="approve" data-approval="${esc(item.id)}">${esc(t("approve"))}</button>
+            <button type="button" class="button danger small" data-action="reject" data-approval="${esc(item.id)}">${esc(t("reject"))}</button>
+          </div></article>`;
+      }).join("")}</div>`;
+    }
+    function renderActivity() {
+      if (!state.logs.length) return `<div class="empty">${esc(t("noActivity"))}</div>`;
+      return `<div class="list">${state.logs.slice(0, 12).map(log => `<div class="activity-item"><div class="activity-copy">${esc(log.message)}${log.note ? `<small>${esc(log.note)}</small>` : ""}<small>${esc(new Date(log.time).toLocaleString(state.lang === "kk" ? "kk-KZ" : state.lang === "ru" ? "ru-RU" : "en-US", { dateStyle:"short", timeStyle:"short" }))}</small></div></div>`).join("")}</div>`;
+    }
+    function renderOrchestrator() {
+      return `${head("orchestrator", t("overview"), t("overviewSub"), `<span class="badge"><i class="status-dot"></i>${esc(t("active"))}</span>`)}
+        <section class="card" style="margin-bottom:13px"><div class="card-heading"><h3>${esc(t("systemStatus"))}</h3><span class="badge">4 / 4</span></div>${statusCards()}</section>
+        <div class="grid two">
+          <section class="card"><div class="card-heading"><h3>${esc(t("routeTask"))}</h3><span class="badge">${esc(t("robot"))} 1 → 2–4</span></div>
+            <p class="card-copy">${esc(t("routeHelp"))}</p>
+            <form id="route-form" style="margin-top:13px">
+              <div class="field"><label for="route-text">${esc(t("tasks"))}</label><textarea id="route-text" name="task" maxlength="600" placeholder="${esc(t("taskPlaceholder"))}" required></textarea></div>
+              <div class="field"><label for="route-to">${esc(t("destination"))}</label><select id="route-to" name="robot"><option value="auto">${esc(t("automatic"))}</option><option value="legend">${esc(t("toLegend"))}</option><option value="apps">${esc(t("toApps"))}</option><option value="release">${esc(t("toRelease"))}</option></select></div>
+              <button class="button primary" type="submit">${esc(t("sendTask"))}</button>
+            </form>
+          </section>
+          <section class="card"><div class="card-heading"><h3>${esc(t("approvals"))}</h3><span class="badge ${state.approvals.some(a => a.status === "pending") ? "pending" : ""}">${state.approvals.filter(a => a.status === "pending").length}</span></div>
+            <div class="safety-note" style="margin-bottom:11px">${esc(t("approvalNotice"))}</div>${renderApprovals()}
+          </section>
+        </div>
+        <div class="grid two" style="margin-top:13px">
+          <section class="card"><div class="card-heading"><h3>${esc(t("tasks"))}</h3></div>${renderTasks()}</section>
+          <section class="card"><div class="card-heading"><h3>${esc(t("activity"))}</h3></div>${renderActivity()}</section>
+        </div>`;
+    }
+    function renderGenerated() {
+      if (!generated) return `<div class="empty">${esc(t("outputEmpty"))}</div>`;
+      return `<div class="output-grid">
+        <div class="output-block"><strong>${esc(t("hook"))}</strong><p>${esc(generated.hook)}</p></div>
+        <div class="output-block"><strong>${esc(t("script"))}</strong><p>${esc(generated.script)}</p></div>
+        <div class="output-block"><strong>${esc(t("description"))}</strong><p>${esc(generated.description)}</p></div>
+        <div class="output-block"><strong>${esc(t("caption"))}</strong><p>${esc(generated.caption)}</p></div>
+      </div>`;
+    }
+    function renderLegend() {
+      return `${head("legend", t("studioTitle"), t("studioSub"), `<span class="badge">${esc(t("aspect"))}</span>`)}
+        <div class="grid two">
+          <section class="card"><div class="card-heading"><h3>${esc(t("topic"))}</h3><span class="badge">1080p</span></div>
+            <form id="studio-form">
+              <div class="field"><label for="topic">${esc(t("topic"))}</label><textarea id="topic" name="topic" maxlength="300" required placeholder="${esc(t("topicPlaceholder"))}"></textarea></div>
+              <div class="form-row">
+                <div class="field"><label for="platform">${esc(t("platform"))}</label><select id="platform" name="platform"><option value="youtube">${esc(t("youtube"))}</option><option value="tiktok">${esc(t("tiktok"))}</option></select></div>
+                <div class="field"><label for="hook-style">${esc(t("hookStyle"))}</label><select id="hook-style" name="hook"><option value="curiosity">${esc(t("curiosity"))}</option><option value="bold">${esc(t("boldClaim"))}</option><option value="question">${esc(t("question"))}</option></select></div>
+              </div>
+              <button class="button primary" type="submit">${esc(t("generate"))}</button>
+            </form>
+            <div style="margin-top:14px">${renderCheckList("studio", CHECKS.studio, t("performance"))}</div>
+          </section>
+          <section class="card"><div class="card-heading"><h3>${esc(t("generated"))}</h3></div>${renderGenerated()}
+            <button type="button" class="button" style="margin-top:13px" data-action="publish">${esc(t("requestPublish"))}</button>
+          </section>
+        </div>`;
+    }
+    function renderCheckList(group, keys, title) {
+      return `<section class="card"><div class="card-heading"><h3>${esc(title)}</h3><span class="badge">${state.checks[group].filter(Boolean).length} / ${keys.length}</span></div>
+        <div class="checklist">${keys.map((key, i) => `<label class="check-row"><input type="checkbox" data-check="${group}" data-index="${i}" ${state.checks[group][i] ? "checked" : ""}><span>${esc(t(key))}</span></label>`).join("")}</div></section>`;
+    }
+    function renderApps() {
+      return `${head("apps", t("apps"), t("appSub"))}
+        <div class="grid two">
+          <section class="card"><div class="card-heading"><h3>${esc(t("appTask"))}</h3><span class="badge">${esc(t("active"))}</span></div>
+            <form id="app-form">
+              <div class="field"><label for="app-type">${esc(t("taskType"))}</label><select id="app-type" name="type">
+                <option value="feature">${esc(t("newFeature"))}</option><option value="bug">${esc(t("bugFix"))}</option><option value="ui">${esc(t("uiux"))}</option><option value="health">${esc(t("healthCheck"))}</option>
+              </select></div>
+              <div class="field"><label for="app-details">${esc(t("detail"))}</label><textarea id="app-details" name="details" maxlength="600" required placeholder="${esc(t("detailPlaceholder"))}"></textarea></div>
+              <div class="inline-form"><button class="button primary" type="submit">${esc(t("logTask"))}</button><button type="button" class="button" data-action="dev-prompt">${esc(t("generatePrompt"))}</button></div>
+            </form>
+            ${devPrompt ? `<div class="output-block" style="margin-top:13px"><strong>${esc(t("developmentPrompt"))}</strong><p>${esc(devPrompt)}</p></div>` : ""}
+          </section>
+          ${renderCheckList("apps", CHECKS.apps, t("appHealth"))}
+        </div>
+        <section class="card" style="margin-top:13px"><div class="card-heading"><h3>${esc(t("tasks"))}</h3></div>${renderTasks("apps")}</section>`;
+    }
+    function renderRelease() {
+      return `${head("release", t("release"), t("releaseSub"))}
+        <div class="grid two">
+          ${renderCheckList("store", CHECKS.store, t("storeChecklist"))}
+          <section class="card"><div class="card-heading"><h3>${esc(t("securityScan"))}</h3><span class="badge">${esc(t("release"))}</span></div>
+            <p class="card-copy">${esc(t("scannerHelp"))}</p><div id="scan-message"></div>
+            <form id="scan-form" style="margin-top:12px">
+              <div class="field"><label for="scan-text">${esc(t("securityScan"))}</label><textarea id="scan-text" autocomplete="off" spellcheck="false" placeholder="${esc(t("scannerPlaceholder"))}"></textarea></div>
+              <button class="button" type="submit">${esc(t("scan"))}</button>
+            </form>
+          </section>
+        </div>
+        <section class="card" style="margin-top:13px"><div class="card-heading"><h3>${esc(t("storeActions"))}</h3><span class="badge pending">${esc(t("needsApproval"))}</span></div>
+          <p class="card-copy">${esc(t("approvalNotice"))}</p>
+          <div class="inline-form" style="margin-top:12px;flex-wrap:wrap">
+            <button type="button" class="button primary" data-action="store-submit">${esc(t("requestSubmission"))}</button>
+            <button type="button" class="button" data-action="billing">${esc(t("requestBilling"))}</button>
+          </div>
+        </section>
+        <section class="card" style="margin-top:13px"><div class="card-heading"><h3>${esc(t("tasks"))}</h3></div>${renderTasks("release")}</section>`;
+    }
+    function render() {
+      renderChrome();
+      root.innerHTML = state.active === "orchestrator" ? renderOrchestrator()
+        : state.active === "legend" ? renderLegend()
+        : state.active === "apps" ? renderApps() : renderRelease();
+      document.title = `Clina 4-Robots Hub · ${robotName(state.active)}`;
+    }
+    const secretPatterns = [
+      /(?:^|[^\p{L}\p{N}_])(?:password|passwd|passcode|пароль|құпиясөз)\s*(?:[:=]|\bis\b|\s+)\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu,
+      /(?:^|[^\p{L}\p{N}_])(?:api[\s_-]?(?:key|token)|access[\s_-]?token|refresh[\s_-]?token|token|secret|токен|кілт)\s*(?:[:=]|\bis\b|\s+)\s*(?:"[^"]*"|'[^']*'|[^\s,;]+)/giu,
+      /\b(?:sk-[A-Za-z0-9_-]{12,}|gh[pousr]_[A-Za-z0-9]{20,}|AKIA[A-Z0-9]{16})\b/g,
+      /\b(?:\d[ -]*?){8,34}\b/g,
+      /\bBearer\s+[A-Za-z0-9._~+/-]+=*/giu,
+      /\b(?:eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]{8,})\b/g,
+      /\b[A-Z]{2}\d{2}(?:[\s-]?[A-Z0-9]){11,30}\b/gi,
+      /-----BEGIN (?:RSA |EC |OPENSSH )?PRIVATE KEY-----[\s\S]+?-----END (?:RSA |EC |OPENSSH )?PRIVATE KEY-----/g
+    ];
+    function containsSensitive(value) {
+      const text = String(value || "");
+      if (secretPatterns.some(pattern => { pattern.lastIndex = 0; return pattern.test(text); })) return true;
+      return false;
+    }
+    function redact(value) {
+      let safe = String(value || "");
+      for (const pattern of secretPatterns) {
+        pattern.lastIndex = 0;
+        safe = safe.replace(pattern, "[redacted]");
+      }
+      return safe.slice(0, 600);
+    }
+    function approvalReasonFor(text) {
+      if (/\b(?:pay(?:ment)?s?|billing|invoice|charge|subscription)\b|төлем|шот|оплат[а-я]*|плат[её]ж[а-я]*|сч[её]т|биллинг/iu.test(text)) return "billing";
+      if (/\b(?:publish(?:ing)?|post(?:ing)?|store submission|release to store|account)\b|жариялау|жарияла|тіркелгі|аккаунт|публик[а-я]*/iu.test(text)) return "publish";
+      if (/\b(?:delete|deletion|remove|overwrite|replace all|drop table|destructive)\b|жою|өшір|қайта жаз|толық ауыстыр|удалить|удаление|перезапис|заменить весь/iu.test(text)) return "destructive";
+      return "";
+    }
+    function routeFor(text, choice = "auto") {
+      if (choice !== "auto") return choice;
+      if (/\b(?:store|release|security|privacy|app store|google play)\b|дүкен|релиз|қауіпсіздік|магазин|публик[а-я]*/iu.test(text)) return "release";
+      if (/\b(?:video|youtube|tiktok|script|story)\b|контент|видео|сценар[а-я]*/iu.test(text)) return "legend";
+      return "apps";
+    }
+    function newTask(text, robot, forcedReason = "") {
+      const wasRedacted = containsSensitive(text);
+      const safeText = redact(text).trim();
+      const reason = forcedReason || approvalReasonFor(text);
+      const id = crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+      const task = { id, text: safeText, robot, status: reason ? "pending" : "routed", createdAt: new Date().toISOString() };
+      state.tasks.unshift(task);
+      if (reason) {
+        state.approvals.unshift({ id: `${id}-approval`, taskId: id, robot, reason, status: "pending" });
+        addLog(t("activityApproval"), wasRedacted);
+      } else {
+        addLog(t("activityRoute").replace("{robot}", robotName(robot)), wasRedacted);
+      }
+      persist();
+      return task;
+    }
+    function handleDecision(approvalId, decision) {
+      const approval = state.approvals.find(item => item.id === approvalId && item.status === "pending");
+      if (!approval) return;
+      const task = state.tasks.find(item => item.id === approval.taskId);
+      if (!task) return;
+      approval.status = decision;
+      task.status = decision === "approved" ? "approved" : "rejected";
+      addLog(t(decision === "approved" ? "activityApprove" : "activityReject").replace("{task}", task.text));
+      persist();
+      render();
+    }
+    function submitRoute(form) {
+      const data = new FormData(form);
+      const text = String(data.get("task") || "").trim();
+      if (!text) return showToast(t("emptyTask"));
+      newTask(text, routeFor(text, String(data.get("robot") || "auto")));
+      form.reset();
+      render();
+    }
+    function submitStudio(form) {
+      const data = new FormData(form);
+      const topic = String(data.get("topic") || "").trim();
+      if (!topic) return showToast(t("emptyTopic"));
+      const safeTopic = redact(topic);
+      const topicEnglish = safeTopic;
+      const styles = {
+        curiosity: `Most people miss this surprising detail about ${topicEnglish}.`,
+        bold: `${topicEnglish} is not what you think — here's why.`,
+        question: `What if everything you knew about ${topicEnglish} was only half the story?`
+      };
+      const platform = String(data.get("platform")) === "tiktok" ? t("tiktok") : t("youtube");
+      generated = {
+        topic: safeTopic,
+        platform,
+        hookStyle: String(data.get("hook") || "curiosity"),
+        hook: styles[String(data.get("hook"))] || styles.curiosity,
+        script: `0:00 — ${styles[String(data.get("hook"))] || styles.curiosity}\n0:03 — Break the idea into one clear, visual moment.\n0:08 — Share the useful reveal about ${topicEnglish}.\n0:14 — End with one memorable takeaway and a natural question.`,
+        description: `A quick, practical story about ${topicEnglish}. Watch to the end for the key takeaway.\n\n#Shorts #Storytelling #${topicEnglish.toLowerCase().replace(/[^a-z0-9]+/g, "")}`,
+        caption: `A fresh perspective on ${topicEnglish} ✨ What do you think? #fyp #storytime`,
+        performance: [false, false, false]
+      };
+      render();
+    }
+    function submitApp(form) {
+      const data = new FormData(form);
+      const details = String(data.get("details") || "").trim();
+      if (!details) return showToast(t("emptyDetail"));
+      const type = String(data.get("type") || "feature");
+      const typeLabel = t(({ feature:"newFeature", bug:"bugFix", ui:"uiux", health:"healthCheck" })[type] || "newFeature");
+      newTask(`${typeLabel}: ${details}`, "apps");
+      devPrompt = `Work item: ${typeLabel}\nObjective: ${redact(details)}\nConstraints: preserve existing behavior, add focused validation, and report touched files and test results.`;
+      form.reset();
+      render();
+    }
+    function scanText(form) {
+      const input = form.querySelector("#scan-text");
+      const result = document.getElementById("scan-message");
+      const unsafe = containsSensitive(input.value);
+      input.value = "";
+      result.innerHTML = `<div class="${unsafe ? "notice" : "safety-note"}">${esc(t(unsafe ? "scanWarning" : "scanClean"))}</div>`;
+      input.focus();
+    }
+    document.addEventListener("click", event => {
+      const langButton = event.target.closest("[data-lang]");
+      if (langButton) {
+        if (!LANGS.includes(langButton.dataset.lang)) return;
+        state.lang = langButton.dataset.lang;
+        persist();
+        render();
+        return;
+      }
+      const robotButton = event.target.closest("[data-robot]");
+      if (robotButton) {
+        if (!ROBOT_IDS.includes(robotButton.dataset.robot)) return;
+        state.active = robotButton.dataset.robot;
+        persist();
+        render();
+        return;
+      }
+      const button = event.target.closest("[data-action]");
+      if (!button) return;
+      const action = button.dataset.action;
+      if (action === "reset") {
+        if (!window.confirm(t("resetConfirm"))) return;
+        try {
+          localStorage.removeItem(STORE_KEY);
+          state = emptyState();
+          generated = null;
+          devPrompt = "";
+          render();
+        } catch (error) {
+          console.error("Could not reset Clina demo state:", error);
+          showToast(t("errorStorage"));
         }
-        setInterval(updateClock, 1000);
-        updateClock();
-
-        // 1. GPS & Карта
-        function getLocationGPS() {
-            let res = document.getElementById('gpsResult');
-            if (navigator.geolocation) {
-                res.textContent = "Спутникпен байланысуда... 🛰️";
-                navigator.geolocation.getCurrentPosition((position) => {
-                    let lat = position.coords.latitude.toFixed(4);
-                    let lon = position.coords.longitude.toFixed(4);
-                    res.innerHTML = `Координаттар: ${lat}, ${lon} <br><a href="https://maps.google.com/?q=${lat},${lon}" target="_blank" style="color: #0984e3; font-weight: bold;">🗺️ Спутниктік картадан ашу</a>`;
-                }, () => {
-                    res.textContent = "GPS рұқсаты сөндірулі ❌";
-                });
-            } else {
-                res.textContent = "Браузер GPS қолдамайды.";
-            }
-        }
-
-        function openMapAddress() {
-            let addr = document.getElementById('addressInput').value;
-            let res = document.getElementById('gpsResult');
-            if(addr.trim() !== '') {
-                let encoded = encodeURIComponent(addr);
-                window.open(`https://www.google.com/maps/search/?api=1&query=${encoded}`, '_blank');
-                res.innerHTML = `Мекенжай: ${addr} (Карта ашылды 🗺️)`;
-            } else {
-                res.textContent = "Мекенжайды немесе қаланы жазыңыз!";
-            }
-        }
-
-        // 2. Телефон нөмірін анықтау
-        function checkPhone() {
-            let phone = document.getElementById('phoneInput').value;
-            let res = document.getElementById('phoneResult');
-            if(phone.trim() === '') {
-                res.textContent = "Нөмірді енгізіңіз!";
-                return;
-            }
-            let operators = ['Kcell / Activ', 'Tele2 / Altel', 'Beeline KZ'];
-            let randomOp = operators[Math.floor(Math.random() * operators.length)];
-            res.textContent = `Оператор: ${randomOp}, Аймақ: Қазақстан 🇰🇿`;
-        }
-
-        // 3. Музыка плеері
-        function playMusic() {
-            let audio = document.getElementById('audioPlayer');
-            let songUrl = document.getElementById('songSelect').value;
-            audio.src = songUrl;
-            audio.play();
-        }
-
-        function stopMusic() {
-            let audio = document.getElementById('audioPlayer');
-            audio.pause();
-            audio.currentTime = 0;
-        }
-
-        // Дизайн
-        function setTheme(mode) {
-            document.body.classList.remove('dark-mode', 'neon-mode');
-            if(mode === 'dark') {
-                document.body.classList.add('dark-mode');
-                localStorage.setItem('appTheme', 'dark-mode');
-            } else if(mode === 'neon') {
-                document.body.classList.add('neon-mode');
-                localStorage.setItem('appTheme', 'neon-mode');
-            }
-        }
-
-        function ozgertuFon() {
-            document.body.classList.remove('dark-mode', 'neon-mode');
-            localStorage.removeItem('appTheme');
-            let colors = [
-                "linear-gradient(135deg, #74b9ff, #dfe6e9)",
-                "linear-gradient(135deg, #55efc4, #81ecec)",
-                "linear-gradient(135deg, #ffeaa7, #fab1a0)",
-                "linear-gradient(135deg, #a29bfe, #dfe6e9)",
-                "linear-gradient(135deg, #ff7675, #74b9ff)"
-            ];
-            let randomColor = colors[Math.floor(Math.random() * colors.length)];
-            document.getElementById('mainBody').style.background = randomColor;
-        }
-
-        function saveName() {
-            let name = document.getElementById('usernameInput').value;
-            if(name.trim() !== '') {
-                localStorage.setItem('userName', name);
-                document.getElementById('welcomeUser').textContent = "Сәлем! Менің атым " + name;
-                document.getElementById('usernameInput').value = '';
-            }
-        }
-
-        function saveNote() {
-            let text = document.getElementById('noteInput').value;
-            if(text.trim() !== '') {
-                let notes = readArray('myNotes');
-                notes.push(text);
-                localStorage.setItem('myNotes', JSON.stringify(notes));
-                document.getElementById('noteInput').value = '';
-                loadNotes();
-            }
-        }
-        function loadNotes() {
-            let ul = document.getElementById('noteList');
-            ul.innerHTML = '';
-            let notes = readArray('myNotes');
-            notes.forEach((note, index) => {
-                let li = document.createElement('li');
-                let text = document.createElement('span');
-                text.textContent = note;
-                let remove = document.createElement('span');
-                remove.textContent = '✕';
-                remove.onclick = () => deleteNote(index);
-                remove.setAttribute('role', 'button');
-                remove.setAttribute('tabindex', '0');
-                remove.setAttribute('aria-label', 'Жазбаны жою');
-                remove.style.cssText = 'color:red; cursor:pointer; font-weight:bold;';
-                li.append(text, remove);
-                ul.appendChild(li);
-            });
-        }
-        function deleteNote(index) {
-            let notes = readArray('myNotes');
-            notes.splice(index, 1);
-            localStorage.setItem('myNotes', JSON.stringify(notes));
-            loadNotes();
-        }
-
-        function playRPS(userChoice) {
-            let choices = ['Тас', 'Қағаз', 'Қайшы'];
-            let compChoice = choices[Math.floor(Math.random() * choices.length)];
-            let resText = `Сіз: ${userChoice} | Компьютер: ${compChoice} — `;
-            if(userChoice === compChoice) resText += "Тең түстіңіз! 🤝";
-            else if(
-                (userChoice === 'Тас' && compChoice === 'Қайшы') ||
-                (userChoice === 'Қағаз' && compChoice === 'Тас') ||
-                (userChoice === 'Қайшы' && compChoice === 'Қағаз')
-            ) resText += "Сіз жеңдіңіз! 🎉";
-            else resText += "Компьютер жеңді! 🤖";
-            document.getElementById('rpsResult').textContent = resText;
-        }
-
-        let workoutSeconds = 30;
-        let workoutInterval = null;
-        function startWorkout() {
-            if(workoutInterval) return;
-            workoutInterval = setInterval(() => {
-                workoutSeconds--;
-                let m = String(Math.floor(workoutSeconds / 60)).padStart(2, '0');
-                let s = String(workoutSeconds % 60).padStart(2, '0');
-                document.getElementById('workoutDisplay').textContent = `${m}:${s}`;
-                if(workoutSeconds <= 0) {
-                    clearInterval(workoutInterval);
-                    workoutInterval = null;
-                    alert("Уақыт бітті! Жарайсыз! 💪");
-                    workoutSeconds = 30;
-                    document.getElementById('workoutDisplay').textContent = "00:30";
-                }
-            }, 1000);
-        }
-        function stopWorkout() {
-            clearInterval(workoutInterval);
-            workoutInterval = null;
-        }
-
-        function showJoke() {
-            let jokes = [
-                "Бағдарламашы ұйықтар алдында қасына екі стақан қояды: біреуі сумен, екіншісі бос 😂",
-                "Кодтағы қателік — бұл фича, қателік емес! 🤓",
-                "Мұғалім: «HTML бағдарламалау тілі ме?» Оқушы: «Жоқ, бұл өмір салты!» 💻"
-            ];
-            document.getElementById('jokeText').textContent = jokes[Math.floor(Math.random() * jokes.length)];
-        }
-
-        function calcBMI() {
-            let h = Number(document.getElementById('heightInput').value) / 100;
-            let w = Number(document.getElementById('weightInput').value);
-            if(h > 0 && w > 0) {
-                let bmi = (w / (h * h)).toFixed(1);
-                let text = bmi < 18.5 ? "Салмақ аз 🦴" : bmi < 25 ? "Қалыпты салмақ 👍" : "Артық салмақ ⚖️";
-                document.getElementById('bmiResult').textContent = `BMI: ${bmi} (${text})`;
-            }
-        }
-
-        function checkGuess() {
-            let guess = Number(document.getElementById('guessInput').value);
-            let res = document.getElementById('guessResult');
-            if(guess === targetNumber) {
-                res.textContent = "Құттықтаймын! Санды таптыңыз! 🎉";
-                res.style.color = "#00b894";
-                targetNumber = Math.floor(Math.random() * 100) + 1;
-            } else if(guess < targetNumber) {
-                res.textContent = "Үлкенірек сан жазыңыз! ⬆️";
-                res.style.color = "#e17055";
-            } else {
-                res.textContent = "Кішірек сан жазыңыз! ⬇️";
-                res.style.color = "#e17055";
-            }
-        }
-
-        function taskQosu() {
-            let input = document.getElementById('taskInput');
-            let txt = input.value;
-            if (txt.trim() !== '') {
-                let tasks = readArray('myTasksAdv');
-                tasks.push({ text: txt, done: false });
-                localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
-                input.value = '';
-                loadTasks();
-            }
-        }
-        function loadTasks() {
-            let ul = document.getElementById('taskList');
-            ul.innerHTML = '';
-            let tasks = readArray('myTasksAdv');
-            tasks.forEach((task, index) => {
-                let li = document.createElement('li');
-                li.className = task.done ? 'completed' : '';
-                let content = document.createElement('span');
-                let checkbox = document.createElement('input');
-                checkbox.type = 'checkbox';
-                checkbox.checked = Boolean(task.done);
-                checkbox.onchange = () => toggleTask(index);
-                let text = document.createTextNode(task.text);
-                content.append(checkbox, text);
-                let remove = document.createElement('span');
-                remove.textContent = '✕';
-                remove.onclick = () => deleteTask(index);
-                remove.setAttribute('role', 'button');
-                remove.setAttribute('tabindex', '0');
-                remove.setAttribute('aria-label', 'Тапсырманы жою');
-                remove.style.cssText = 'color:red; cursor:pointer; font-weight:bold;';
-                li.append(content, remove);
-                ul.appendChild(li);
-            });
-        }
-        function toggleTask(index) {
-            let tasks = readArray('myTasksAdv');
-            tasks[index].done = !tasks[index].done;
-            localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
-            loadTasks();
-        }
-        function deleteTask(index) {
-            let tasks = readArray('myTasksAdv');
-            tasks.splice(index, 1);
-            localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
-            loadTasks();
-        }
-
-        function showQuote() {
-            let quotes = [
-                "«Қате жасаудан қорықпа, қателік — бұл тәжірибе!»",
-                "«Бүгінгі еңбегің — ертеңгі жетістігің!»",
-                "«Әрбір мықты программист қарапайым кодтан бастаған.»",
-                "«Мақсатыңа сенсең, бәрі де мүмкін!»"
-            ];
-            document.getElementById('quoteText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
-        }
-
-        let secondsTotal = 0;
-        let timerInterval = null;
-        function startStopwatch() {
-            if(timerInterval) return;
-            timerInterval = setInterval(() => {
-                secondsTotal++;
-                let m = String(Math.floor(secondsTotal / 60)).padStart(2, '0');
-                let s = String(secondsTotal % 60).padStart(2, '0');
-                document.getElementById('stopwatchDisplay').textContent = `${m}:${s}`;
-            }, 1000);
-        }
-        function stopStopwatch() {
-            clearInterval(timerInterval);
-            timerInterval = null;
-        }
-        function resetStopwatch() {
-            stopStopwatch();
-            secondsTotal = 0;
-            document.getElementById('stopwatchDisplay').textContent = "00:00";
-        }
-
-        function checkQuiz(isCorrect) {
-            let resElem = document.getElementById('quizResult');
-            if(isCorrect) {
-                resElem.textContent = "Дұрыс! 🎉 Жарайсың!";
-                resElem.style.color = "#00b894";
-            } else {
-                resElem.textContent = "Қате, қайталап көр! ❌";
-                resElem.style.color = "red";
-            }
-        }
-
-        function saveFeedback() {
-            let rating = document.getElementById('ratingSelect').value;
-            let text = document.getElementById('feedbackInput').value;
-            if(text.trim() !== '') {
-                let feedbacks = readArray('myFeedbacks');
-                feedbacks.push(`${rating} - ${text}`);
-                localStorage.setItem('myFeedbacks', JSON.stringify(feedbacks));
-                document.getElementById('feedbackInput').value = '';
-                loadFeedbacks();
-            }
-        }
-        function loadFeedbacks() {
-            let ul = document.getElementById('feedbackList');
-            ul.innerHTML = '';
-            let feedbacks = readArray('myFeedbacks');
-            feedbacks.forEach(item => {
-                let li = document.createElement('li');
-                li.textContent = item;
-                ul.appendChild(li);
-            });
-        }
-
-        function getWeather() {
-            let city = document.getElementById('cityInput').value;
-            if(city.trim() === '') return;
-            let temps = Math.floor(Math.random() * 30) - 5;
-            document.getElementById('weatherResult').textContent = `${city} қаласында: +${temps}°C, Күн ашық ☀️`;
-        }
-
-        function generatePassword() {
-            let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%";
-            let pass = "";
-            for(let i = 0; i < 8; i++) {
-                pass += chars.charAt(Math.floor(Math.random() * chars.length));
-            }
-            document.getElementById('passwordOutput').value = pass;
-        }
-
-        function convertCurrency() {
-            let tenge = Number(document.getElementById('tengeInput').value);
-            let currency = document.getElementById('currencySelect').value;
-            let result = currency === 'usd' ? (tenge / 500).toFixed(2) + " $" : (tenge / 540).toFixed(2) + " €";
-            document.getElementById('currencyResult').textContent = "Нәтиже: " + result;
-        }
-
-        function calcBudget() {
-            let inc = Number(document.getElementById('incomeInput').value);
-            let exp = Number(document.getElementById('expenseInput').value);
-            let bal = inc - exp;
-            let resultElem = document.getElementById('budgetResult');
-            resultElem.textContent = "Қалдық: " + bal + " ₸";
-            resultElem.style.color = bal < 0 ? "red" : "#00b894";
-        }
-
-        function eseptert() {
-            let n1 = Number(document.getElementById('num1').value);
-            let n2 = Number(document.getElementById('num2').value);
-            let op = document.getElementById('operator').value;
-            let res = 0;
-
-            if (op === '+') res = n1 + n2;
-            else if (op === '-') res = n1 - n2;
-            else if (op === '*') res = n1 * n2;
-            else if (op === '/') {
-                if (n2 === 0) {
-                    document.getElementById('calcResult').textContent = "Нәтиже: Нөлге бөлуге болмайды!";
-                    return;
-                }
-                res = n1 / n2;
-            }
-            document.getElementById('calcResult').textContent = "Нәтиже: " + res;
-        }
-
-        let san = 0;
-        function basu() {
-            san++;
-            document.getElementById('clickCount').textContent = san;
-            localStorage.setItem('clickCount', san);
-        }
-        function qalpynaKeltyru() {
-            san = 0;
-            document.getElementById('clickCount').textContent = san;
-            localStorage.setItem('clickCount', san);
-        }
-        function askAI() {
-            let query = document.getElementById("aiQuestion").value.toLowerCase().trim();
-            let response = "Кешіріңіз, мен әзірге бұл сұраққа жауап білмеймін.";
-            if (query === "") response = "Сұрақты енгізіңіз.";
-            else if (query.includes("сәлем") || query.includes("привет")) response = "Сәлеметсіз бе! Қалай көмектесе аламын?";
-            else if (query.includes("ауа райы")) response = "Нақты болжам үшін қала атауын Ауа райы бөліміне енгізіңіз.";
-            else if (query.includes("уақыт")) response = "Қазіргі уақыт: " + new Date().toLocaleTimeString();
-            else if (query.includes("атың кім")) response = "Мен осы қосымшаға кіріктірілген көмекшімін!";
-            document.getElementById("aiAnswer").textContent = response;
-        }
-
-        function convertLength() {
-            let input = document.getElementById("metersInput");
-            let m = Number(input.value);
-            if (input.value.trim() === "" || !Number.isFinite(m) || m < 0) {
-                document.getElementById("lengthResult").textContent = "Нөлден үлкен немесе тең сан енгізіңіз!";
-                return;
-            }
-            let cm = m * 100;
-            let mm = m * 1000;
-            document.getElementById("lengthResult").textContent = `${m} м = ${cm} см = ${mm} мм`;
-        }
-
-        function toggleProjectDetails(button, detailsId) {
-            const details = document.getElementById(detailsId);
-            const isOpen = details.classList.toggle('open');
-            button.textContent = isOpen ? 'Жасыру' : 'Толығырақ';
-            button.setAttribute('aria-expanded', String(isOpen));
-        }
-
-        function calculateTrips() {
-            const input = document.getElementById('tripCount');
-            const trips = Number(input.value);
-
-            if (input.value.trim() === '' || !Number.isInteger(trips) || trips < 1) {
-                document.getElementById('tripCountResult').textContent = '0';
-                document.getElementById('tripResult').textContent = 'Сапар санын кемінде 1 деп енгізіңіз!';
-                document.getElementById('tripResult').style.color = 'var(--danger)';
-                input.focus();
-                return;
-            }
-
-            const total = trips * 400;
-            document.getElementById('tripCountResult').textContent = trips;
-            document.getElementById('tripResult').textContent = `Жалпы сома: ${total.toLocaleString('kk-KZ')} ₸`;
-            document.getElementById('tripResult').style.color = 'var(--success)';
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            const tripInput = document.getElementById('tripCount');
-            if (tripInput) {
-                tripInput.addEventListener('keydown', function (event) {
-                    if (event.key === 'Enter') {
-                        calculateTrips();
-                    }
-                });
-            }
-        });
-    </script>
+      } else if (action === "approve" || action === "reject") {
+        handleDecision(button.dataset.approval, action === "approve" ? "approved" : "rejected");
+      } else if (action === "publish") {
+        if (!generated) return showToast(t("emptyTopic"));
+        newTask(`${t("requestPublish")}: ${generated.topic}`, "legend", "publish");
+        render();
+      } else if (action === "store-submit") {
+        newTask(t("submission"), "release", "publish");
+        render();
+      } else if (action === "billing") {
+        newTask(t("billing"), "release", "billing");
+        render();
+      } else if (action === "dev-prompt") {
+        const details = document.getElementById("app-details").value.trim();
+        if (!details) return showToast(t("emptyDetail"));
+        devPrompt = `Objective: ${redact(details)}\nConstraints: preserve existing behavior, avoid unrelated changes, add focused validation, and report test results.`;
+        render();
+      } else if (action === "complete-task") {
+        const task = state.tasks.find(item => item.id === button.dataset.task && item.status === "approved");
+        if (!task) return;
+        task.status = "complete";
+        addLog(t("completedToast"));
+        persist();
+        showToast(t("completedToast"));
+        render();
+      }
+    });
+    document.addEventListener("submit", event => {
+      const form = event.target;
+      if (!(form instanceof HTMLFormElement)) return;
+      event.preventDefault();
+      if (form.id === "route-form") submitRoute(form);
+      else if (form.id === "studio-form") submitStudio(form);
+      else if (form.id === "app-form") submitApp(form);
+      else if (form.id === "scan-form") scanText(form);
+    });
+    document.addEventListener("change", event => {
+      const input = event.target.closest("[data-check]");
+      if (!input) return;
+      const group = input.dataset.check;
+      const index = Number(input.dataset.index);
+      if (!CHECKS[group] || !Number.isInteger(index) || index < 0 || index >= CHECKS[group].length) return;
+      state.checks[group][index] = input.checked;
+      persist();
+      render();
+    });
+    loadState();
+    render();
+  </script>
 </body>
 </html>

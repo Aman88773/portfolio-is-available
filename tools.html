@@ -1,0 +1,1126 @@
+<!DOCTYPE html>
+<html lang="kk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#6c5ce7">
+    <title>Amanjol — пайдалы қосымшалар</title>
+    <style>
+        :root {
+            --primary: #6c5ce7;
+            --primary-dark: #5541c7;
+            --accent: #0984e3;
+            --success: #00b894;
+            --danger: #d63031;
+            --text: #253048;
+            --muted: #667085;
+            --surface: rgba(255, 255, 255, 0.94);
+            --border: rgba(99, 110, 134, 0.14);
+        }
+        * {
+            box-sizing: border-box;
+        }
+        html {
+            scroll-behavior: smooth;
+        }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            background:
+                radial-gradient(circle at top left, rgba(116, 185, 255, 0.45), transparent 32rem),
+                linear-gradient(135deg, #eef2ff, #f7f8fc);
+            text-align: left;
+            padding: 24px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: var(--text);
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+        body.dark-mode {
+            --text: #f1f5f9;
+            --muted: #cbd5e1;
+            --surface: rgba(30, 41, 59, 0.96);
+            --border: rgba(148, 163, 184, 0.18);
+            background: linear-gradient(145deg, #0f172a, #1e293b);
+        }
+        body.dark-mode .card {
+            background: var(--surface);
+            color: var(--text);
+        }
+        body.dark-mode input, body.dark-mode select, body.dark-mode textarea {
+            background-color: #334155;
+            color: #fff;
+            border-color: #475569;
+        }
+        body.dark-mode li {
+            background: #485460;
+            color: white;
+        }
+        body.neon-mode {
+            --text: #dffff7;
+            --muted: #9be7d7;
+            --surface: rgba(26, 26, 46, 0.96);
+            --border: rgba(0, 255, 204, 0.25);
+            background: linear-gradient(145deg, #09091f, #151537);
+            color: var(--text);
+        }
+        body.neon-mode .card {
+            background: var(--surface);
+            color: var(--text);
+            box-shadow: 0 0 15px rgba(0,255,204,0.3);
+            border-color: #00ffcc;
+        }
+        body.neon-mode input, body.neon-mode select, body.neon-mode textarea {
+            background-color: #16213e;
+            color: #00ffcc;
+            border: 1px solid #00ffcc;
+        }
+        .dashboard {
+            width: min(1180px, 100%);
+            margin: 0 auto;
+        }
+        .hero {
+            margin-bottom: 18px;
+            padding: 28px;
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            background: var(--surface);
+            box-shadow: 0 16px 40px rgba(71, 85, 105, 0.10);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 20px;
+        }
+        .hero h1 {
+            margin: 0 0 6px;
+            font-size: clamp(1.6rem, 4vw, 2.5rem);
+        }
+        .hero p {
+            margin: 0;
+            color: var(--muted);
+        }
+        .hero-clock {
+            flex: 0 0 auto;
+            min-width: 150px;
+            text-align: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            align-items: start;
+        }
+        .card {
+            min-width: 0;
+            background: var(--surface);
+            margin: 0;
+            padding: 20px;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 10px 28px rgba(71, 85, 105, 0.09);
+        }
+        .card h3 {
+            margin-top: 0;
+            line-height: 1.35;
+        }
+        input, select, textarea {
+            width: 100%;
+            min-height: 42px;
+            padding: 10px 12px;
+            border: 1px solid #d5dae3;
+            border-radius: 9px;
+            margin: 0 0 10px;
+            font: inherit;
+            font-size: 14px;
+            background: #fff;
+            color: var(--text);
+            outline: none;
+        }
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.14);
+        }
+        textarea {
+            min-height: 82px;
+            resize: vertical;
+        }
+        .btn {
+            min-height: 42px;
+            padding: 10px 14px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 9px;
+            font-size: 14px;
+            cursor: pointer;
+            font-weight: 700;
+            margin: 4px 2px;
+            transition: transform 0.16s ease, opacity 0.16s ease, box-shadow 0.16s ease;
+        }
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 14px rgba(79, 70, 229, 0.18);
+        }
+        .btn:focus-visible, a:focus-visible {
+            outline: 3px solid rgba(108, 92, 231, 0.35);
+            outline-offset: 2px;
+        }
+        .theme-card {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .theme-card h3 {
+            flex-basis: 100%;
+        }
+        ul {
+            list-style-type: none;
+            padding: 0;
+            text-align: left;
+            margin-top: 10px;
+        }
+        li {
+            background: #f1f2f6;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            overflow-wrap: anywhere;
+        }
+        li span:first-child {
+            min-width: 0;
+        }
+        li input[type="checkbox"] {
+            width: 18px;
+            min-height: 18px;
+            margin: 0 6px 0 0;
+            accent-color: var(--primary);
+        }
+        .completed {
+            text-decoration: line-through;
+            opacity: 0.6;
+        }
+        .clock {
+            font-size: clamp(18px, 3vw, 24px);
+            font-weight: bold;
+            color: var(--primary);
+        }
+        .full-width {
+            grid-column: 1 / -1;
+        }
+        .projects-section {
+            margin-top: 18px;
+        }
+        .projects-section-header {
+            padding: 22px;
+            margin-bottom: 16px;
+        }
+        .projects-section-header h2 {
+            margin: 0 0 6px;
+        }
+        .projects-section-header p {
+            margin: 0;
+            color: var(--muted);
+        }
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        .project-card {
+            position: relative;
+            overflow: hidden;
+            border-top: 4px solid var(--primary);
+        }
+        .project-card:nth-child(2) {
+            border-top-color: var(--success);
+        }
+        .project-card:nth-child(3) {
+            border-top-color: #fdcb6e;
+        }
+        .project-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            margin-bottom: 12px;
+            background: rgba(108, 92, 231, 0.12);
+            font-size: 24px;
+        }
+        .project-card p {
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .project-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin: 12px 0;
+        }
+        .project-tag {
+            padding: 5px 8px;
+            border-radius: 999px;
+            background: rgba(108, 92, 231, 0.10);
+            color: var(--primary);
+            font-size: 12px;
+            font-weight: 700;
+        }
+        .project-details {
+            display: none;
+            margin-top: 10px;
+            padding: 10px 12px;
+            border-radius: 9px;
+            background: rgba(108, 92, 231, 0.08);
+            color: var(--text);
+        }
+        .project-details.open {
+            display: block;
+        }
+        .tariff-calculator {
+            max-width: 620px;
+        }
+        .tariff-summary {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            margin: 12px 0;
+        }
+        .tariff-summary-item {
+            padding: 12px;
+            border-radius: 10px;
+            background: rgba(108, 92, 231, 0.08);
+        }
+        .tariff-summary-item span {
+            display: block;
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .tariff-summary-item strong {
+            display: block;
+            margin-top: 4px;
+            color: var(--primary);
+            font-size: 18px;
+        }
+        #tripResult {
+            min-height: 24px;
+            margin: 12px 0 0;
+            font-weight: 800;
+            color: var(--success);
+        }
+        @media (max-width: 980px) {
+            .grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 640px) {
+            body {
+                padding: 12px;
+            }
+            .hero {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 20px;
+            }
+            .hero-clock {
+                min-width: 0;
+                text-align: left;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .card {
+                padding: 16px;
+            }
+            .btn {
+                width: 100%;
+                margin: 4px 0;
+            }
+            .theme-card .btn {
+                width: calc(50% - 4px);
+            }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            html {
+                scroll-behavior: auto;
+            }
+            * {
+                transition: none !important;
+            }
+        }
+    </style>
+</head>
+<body id="mainBody">
+    <main class="dashboard">
+    <p style="margin: 0 0 12px;"><a href="./index.html" style="color: var(--primary); font-weight: 700;">← Clina 4-Robots Hub</a></p>
+    <header class="hero">
+        <div>
+            <h1 id="welcomeUser">Сәлем! Менің атым Аманжол</h1>
+            <p>Телефонға да, компьютерге де ыңғайлы пайдалы құралдар.</p>
+        </div>
+        <div class="hero-clock">
+            <div id="liveClock" class="clock">00:00:00</div>
+        </div>
+    </header>
+
+    <div class="grid">
+    <div class="card theme-card">
+        <h3>Дизайнды өзгерту</h3>
+        <button class="btn" style="background-color: #6c5ce7;" onclick="setTheme('dark')">🌙 Түнгі</button>
+        <button class="btn" style="background-color: #00cec9;" onclick="setTheme('neon')">⚡ Неон</button>
+        <button class="btn" style="background-color: #e84393;" onclick="ozgertuFon()">🎨 Түс</button>
+    </div>
+
+    <div class="card">
+        <h3>👤 Есіміңізді енгізіңіз:</h3>
+        <input type="text" id="usernameInput" placeholder="Атыңыз...">
+        <br>
+        <button class="btn" onclick="saveName()">Сақтау</button>
+    </div>
+
+    <!-- 1. GPS & Мекенжай -->
+    <div class="card">
+        <h3>🛰️ Спутниктік GPS & Мекенжай</h3>
+        <button class="btn" style="background-color: #0984e3; width: 85%;" onclick="getLocationGPS()">📍 GPS координат табу</button><br>
+        <input type="text" id="addressInput" placeholder="Қала немесе мекенжай..."><br>
+        <button class="btn" style="background-color: #00b894;" onclick="openMapAddress()">🗺️ Картадан ашу</button>
+        <h4 id="gpsResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- 2. Телефон нөмірін анықтау -->
+    <div class="card">
+        <h3>📱 Телефон нөмірін анықтау</h3>
+        <input type="text" id="phoneInput" placeholder="+7 (701) ХХХ-ХХ-ХХ"><br>
+        <button class="btn" style="background-color: #e17055;" onclick="checkPhone()">Нөмірді тексеру</button>
+        <h4 id="phoneResult" style="margin-top: 10px;"></h4>
+    </div>
+
+
+    <!-- Жазбалар кітапшасы -->
+    <div class="card">
+        <h3>📌 Жеке жазбалар кітапшасы</h3>
+        <textarea id="noteInput" placeholder="Ойларыңызды жазыңыз..." style="height: 60px;"></textarea>
+        <br>
+        <button class="btn" style="background-color: #0984e3;" onclick="saveNote()">Жазбаны сақтау</button>
+        <ul id="noteList"></ul>
+    </div>
+
+    <!-- Тас, қайшы, қағаз -->
+    <div class="card">
+        <h3>✌️ Тас, қайшы, қағаз</h3>
+        <button class="btn" style="background-color: #6c5ce7;" onclick="playRPS('Тас')">✊ Тас</button>
+        <button class="btn" style="background-color: #00b894;" onclick="playRPS('Қағаз')">✋ Қағаз</button>
+        <button class="btn" style="background-color: #d63031;" onclick="playRPS('Қайшы')">✌️ Қайшы</button>
+        <h4 id="rpsResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Спорттық таймер -->
+    <div class="card">
+        <h3>⏱️ Спорттық таймер</h3>
+        <h2 id="workoutDisplay" style="color: #e17055; margin: 10px 0;">00:30</h2>
+        <button class="btn" style="background-color: #00b894;" onclick="startWorkout()">Бастау</button>
+        <button class="btn" style="background-color: #d63031;" onclick="stopWorkout()">Тоқтату</button>
+    </div>
+
+    <!-- Әзілдер -->
+    <div class="card">
+        <h3>😂 Күн әзілі</h3>
+        <p id="jokeText" style="font-weight: bold; color: #6c5ce7; min-height: 40px;">Күлкі — өмірді ұзартады!</p>
+        <button class="btn" style="background-color: #fdcb6e; color: #2d3436;" onclick="showJoke()">Әзіл оқу 🎭</button>
+    </div>
+
+    <!-- BMI -->
+    <div class="card">
+        <h3>⚖️ Дене салмағының индексі (BMI)</h3>
+        <input type="number" id="heightInput" placeholder="Бойыңыз (см)"><br>
+        <input type="number" id="weightInput" placeholder="Салмағыңыз (кг)"><br>
+        <button class="btn" style="background-color: #00b894;" onclick="calcBMI()">Есептеу</button>
+        <h4 id="bmiResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Санды тап -->
+    <div class="card">
+        <h3>🎯 Санды тап ойыны (1-100)</h3>
+        <input type="number" id="guessInput" placeholder="Сан енгізіңіз..."><br>
+        <button class="btn" style="background-color: #e17055;" onclick="checkGuess()">Тексеру</button>
+        <h4 id="guessResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Істер тізімі -->
+    <div class="card">
+        <h3>📝 Істер тізімі</h3>
+        <input type="text" id="taskInput" placeholder="Жаңа тапсырма...">
+        <br>
+        <button class="btn" onclick="taskQosu()">Қосу</button>
+        <ul id="taskList"></ul>
+    </div>
+
+    <!-- Цитаталар -->
+    <div class="card">
+        <h3>💡 Күн цитатасы</h3>
+        <p id="quoteText" style="font-style: italic; color: #0984e3; min-height: 40px;">"Бүгін ең жақсы күн!"</p>
+        <button class="btn" style="background-color: #00cec9; color: white;" onclick="showQuote()">Шабыт алу 🌟</button>
+    </div>
+
+    <!-- Секундомер -->
+    <div class="card">
+        <h3>⏱️ Секундомер</h3>
+        <h2 id="stopwatchDisplay" style="color: #e17055; margin: 10px 0;">00:00</h2>
+        <button class="btn" style="background-color: #00b894;" onclick="startStopwatch()">Бастау</button>
+        <button class="btn" style="background-color: #e17055;" onclick="stopStopwatch()">Тоқтату</button>
+        <button class="btn" style="background-color: #d63031;" onclick="resetStopwatch()">Нөлдеу</button>
+    </div>
+
+    <!-- Викторина -->
+    <div class="card">
+        <h3>🧠 Мини-викторина</h3>
+        <p id="quizQuestion">HTML нені білдіреді?</p>
+        <button class="btn" style="background-color: #6c5ce7; width: 85%;" onclick="checkQuiz(true)">А) Markup Language</button><br>
+        <button class="btn" style="background-color: #6c5ce7; width: 85%;" onclick="checkQuiz(false)">Б) Hyper Tool Machine</button>
+        <h4 id="quizResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Пікірлер -->
+    <div class="card">
+        <h3>💬 Пікір қалдыру</h3>
+        <select id="ratingSelect" style="width: 74%;">
+            <option value="⭐⭐⭐⭐⭐">⭐⭐⭐⭐⭐ (Керемет)</option>
+            <option value="⭐⭐⭐⭐">⭐⭐⭐⭐ (Жақсы)</option>
+            <option value="⭐⭐⭐">⭐⭐⭐ (Жаман емес)</option>
+        </select><br>
+        <input type="text" id="feedbackInput" placeholder="Пікіріңізді жазыңыз..."><br>
+        <button class="btn" style="background-color: #0984e3;" onclick="saveFeedback()">Жіберу</button>
+        <ul id="feedbackList"></ul>
+    </div>
+
+    <!-- Ауа райы -->
+    <div class="card">
+        <h3>☀️ Ауа райы болжамы</h3>
+        <input type="text" id="cityInput" placeholder="Қала аты (Мысалы: Astana)"><br>
+        <button class="btn" style="background-color: #0984e3;" onclick="getWeather()">Тексеру</button>
+        <h4 id="weatherResult" style="margin-top: 10px;"></h4>
+    </div>
+
+    <!-- Пароль -->
+    <div class="card">
+        <h3>🔐 Құпиясөз генераторы</h3>
+        <button class="btn" style="background-color: #e17055;" onclick="generatePassword()">Пароль жасау</button>
+        <input type="text" id="passwordOutput" placeholder="Шыққан пароль..." readonly style="margin-top: 10px; text-align: center; font-weight: bold;">
+    </div>
+
+    <!-- Валюта -->
+    <div class="card">
+        <h3>💱 Валюта конвертері</h3>
+        <input type="number" id="tengeInput" placeholder="Теңге мөлшері (₸)"><br>
+        <select id="currencySelect" style="width: 74%;">
+            <option value="usd">USD (Доллар ~ 500₸)</option>
+            <option value="eur">EUR (Еуро ~ 540₸)</option>
+        </select><br>
+        <button class="btn" style="background-color: #00b894;" onclick="convertCurrency()">Айырбастау</button>
+        <h4 id="currencyResult" style="margin-top: 10px;">Нәтиже: </h4>
+    </div>
+
+    <!-- Бюджет -->
+    <div class="card">
+        <h3>💰 Бюджет есептегіш</h3>
+        <input type="number" id="incomeInput" placeholder="Кіріс (Табыс) ₸"><br>
+        <input type="number" id="expenseInput" placeholder="Шығыс (Жұмсау) ₸"><br>
+        <button class="btn" style="background-color: #00b894;" onclick="calcBudget()">Есептеу</button>
+        <h4 id="budgetResult" style="margin-top: 10px;">Қалдық: 0 ₸</h4>
+    </div>
+
+    <!-- Калькулятор -->
+    <div class="card">
+        <h3>🧮 Толық калькулятор</h3>
+        <input type="number" id="num1" placeholder="Сан 1"><br>
+        <input type="number" id="num2" placeholder="Сан 2"><br>
+        <select id="operator" style="width: 74%;">
+            <option value="+">Қосу (+)</option>
+            <option value="-">Азайту (-)</option>
+            <option value="*">Көбейту (*)</option>
+            <option value="/">Бөлу (/)</option>
+        </select><br>
+        <button class="btn" onclick="eseptert()">Есептеу</button>
+        <h3 id="calcResult" style="color: #0984e3; margin-top: 10px;"></h3>
+    </div>
+
+    <!-- Кликер -->
+    <div class="card">
+        <h3>🎮 Кликер ойыны</h3>
+        <p>Басқан саны: <span id="clickCount" style="font-weight: bold; color: #e17055; font-size: 20px;">0</span></p>
+        <button class="btn" style="background-color: #00b894;" onclick="basu()">Бас мені! 🚀</button>
+        <br>
+        <button class="btn" style="background-color: #d63031; padding: 5px 10px; font-size: 12px;" onclick="qalpynaKeltyru()">Қалпына келтіру</button>
+    </div>
+
+    <!-- ИИ Көмекші -->
+    <div class="card">
+        <h3>🤖 ИИ Көмекші</h3>
+        <input type="text" id="aiQuestion" placeholder="Сұрақ қойыңыз">
+        <button class="btn" onclick="askAI()">Сұрау</button>
+        <p id="aiAnswer" style="margin-top: 10px; font-weight: 500;">Жауап осында шығады...</p>
+    </div>
+
+    <!-- Ұзындық конвертері -->
+    <div class="card">
+        <h3>📏 Ұзындық конвертері</h3>
+        <input type="number" id="metersInput" min="0" step="0.01" placeholder="Метр енгізіңіз (м)">
+        <button class="btn" onclick="convertLength()">Өзгерту</button>
+        <p id="lengthResult">Нәтиже: -</p>
+    </div>
+    </div>
+
+    <section class="projects-section" aria-labelledby="projectsHeading">
+        <div class="card projects-section-header">
+            <h2 id="projectsHeading">Жобалар мен құралдар</h2>
+            <p>Қолданылған жобалар және Жайремге арналған локальді сапар калькуляторы.</p>
+        </div>
+
+        <div class="project-grid">
+            <article class="card project-card">
+                <div class="project-icon" aria-hidden="true">🚕</div>
+                <h3>Жайрем такси қызметі</h3>
+                <p>Жайрем ауданындағы жергілікті жолақыға арналған ыңғайлы такси қызметі концепті.</p>
+                <div class="project-tags" aria-label="Технологиялар">
+                    <span class="project-tag">Қызмет</span>
+                    <span class="project-tag">Жергілікті тариф</span>
+                </div>
+                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'taxiDetails')">Толығырақ</button>
+                <a class="btn" href="taxi/" style="display: inline-flex; align-items: center; text-decoration: none;">Такси қосымшасын ашу</a>
+                <div class="project-details" id="taxiDetails">Сапар санын және жолақы сомасын калькулятор арқылы жылдам есептеуге арналған.</div>
+            </article>
+
+            <article class="card project-card">
+                <div class="project-icon" aria-hidden="true">🧮</div>
+                <h3>Веб-калькулятор</h3>
+                <p>Қарапайым арифметикалық есептер мен күнделікті сандарды жылдам есептейтін веб-құрал.</p>
+                <div class="project-tags" aria-label="Технологиялар">
+                    <span class="project-tag">HTML</span>
+                    <span class="project-tag">JavaScript</span>
+                </div>
+                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'calculatorDetails')">Толығырақ</button>
+                <div class="project-details" id="calculatorDetails">Қосу, азайту, көбейту және бөлу амалдарын телефон мен компьютерден орындауға болады.</div>
+            </article>
+
+            <article class="card project-card">
+                <div class="project-icon" aria-hidden="true">🎬</div>
+                <h3>Бейнемонтаж / контент</h3>
+                <p>Әлеуметтік желілерге арналған қысқа видео, монтаж және контент дайындау бағыты.</p>
+                <div class="project-tags" aria-label="Технологиялар">
+                    <span class="project-tag">Монтаж</span>
+                    <span class="project-tag">Контент</span>
+                </div>
+                <button class="btn" type="button" onclick="toggleProjectDetails(this, 'videoDetails')">Толығырақ</button>
+                <div class="project-details" id="videoDetails">Қысқа роликтер, субтитрлер, өңдеу және әлеуметтік желі форматтарына бейімдеу ұсынылады.</div>
+            </article>
+        </div>
+
+        <div class="card tariff-calculator" id="tariffCalculator">
+            <h3>🚕 Жайрем локальді тариф калькуляторы</h3>
+            <p style="color: var(--muted);">Бір сапардың бағасы: <strong>400 ₸</strong></p>
+            <label for="tripCount">Сапар саны</label>
+            <input type="number" id="tripCount" min="1" step="1" placeholder="Мысалы: 5" inputmode="numeric">
+            <button class="btn" type="button" style="background-color: #00b894;" onclick="calculateTrips()">Жалпы соманы есептеу</button>
+            <div class="tariff-summary">
+                <div class="tariff-summary-item">
+                    <span>Бір сапар</span>
+                    <strong>400 ₸</strong>
+                </div>
+                <div class="tariff-summary-item">
+                    <span>Сапар саны</span>
+                    <strong id="tripCountResult">0</strong>
+                </div>
+            </div>
+            <p id="tripResult" role="status" aria-live="polite">Жалпы сома: 0 ₸</p>
+        </div>
+    </section>
+
+    <footer class="card" style="margin-top: 18px;">
+        <h2>Байланыс</h2>
+        <a href="tel:+77478632459">+7 (747) 863-24-59</a>
+    </footer>
+    </main>
+
+    <script>
+        let targetNumber = Math.floor(Math.random() * 100) + 1;
+
+        function readArray(key) {
+            try {
+                const value = JSON.parse(localStorage.getItem(key) || '[]');
+                return Array.isArray(value) ? value : [];
+            } catch (error) {
+                localStorage.removeItem(key);
+                return [];
+            }
+        }
+
+        window.onload = function() {
+            let savedTheme = localStorage.getItem('appTheme');
+            if(savedTheme) {
+                document.body.classList.add(savedTheme);
+            }
+            let savedName = localStorage.getItem('userName');
+            if(savedName) {
+                document.getElementById('welcomeUser').textContent = "Сәлем! Менің атым " + savedName;
+            }
+            let savedCount = localStorage.getItem('clickCount');
+            if(savedCount) {
+                san = Number(savedCount);
+                document.getElementById('clickCount').textContent = san;
+            }
+            loadTasks();
+            loadFeedbacks();
+            loadNotes();
+        };
+
+        function updateClock() {
+            let now = new Date();
+            let hours = String(now.getHours()).padStart(2, '0');
+            let minutes = String(now.getMinutes()).padStart(2, '0');
+            let seconds = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('liveClock').textContent = `⏰ ${hours}:${minutes}:${seconds}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // 1. GPS & Карта
+        function getLocationGPS() {
+            let res = document.getElementById('gpsResult');
+            if (navigator.geolocation) {
+                res.textContent = "Спутникпен байланысуда... 🛰️";
+                navigator.geolocation.getCurrentPosition((position) => {
+                    let lat = position.coords.latitude.toFixed(4);
+                    let lon = position.coords.longitude.toFixed(4);
+                    res.innerHTML = `Координаттар: ${lat}, ${lon} <br><a href="https://maps.google.com/?q=${lat},${lon}" target="_blank" style="color: #0984e3; font-weight: bold;">🗺️ Спутниктік картадан ашу</a>`;
+                }, () => {
+                    res.textContent = "GPS рұқсаты сөндірулі ❌";
+                });
+            } else {
+                res.textContent = "Браузер GPS қолдамайды.";
+            }
+        }
+
+        function openMapAddress() {
+            let addr = document.getElementById('addressInput').value;
+            let res = document.getElementById('gpsResult');
+            if(addr.trim() !== '') {
+                let encoded = encodeURIComponent(addr);
+                window.open(`https://www.google.com/maps/search/?api=1&query=${encoded}`, '_blank');
+                res.innerHTML = `Мекенжай: ${addr} (Карта ашылды 🗺️)`;
+            } else {
+                res.textContent = "Мекенжайды немесе қаланы жазыңыз!";
+            }
+        }
+
+        // 2. Телефон нөмірін анықтау
+        function checkPhone() {
+            let phone = document.getElementById('phoneInput').value;
+            let res = document.getElementById('phoneResult');
+            if(phone.trim() === '') {
+                res.textContent = "Нөмірді енгізіңіз!";
+                return;
+            }
+            let operators = ['Kcell / Activ', 'Tele2 / Altel', 'Beeline KZ'];
+            let randomOp = operators[Math.floor(Math.random() * operators.length)];
+            res.textContent = `Оператор: ${randomOp}, Аймақ: Қазақстан 🇰🇿`;
+        }
+
+        // 3. Музыка плеері
+        function playMusic() {
+            let audio = document.getElementById('audioPlayer');
+            let songUrl = document.getElementById('songSelect').value;
+            audio.src = songUrl;
+            audio.play();
+        }
+
+        function stopMusic() {
+            let audio = document.getElementById('audioPlayer');
+            audio.pause();
+            audio.currentTime = 0;
+        }
+
+        // Дизайн
+        function setTheme(mode) {
+            document.body.classList.remove('dark-mode', 'neon-mode');
+            if(mode === 'dark') {
+                document.body.classList.add('dark-mode');
+                localStorage.setItem('appTheme', 'dark-mode');
+            } else if(mode === 'neon') {
+                document.body.classList.add('neon-mode');
+                localStorage.setItem('appTheme', 'neon-mode');
+            }
+        }
+
+        function ozgertuFon() {
+            document.body.classList.remove('dark-mode', 'neon-mode');
+            localStorage.removeItem('appTheme');
+            let colors = [
+                "linear-gradient(135deg, #74b9ff, #dfe6e9)",
+                "linear-gradient(135deg, #55efc4, #81ecec)",
+                "linear-gradient(135deg, #ffeaa7, #fab1a0)",
+                "linear-gradient(135deg, #a29bfe, #dfe6e9)",
+                "linear-gradient(135deg, #ff7675, #74b9ff)"
+            ];
+            let randomColor = colors[Math.floor(Math.random() * colors.length)];
+            document.getElementById('mainBody').style.background = randomColor;
+        }
+
+        function saveName() {
+            let name = document.getElementById('usernameInput').value;
+            if(name.trim() !== '') {
+                localStorage.setItem('userName', name);
+                document.getElementById('welcomeUser').textContent = "Сәлем! Менің атым " + name;
+                document.getElementById('usernameInput').value = '';
+            }
+        }
+
+        function saveNote() {
+            let text = document.getElementById('noteInput').value;
+            if(text.trim() !== '') {
+                let notes = readArray('myNotes');
+                notes.push(text);
+                localStorage.setItem('myNotes', JSON.stringify(notes));
+                document.getElementById('noteInput').value = '';
+                loadNotes();
+            }
+        }
+        function loadNotes() {
+            let ul = document.getElementById('noteList');
+            ul.innerHTML = '';
+            let notes = readArray('myNotes');
+            notes.forEach((note, index) => {
+                let li = document.createElement('li');
+                let text = document.createElement('span');
+                text.textContent = note;
+                let remove = document.createElement('span');
+                remove.textContent = '✕';
+                remove.onclick = () => deleteNote(index);
+                remove.setAttribute('role', 'button');
+                remove.setAttribute('tabindex', '0');
+                remove.setAttribute('aria-label', 'Жазбаны жою');
+                remove.style.cssText = 'color:red; cursor:pointer; font-weight:bold;';
+                li.append(text, remove);
+                ul.appendChild(li);
+            });
+        }
+        function deleteNote(index) {
+            let notes = readArray('myNotes');
+            notes.splice(index, 1);
+            localStorage.setItem('myNotes', JSON.stringify(notes));
+            loadNotes();
+        }
+
+        function playRPS(userChoice) {
+            let choices = ['Тас', 'Қағаз', 'Қайшы'];
+            let compChoice = choices[Math.floor(Math.random() * choices.length)];
+            let resText = `Сіз: ${userChoice} | Компьютер: ${compChoice} — `;
+            if(userChoice === compChoice) resText += "Тең түстіңіз! 🤝";
+            else if(
+                (userChoice === 'Тас' && compChoice === 'Қайшы') ||
+                (userChoice === 'Қағаз' && compChoice === 'Тас') ||
+                (userChoice === 'Қайшы' && compChoice === 'Қағаз')
+            ) resText += "Сіз жеңдіңіз! 🎉";
+            else resText += "Компьютер жеңді! 🤖";
+            document.getElementById('rpsResult').textContent = resText;
+        }
+
+        let workoutSeconds = 30;
+        let workoutInterval = null;
+        function startWorkout() {
+            if(workoutInterval) return;
+            workoutInterval = setInterval(() => {
+                workoutSeconds--;
+                let m = String(Math.floor(workoutSeconds / 60)).padStart(2, '0');
+                let s = String(workoutSeconds % 60).padStart(2, '0');
+                document.getElementById('workoutDisplay').textContent = `${m}:${s}`;
+                if(workoutSeconds <= 0) {
+                    clearInterval(workoutInterval);
+                    workoutInterval = null;
+                    alert("Уақыт бітті! Жарайсыз! 💪");
+                    workoutSeconds = 30;
+                    document.getElementById('workoutDisplay').textContent = "00:30";
+                }
+            }, 1000);
+        }
+        function stopWorkout() {
+            clearInterval(workoutInterval);
+            workoutInterval = null;
+        }
+
+        function showJoke() {
+            let jokes = [
+                "Бағдарламашы ұйықтар алдында қасына екі стақан қояды: біреуі сумен, екіншісі бос 😂",
+                "Кодтағы қателік — бұл фича, қателік емес! 🤓",
+                "Мұғалім: «HTML бағдарламалау тілі ме?» Оқушы: «Жоқ, бұл өмір салты!» 💻"
+            ];
+            document.getElementById('jokeText').textContent = jokes[Math.floor(Math.random() * jokes.length)];
+        }
+
+        function calcBMI() {
+            let h = Number(document.getElementById('heightInput').value) / 100;
+            let w = Number(document.getElementById('weightInput').value);
+            if(h > 0 && w > 0) {
+                let bmi = (w / (h * h)).toFixed(1);
+                let text = bmi < 18.5 ? "Салмақ аз 🦴" : bmi < 25 ? "Қалыпты салмақ 👍" : "Артық салмақ ⚖️";
+                document.getElementById('bmiResult').textContent = `BMI: ${bmi} (${text})`;
+            }
+        }
+
+        function checkGuess() {
+            let guess = Number(document.getElementById('guessInput').value);
+            let res = document.getElementById('guessResult');
+            if(guess === targetNumber) {
+                res.textContent = "Құттықтаймын! Санды таптыңыз! 🎉";
+                res.style.color = "#00b894";
+                targetNumber = Math.floor(Math.random() * 100) + 1;
+            } else if(guess < targetNumber) {
+                res.textContent = "Үлкенірек сан жазыңыз! ⬆️";
+                res.style.color = "#e17055";
+            } else {
+                res.textContent = "Кішірек сан жазыңыз! ⬇️";
+                res.style.color = "#e17055";
+            }
+        }
+
+        function taskQosu() {
+            let input = document.getElementById('taskInput');
+            let txt = input.value;
+            if (txt.trim() !== '') {
+                let tasks = readArray('myTasksAdv');
+                tasks.push({ text: txt, done: false });
+                localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
+                input.value = '';
+                loadTasks();
+            }
+        }
+        function loadTasks() {
+            let ul = document.getElementById('taskList');
+            ul.innerHTML = '';
+            let tasks = readArray('myTasksAdv');
+            tasks.forEach((task, index) => {
+                let li = document.createElement('li');
+                li.className = task.done ? 'completed' : '';
+                let content = document.createElement('span');
+                let checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.checked = Boolean(task.done);
+                checkbox.onchange = () => toggleTask(index);
+                let text = document.createTextNode(task.text);
+                content.append(checkbox, text);
+                let remove = document.createElement('span');
+                remove.textContent = '✕';
+                remove.onclick = () => deleteTask(index);
+                remove.setAttribute('role', 'button');
+                remove.setAttribute('tabindex', '0');
+                remove.setAttribute('aria-label', 'Тапсырманы жою');
+                remove.style.cssText = 'color:red; cursor:pointer; font-weight:bold;';
+                li.append(content, remove);
+                ul.appendChild(li);
+            });
+        }
+        function toggleTask(index) {
+            let tasks = readArray('myTasksAdv');
+            tasks[index].done = !tasks[index].done;
+            localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
+            loadTasks();
+        }
+        function deleteTask(index) {
+            let tasks = readArray('myTasksAdv');
+            tasks.splice(index, 1);
+            localStorage.setItem('myTasksAdv', JSON.stringify(tasks));
+            loadTasks();
+        }
+
+        function showQuote() {
+            let quotes = [
+                "«Қате жасаудан қорықпа, қателік — бұл тәжірибе!»",
+                "«Бүгінгі еңбегің — ертеңгі жетістігің!»",
+                "«Әрбір мықты программист қарапайым кодтан бастаған.»",
+                "«Мақсатыңа сенсең, бәрі де мүмкін!»"
+            ];
+            document.getElementById('quoteText').textContent = quotes[Math.floor(Math.random() * quotes.length)];
+        }
+
+        let secondsTotal = 0;
+        let timerInterval = null;
+        function startStopwatch() {
+            if(timerInterval) return;
+            timerInterval = setInterval(() => {
+                secondsTotal++;
+                let m = String(Math.floor(secondsTotal / 60)).padStart(2, '0');
+                let s = String(secondsTotal % 60).padStart(2, '0');
+                document.getElementById('stopwatchDisplay').textContent = `${m}:${s}`;
+            }, 1000);
+        }
+        function stopStopwatch() {
+            clearInterval(timerInterval);
+            timerInterval = null;
+        }
+        function resetStopwatch() {
+            stopStopwatch();
+            secondsTotal = 0;
+            document.getElementById('stopwatchDisplay').textContent = "00:00";
+        }
+
+        function checkQuiz(isCorrect) {
+            let resElem = document.getElementById('quizResult');
+            if(isCorrect) {
+                resElem.textContent = "Дұрыс! 🎉 Жарайсың!";
+                resElem.style.color = "#00b894";
+            } else {
+                resElem.textContent = "Қате, қайталап көр! ❌";
+                resElem.style.color = "red";
+            }
+        }
+
+        function saveFeedback() {
+            let rating = document.getElementById('ratingSelect').value;
+            let text = document.getElementById('feedbackInput').value;
+            if(text.trim() !== '') {
+                let feedbacks = readArray('myFeedbacks');
+                feedbacks.push(`${rating} - ${text}`);
+                localStorage.setItem('myFeedbacks', JSON.stringify(feedbacks));
+                document.getElementById('feedbackInput').value = '';
+                loadFeedbacks();
+            }
+        }
+        function loadFeedbacks() {
+            let ul = document.getElementById('feedbackList');
+            ul.innerHTML = '';
+            let feedbacks = readArray('myFeedbacks');
+            feedbacks.forEach(item => {
+                let li = document.createElement('li');
+                li.textContent = item;
+                ul.appendChild(li);
+            });
+        }
+
+        function getWeather() {
+            let city = document.getElementById('cityInput').value;
+            if(city.trim() === '') return;
+            let temps = Math.floor(Math.random() * 30) - 5;
+            document.getElementById('weatherResult').textContent = `${city} қаласында: +${temps}°C, Күн ашық ☀️`;
+        }
+
+        function generatePassword() {
+            let chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%";
+            let pass = "";
+            for(let i = 0; i < 8; i++) {
+                pass += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            document.getElementById('passwordOutput').value = pass;
+        }
+
+        function convertCurrency() {
+            let tenge = Number(document.getElementById('tengeInput').value);
+            let currency = document.getElementById('currencySelect').value;
+            let result = currency === 'usd' ? (tenge / 500).toFixed(2) + " $" : (tenge / 540).toFixed(2) + " €";
+            document.getElementById('currencyResult').textContent = "Нәтиже: " + result;
+        }
+
+        function calcBudget() {
+            let inc = Number(document.getElementById('incomeInput').value);
+            let exp = Number(document.getElementById('expenseInput').value);
+            let bal = inc - exp;
+            let resultElem = document.getElementById('budgetResult');
+            resultElem.textContent = "Қалдық: " + bal + " ₸";
+            resultElem.style.color = bal < 0 ? "red" : "#00b894";
+        }
+
+        function eseptert() {
+            let n1 = Number(document.getElementById('num1').value);
+            let n2 = Number(document.getElementById('num2').value);
+            let op = document.getElementById('operator').value;
+            let res = 0;
+
+            if (op === '+') res = n1 + n2;
+            else if (op === '-') res = n1 - n2;
+            else if (op === '*') res = n1 * n2;
+            else if (op === '/') {
+                if (n2 === 0) {
+                    document.getElementById('calcResult').textContent = "Нәтиже: Нөлге бөлуге болмайды!";
+                    return;
+                }
+                res = n1 / n2;
+            }
+            document.getElementById('calcResult').textContent = "Нәтиже: " + res;
+        }
+
+        let san = 0;
+        function basu() {
+            san++;
+            document.getElementById('clickCount').textContent = san;
+            localStorage.setItem('clickCount', san);
+        }
+        function qalpynaKeltyru() {
+            san = 0;
+            document.getElementById('clickCount').textContent = san;
+            localStorage.setItem('clickCount', san);
+        }
+        function askAI() {
+            let query = document.getElementById("aiQuestion").value.toLowerCase().trim();
+            let response = "Кешіріңіз, мен әзірге бұл сұраққа жауап білмеймін.";
+            if (query === "") response = "Сұрақты енгізіңіз.";
+            else if (query.includes("сәлем") || query.includes("привет")) response = "Сәлеметсіз бе! Қалай көмектесе аламын?";
+            else if (query.includes("ауа райы")) response = "Нақты болжам үшін қала атауын Ауа райы бөліміне енгізіңіз.";
+            else if (query.includes("уақыт")) response = "Қазіргі уақыт: " + new Date().toLocaleTimeString();
+            else if (query.includes("атың кім")) response = "Мен осы қосымшаға кіріктірілген көмекшімін!";
+            document.getElementById("aiAnswer").textContent = response;
+        }
+
+        function convertLength() {
+            let input = document.getElementById("metersInput");
+            let m = Number(input.value);
+            if (input.value.trim() === "" || !Number.isFinite(m) || m < 0) {
+                document.getElementById("lengthResult").textContent = "Нөлден үлкен немесе тең сан енгізіңіз!";
+                return;
+            }
+            let cm = m * 100;
+            let mm = m * 1000;
+            document.getElementById("lengthResult").textContent = `${m} м = ${cm} см = ${mm} мм`;
+        }
+
+        function toggleProjectDetails(button, detailsId) {
+            const details = document.getElementById(detailsId);
+            const isOpen = details.classList.toggle('open');
+            button.textContent = isOpen ? 'Жасыру' : 'Толығырақ';
+            button.setAttribute('aria-expanded', String(isOpen));
+        }
+
+        function calculateTrips() {
+            const input = document.getElementById('tripCount');
+            const trips = Number(input.value);
+
+            if (input.value.trim() === '' || !Number.isInteger(trips) || trips < 1) {
+                document.getElementById('tripCountResult').textContent = '0';
+                document.getElementById('tripResult').textContent = 'Сапар санын кемінде 1 деп енгізіңіз!';
+                document.getElementById('tripResult').style.color = 'var(--danger)';
+                input.focus();
+                return;
+            }
+
+            const total = trips * 400;
+            document.getElementById('tripCountResult').textContent = trips;
+            document.getElementById('tripResult').textContent = `Жалпы сома: ${total.toLocaleString('kk-KZ')} ₸`;
+            document.getElementById('tripResult').style.color = 'var(--success)';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const tripInput = document.getElementById('tripCount');
+            if (tripInput) {
+                tripInput.addEventListener('keydown', function (event) {
+                    if (event.key === 'Enter') {
+                        calculateTrips();
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
