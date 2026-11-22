@@ -157,8 +157,12 @@
     .output-block { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #10131a; }
     .output-block strong { display: block; margin-bottom: 6px; color: #d3b27e; font-size: 10px; }
     .output-block p { margin: 0; color: #d8dce4; font-size: 11px; line-height: 1.55; white-space: pre-wrap; }
+    .episode-controls { display: flex; align-items: center; gap: 9px; margin-top: 12px; }
+    .episode-controls label { color: var(--muted); font-size: 10px; }
+    .episode-controls select { flex: 1; min-width: 0; }
     .studio-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
     .studio-status { min-height: 16px; margin: 9px 0 0; color: var(--muted); font-size: 10px; }
+    .studio-guidance { margin: 3px 0 0; color: var(--muted); font-size: 10px; line-height: 1.5; }
     .safety-note { padding: 10px 11px; border: 1px solid #51432d; border-radius: 11px; color: #ddc69f; background: #241f18; font-size: 10px; line-height: 1.5; }
     .notice { margin-bottom: 12px; padding: 11px 12px; border: 1px solid #5b3738; border-radius: 12px; color: #ffc5c5; background: #291a1c; font-size: 11px; line-height: 1.5; }
     .toast { position: fixed; z-index: 20; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); width: min(380px, calc(100% - 32px)); padding: 12px 14px; border: 1px solid #51432d; border-radius: 13px; color: #f2dfbd; background: #201d19; box-shadow: 0 14px 40px #0008; font-size: 11px; line-height: 1.5; }
@@ -326,8 +330,10 @@
         generate:"Сценарий жасау", generated:"ЖАСАЛҒАН КОНТЕНТ", hook:"Ағылшынша hook", script:"English script",
         title:"YouTube атауы", description:"YouTube сипаттамасы", tags:"YouTube тегтері", hashtags:"Хэштегтер",
         caption:"TikTok жазбасы", debateQuestion:"Пікірталас сұрағы", performance:"Retention Checklist",
-        renderVideo:"Render & Download 1080p Video (Жоғары сапада жүктеп алу)", downloadMetadata:"Сценарий мен метадеректерді жүктеп алу (.txt)",
-        rendering:"1080p видео жасалуда… Осы бетті ашық ұстаңыз.", renderComplete:"Видео жүктелді.", renderUnsupported:"Бұл браузерде 1080p видео жазу қолжетімсіз. Жаңартылған Chrome немесе Safari қолданып көріңіз.",
+        episodeCount:"Эпизод саны", episodeCountHelp:"1–20. Тақырыптан автоматты анықтау үшін бос қалдырыңыз.", episodeProgress:"Episode {current} / {total}",
+        renderVideo:"1080p видео жасау · Episode {current} / {total}", downloadMetadata:"Сценарий мен метадеректерді жүктеп алу (.txt)",
+        rendering:"Episode {current} / {total} · 1080p видео жасалуда… Осы бетті ашық ұстаңыз.", renderComplete:"Episode {current} / {total} жүктелді.", iosSaveHint:"iPhone/iOS-та файл пайда болған соң, Share («Бөлісу») → Save Video («Сохранить видео») таңдаңыз: видео Photos галереясына сақталады, WhatsApp-қа жіберілмейді.",
+        renderUnsupported:"Бұл браузерде 1080p видео жазу қолжетімсіз. Жаңартылған Chrome немесе Safari қолданып көріңіз.",
         renderFailed:"Видео жасау сәтсіз аяқталды. Браузердің медиа жазу қолдауын тексеріңіз.", downloadComplete:"Сценарий файлы жүктелді.",
         metadataEmpty:"Алдымен тақырыпты енгізіп, сценарий жасаңыз.", retention:"Алғашқы секундтарда назарды ұстау", views:"Мақсатты қаралымдарды бақылау", watchTime:"Көру уақытын тексеру",
         requestPublish:"Жариялауға мақұлдау сұрау", outputEmpty:"Тақырып енгізіп, сценарийді жасаңыз.",
@@ -346,7 +352,7 @@
         submission:"Дүкенге жіберу", billing:"Төлем немесе есепшот", requestSubmission:"Дүкенге жіберуді сұрау",
         storeActions:"Релиз әрекеттері", requestBilling:"Төлемді мақұлдауға жіберу",
         statusReady:"Жұмыс істеуге дайын", statusBusy:"Тапсырма бар", statusQueue:"Кезекте сұрау бар",
-        emptyTask:"Тапсырма мәтінін енгізіңіз.", emptyTopic:"Алдымен тақырыпты енгізіңіз.", emptyDetail:"Тапсырма сипаттамасын енгізіңіз.",
+        emptyTask:"Тапсырма мәтінін енгізіңіз.", emptyTopic:"Алдымен тақырыпты енгізіңіз.", badEpisodeCount:"Эпизод саны 1 мен 20 аралығында болуы керек.", emptyDetail:"Тапсырма сипаттамасын енгізіңіз.",
         noExternal:"Бұл демонстрация сыртқы сервистерге қосылмайды.",
         statusLabels:["Орталық бағыттау", "Контент әзірлеу", "Қосымша әзірлеу", "Дүкен және қауіпсіздік"],
         activityRoute:"{robot} роботы үшін тапсырма жасалды", activityApproval:"Мақұлдау сұрауы жасалды", activityApprove:"Мақұлданды: {task}", activityReject:"Қабылданбады: {task}",
@@ -396,8 +402,10 @@
         generate:"Создать сценарий", generated:"СОЗДАННЫЙ КОНТЕНТ", hook:"Англоязычный хук", script:"Сценарий на английском",
         title:"Название YouTube", description:"Описание YouTube", tags:"Теги YouTube", hashtags:"Хэштеги",
         caption:"Подпись TikTok", debateQuestion:"Вопрос для обсуждения", performance:"Retention Checklist",
-        renderVideo:"Render & Download 1080p Video (Жоғары сапада жүктеп алу)", downloadMetadata:"Скачать сценарий и метаданные (.txt)",
-        rendering:"Создаётся видео 1080p… Не закрывайте страницу.", renderComplete:"Видео загружено.", renderUnsupported:"Запись видео 1080p не поддерживается этим браузером. Попробуйте обновлённый Chrome или Safari.",
+        episodeCount:"Количество эпизодов", episodeCountHelp:"От 1 до 20. Оставьте поле пустым, чтобы определить число по теме.", episodeProgress:"Episode {current} / {total}",
+        renderVideo:"Создать видео 1080p · Episode {current} / {total}", downloadMetadata:"Скачать сценарий и метаданные (.txt)",
+        rendering:"Episode {current} / {total} · создаётся видео 1080p… Не закрывайте страницу.", renderComplete:"Episode {current} / {total} загружен.", iosSaveHint:"На iPhone/iOS, когда файл появится, нажмите Share («Бөлісу») → Save Video («Сохранить видео»), чтобы сохранить видео прямо в Фото, а не отправлять его в WhatsApp.",
+        renderUnsupported:"Запись видео 1080p не поддерживается этим браузером. Попробуйте обновлённый Chrome или Safari.",
         renderFailed:"Не удалось создать видео. Проверьте поддержку записи медиа в браузере.", downloadComplete:"Файл сценария загружен.",
         metadataEmpty:"Сначала введите тему и создайте сценарий.", retention:"Удержать внимание в первые секунды", views:"Отслеживать целевые просмотры", watchTime:"Проверить время просмотра",
         requestPublish:"Запросить согласование публикации", outputEmpty:"Введите тему и создайте сценарий.",
@@ -416,7 +424,7 @@
         submission:"Отправка в магазин", billing:"Платёж или счёт", requestSubmission:"Запросить отправку в магазин",
         storeActions:"Действия релиза", requestBilling:"Запросить согласование платежа",
         statusReady:"Готов к работе", statusBusy:"Есть задача", statusQueue:"Есть запрос в очереди",
-        emptyTask:"Введите текст задачи.", emptyTopic:"Сначала введите тему.", emptyDetail:"Введите описание задачи.",
+        emptyTask:"Введите текст задачи.", emptyTopic:"Сначала введите тему.", badEpisodeCount:"Количество эпизодов должно быть от 1 до 20.", emptyDetail:"Введите описание задачи.",
         noExternal:"Демонстрация не подключена к внешним сервисам.",
         statusLabels:["Центральная маршрутизация", "Создание контента", "Разработка приложения", "Магазин и безопасность"],
         activityRoute:"Создана задача для робота «{robot}»", activityApproval:"Создан запрос на согласование", activityApprove:"Согласовано: {task}", activityReject:"Отклонено: {task}",
@@ -466,8 +474,10 @@
         generate:"Generate script", generated:"GENERATED CONTENT", hook:"English hook", script:"English script",
         title:"YouTube title", description:"YouTube description", tags:"YouTube tags", hashtags:"Hashtags",
         caption:"TikTok caption", debateQuestion:"Comment / debate question", performance:"Retention Checklist",
-        renderVideo:"Render & Download 1080p Video (Жоғары сапада жүктеп алу)", downloadMetadata:"Download Script & Metadata (.txt)",
-        rendering:"Rendering 1080p video… Keep this page open.", renderComplete:"Video downloaded.", renderUnsupported:"1080p video recording is unavailable in this browser. Try an up-to-date Chrome or Safari.",
+        episodeCount:"Episode count", episodeCountHelp:"Choose 1–20, or leave blank to detect the count from the topic.", episodeProgress:"Episode {current} / {total}",
+        renderVideo:"Render Episode {current} / {total} · 1080p", downloadMetadata:"Download Script & Metadata (.txt)",
+        rendering:"Episode {current} / {total} · rendering 1080p video… Keep this page open.", renderComplete:"Episode {current} / {total} downloaded.", iosSaveHint:"On iPhone/iOS, when the file appears, tap Share (“Бөлісу”) → Save Video (“Сохранить видео”) to save it to Photos—not WhatsApp.",
+        renderUnsupported:"1080p video recording is unavailable in this browser. Try an up-to-date Chrome or Safari.",
         renderFailed:"Could not render the video. Check your browser's media recording support.", downloadComplete:"Script file downloaded.",
         metadataEmpty:"Enter a topic and generate a script first.", retention:"Hold attention in the opening seconds", views:"Track target views", watchTime:"Review watch time",
         requestPublish:"Request publishing approval", outputEmpty:"Enter a topic and generate a script.",
@@ -486,7 +496,7 @@
         submission:"Store submission", billing:"Payment or billing", requestSubmission:"Request store submission",
         storeActions:"Release actions", requestBilling:"Request billing approval",
         statusReady:"Ready to work", statusBusy:"Task in progress", statusQueue:"Request in queue",
-        emptyTask:"Enter a task.", emptyTopic:"Enter a topic first.", emptyDetail:"Enter task details.",
+        emptyTask:"Enter a task.", emptyTopic:"Enter a topic first.", badEpisodeCount:"Episode count must be between 1 and 20.", emptyDetail:"Enter task details.",
         noExternal:"This demo is not connected to external services.",
         statusLabels:["Central routing", "Content creation", "App development", "Store and security"],
         activityRoute:"Task created for {robot}", activityApproval:"Approval request created", activityApprove:"Approved: {task}", activityReject:"Rejected: {task}",
@@ -511,13 +521,15 @@
     const emptyState = () => ({
       lang: "kk", active: "orchestrator", tasks: [], approvals: [], logs: [],
       checks: { apps: [false, false, false, false], store: [false, false, false, false], studio: [false, false, false] },
-      studio: { track: "youtube", topic: "", hookStyle: "curiosity" }, generated: null
+      studio: { track: "youtube", topic: "", hookStyle: "curiosity", episodeCount: "" }, generated: null
     });
     let state = emptyState();
     let devPrompt = "";
+    let selectedEpisode = 0;
     let toastTimer;
     const root = document.getElementById("workspace");
     const t = key => TEXT[state.lang][key] ?? key;
+    const episodeText = (key, current, total) => t(key).replace("{current}", String(current)).replace("{total}", String(total));
     const esc = value => String(value ?? "").replace(/[&<>"']/g, char => ({
       "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;"
     })[char]);
@@ -556,7 +568,8 @@
           studio: {
             track: TRACK_IDS.includes(saved.studio?.track) ? saved.studio.track : fresh.studio.track,
             topic: redact(saved.studio?.topic).slice(0, 300),
-            hookStyle: ["curiosity", "bold", "question"].includes(saved.studio?.hookStyle) ? saved.studio.hookStyle : fresh.studio.hookStyle
+            hookStyle: ["curiosity", "bold", "question"].includes(saved.studio?.hookStyle) ? saved.studio.hookStyle : fresh.studio.hookStyle,
+            episodeCount: /^(?:[1-9]|1\d|20)$/.test(String(saved.studio?.episodeCount ?? "")) ? String(saved.studio.episodeCount) : ""
           },
           generated: restoreGenerated(saved.generated)
         };
@@ -688,12 +701,15 @@
     }
     function renderGenerated() {
       if (!state.generated) return `<div class="empty">${esc(t("outputEmpty"))}</div>`;
+      const episodes = state.generated.episodes;
+      const episode = episodes[Math.min(selectedEpisode, episodes.length - 1)];
       const output = state.generated.track === "youtube"
-        ? [["title", state.generated.title], ["hook", state.generated.hook], ["script", state.generated.script], ["description", state.generated.description], ["tags", state.generated.tags]]
-        : [["hook", state.generated.hook], ["script", state.generated.script], ["caption", state.generated.caption], ["debateQuestion", state.generated.question], ["hashtags", state.generated.hashtags]];
+        ? [["title", episode.title], ["hook", episode.hook], ["script", episode.script], ["description", state.generated.description], ["tags", state.generated.tags]]
+        : [["hook", episode.hook], ["script", episode.script], ["caption", episode.caption], ["debateQuestion", episode.question], ["hashtags", state.generated.hashtags]];
       return `<div class="output-grid">
         ${output.map(([label, value]) => `<div class="output-block"><strong>${esc(t(label))}</strong><p>${esc(value)}</p></div>`).join("")}
-      </div>`;
+      </div>
+      ${episodes.length > 1 ? `<div class="episode-controls"><label for="episode-select">${esc(t("episodeCount"))}</label><select id="episode-select">${episodes.map((_, index) => `<option value="${index}" ${index === selectedEpisode ? "selected" : ""}>${esc(episodeText("episodeProgress", index + 1, episodes.length))}</option>`).join("")}</select></div>` : ""}`;
     }
     function renderLegend() {
       const track = state.studio.track;
@@ -708,6 +724,7 @@
                 <option value="movies" ${track === "movies" ? "selected" : ""}>${esc(t("moviesTrack"))}</option>
               </select><p class="card-copy" id="track-help">${esc(t(helpKey))}</p></div>
               <div class="field"><label for="topic">${esc(t("topic"))}</label><textarea id="topic" name="topic" maxlength="300" required placeholder="${esc(t("topicPlaceholder"))}">${esc(state.studio.topic)}</textarea></div>
+              <div class="field"><label for="episode-count">${esc(t("episodeCount"))}</label><input id="episode-count" name="episodeCount" type="number" min="1" max="20" step="1" inputmode="numeric" placeholder="1–20" value="${esc(state.studio.episodeCount)}"><p class="card-copy">${esc(t("episodeCountHelp"))}</p></div>
               <div class="form-row">
                 <div class="field" ${track !== "youtube" ? "hidden" : ""}><label for="hook-style">${esc(t("hookStyle"))}</label><select id="hook-style" name="hook">
                   <option value="curiosity" ${state.studio.hookStyle === "curiosity" ? "selected" : ""}>${esc(t("curiosity"))}</option>
@@ -721,11 +738,12 @@
           </section>
           <section class="card"><div class="card-heading"><h3>${esc(t("generated"))}</h3></div>${renderGenerated()}
             <div class="studio-actions">
-              <button type="button" class="button primary" data-action="render-video" ${state.generated ? "" : "disabled"}>${esc(t("renderVideo"))}</button>
+              <button type="button" class="button primary" data-action="render-video" ${state.generated ? "" : "disabled"}>${esc(episodeText("renderVideo", selectedEpisode + 1, state.generated?.episodes.length || 1))}</button>
               <button type="button" class="button" data-action="download-metadata" ${state.generated ? "" : "disabled"}>${esc(t("downloadMetadata"))}</button>
               <button type="button" class="button subtle" data-action="publish">${esc(t("requestPublish"))}</button>
             </div>
             <p class="studio-status" id="studio-export-status" role="status" aria-live="polite"></p>
+            <p class="studio-guidance">${esc(t("iosSaveHint"))}</p>
           </section>
         </div>`;
     }
@@ -806,6 +824,18 @@
       const fields = ["topic", "platform", "hookStyle", "title", "hook", "script", "description", "tags", "caption", "question", "hashtags"];
       const restored = { track: value.track };
       fields.forEach(key => { restored[key] = redact(value[key], 2000); });
+      const episodes = Array.isArray(value.episodes) ? value.episodes.slice(0, 20).filter(item => item && typeof item === "object").map((item, index) => ({
+        number: index + 1,
+        title: redact(item.title, 2000),
+        hook: redact(item.hook, 2000),
+        script: redact(item.script, 2000),
+        caption: redact(item.caption, 2000),
+        question: redact(item.question, 2000)
+      })) : [];
+      restored.episodes = episodes.length ? episodes : [{
+        number: 1, title: restored.title, hook: restored.hook, script: restored.script,
+        caption: restored.caption, question: restored.question
+      }];
       return restored;
     }
     function approvalReasonFor(text) {
@@ -855,20 +885,77 @@
       form.reset();
       render();
     }
+    function detectEpisodeCount(topic) {
+      const match = String(topic).match(/(?:^|[^\p{N}])(\d{1,2})\s*(?:episodes?|сер(?:ия|ии|ий|иям|иями|иях)?)(?=$|[^\p{L}])/iu);
+      const count = match ? Number(match[1]) : 0;
+      return count >= 1 && count <= 20 ? count : 0;
+    }
+    function englishTopic(topic) {
+      const cleanTopic = String(topic)
+        .replace(/(?:^|[^\p{N}])\d{1,2}\s*(?:episodes?|сер(?:ия|ии|ий|иям|иями|иях)?)(?=$|[^\p{L}])/iu, " ")
+        .replace(/^\s*(?:about|on|of|for)\s+/i, "")
+        .trim();
+      return cleanTopic && !/[^\p{Script=Latin}\p{N}\p{P}\p{Z}]/u.test(cleanTopic) ? cleanTopic : "this story";
+    }
+    function conciseTopic(topic, maxLength = 40) {
+      const words = String(topic).split(/\s+/);
+      let result = "";
+      for (const word of words) {
+        const candidate = result ? `${result} ${word}` : word;
+        if (candidate.length > maxLength) break;
+        result = candidate;
+      }
+      return result || "this story";
+    }
+    function createEpisodes(output, count, shortTopic) {
+      const angles = [
+        "Set up the central question.",
+        "Add the background viewers need.",
+        "Focus on a detail people often miss.",
+        "Explore the moment that changed the story.",
+        "Explain why that moment matters.",
+        "Question a common assumption.",
+        "Follow an unexpected connection.",
+        "Revisit the story from a new angle.",
+        "Share the lesson or legacy.",
+        "End with the detail worth remembering."
+      ];
+      return Array.from({ length: count }, (_, index) => {
+        const number = index + 1;
+        if (count === 1) return {
+          number, title: output.title, hook: output.hook, script: output.script,
+          caption: output.caption, question: output.question
+        };
+        const angle = angles[index % angles.length];
+        const hook = number === 1 ? output.hook : `Episode ${number}: ${angle.replace(/\.$/, "")}`;
+        const ending = number === count ? "Which detail will you remember?" : "What should viewers notice next?";
+        return {
+          number,
+          title: `Episode ${number}: ${shortTopic}`,
+          hook,
+          script: `0:00 — ${hook}\n0:03 — ${angle}\n0:08 — Connect this part to ${shortTopic}.\n0:14 — ${ending}`,
+          caption: `${shortTopic}: ${angle.replace(/\.$/, "")}`,
+          question: `What stands out most about ${shortTopic}?`
+        };
+      });
+    }
     function submitStudio(form) {
       const data = new FormData(form);
       const topic = String(data.get("topic") || "").trim();
       if (!topic) return showToast(t("emptyTopic"));
       const safeTopic = redact(topic).slice(0, 300);
+      const requestedCount = String(data.get("episodeCount") || "").trim();
+      const episodeCount = requestedCount ? Number(requestedCount) : detectEpisodeCount(safeTopic) || 1;
+      if (!Number.isInteger(episodeCount) || episodeCount < 1 || episodeCount > 20) return showToast(t("badEpisodeCount"));
       const track = TRACK_IDS.includes(String(data.get("track"))) ? String(data.get("track")) : "youtube";
       const hookStyle = ["curiosity", "bold", "question"].includes(String(data.get("hook"))) ? String(data.get("hook")) : "curiosity";
-      const topicEnglish = safeTopic;
+      const topicEnglish = englishTopic(safeTopic);
+      const shortTopic = conciseTopic(topicEnglish);
       const youtubeHooks = {
-        curiosity: `The legendary story of ${topicEnglish} has an intriguing detail most people miss.`,
-        bold: `${topicEnglish} changed history in a way few people expect.`,
-        question: `What made ${topicEnglish} truly legendary?`
+        curiosity: `A detail about ${shortTopic} most people miss.`,
+        bold: `${shortTopic}: a detail few expect.`,
+        question: `What makes ${shortTopic} worth remembering?`
       };
-      const shortTopic = topicEnglish.split(/\s+/).slice(0, 6).join(" ").slice(0, 48).trim();
       const hook = track === "football"
         ? "This football moment was unreal."
         : track === "movies"
@@ -877,32 +964,37 @@
       const tagSeed = topicEnglish.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 30) || "legend";
       const youtube = track === "youtube";
       const script = youtube
-        ? `0:00 — ${hook}\n0:03 — Set the scene: ${topicEnglish} was more than a name or a moment.\n0:08 — Reveal the intriguing fact and why it mattered.\n0:14 — End with the detail viewers will remember.`
+        ? `0:00 — ${hook}\n0:03 — Set the scene: ${shortTopic} was more than a name or a moment.\n0:08 — Reveal the intriguing fact and why it mattered.\n0:14 — End with the detail viewers will remember.`
         : track === "football"
-          ? `0:00 — ${hook}\n0:02 — Set up the decisive moment around ${topicEnglish}.\n0:06 — Show what made this play or player unforgettable.\n0:11 — Was it the greatest moment? Tell us why.`
-          : `0:00 — ${hook}\n0:02 — Set up the memorable scene or fact about ${topicEnglish}.\n0:06 — Reveal the detail that makes it iconic.\n0:11 — Did you catch it the first time? Tell us below.`;
+          ? `0:00 — ${hook}\n0:02 — Set up the decisive moment around ${shortTopic}.\n0:06 — Show what made this play or player unforgettable.\n0:11 — Was it the greatest moment? Tell us why.`
+          : `0:00 — ${hook}\n0:02 — Set up the memorable scene or fact about ${shortTopic}.\n0:06 — Reveal the detail that makes it iconic.\n0:11 — Did you catch it the first time? Tell us below.`;
       const hashtags = track === "football" ? "#football #soccer #footballtok #fyp"
         : track === "movies" ? "#movies #film #movietok #fyp"
           : `#Shorts #Legend #Storytelling #${tagSeed}`;
       const result = {
         track, topic: safeTopic, platform: track === "youtube" ? "YouTube Shorts" : "US TikTok", hookStyle,
-        title: `${topicEnglish}: The Detail That Made It Legendary`,
+        title: `${shortTopic}: The Detail That Made It Legendary`,
         hook,
         script,
         description: youtube
-          ? `Discover the legendary story and intriguing detail behind ${topicEnglish}. Watch in vertical 9:16, 1080p.\n\n${hashtags}`
+          ? `Discover the legendary story and intriguing detail behind ${shortTopic}. Watch in vertical 9:16, 1080p.\n\n${hashtags}`
           : `A quick US TikTok about ${shortTopic}, made for ${track === "football" ? "football fans" : "movie fans"}.\n\n${hashtags}`,
         tags: `${topicEnglish}, legendary stories, intriguing facts, storytelling, YouTube Shorts, 9:16 video`,
         caption: track === "football"
-          ? `The ${shortTopic} moment was unreal. Where does it rank?`
+          ? `${shortTopic === "this story" ? "This football" : `The ${shortTopic}`} moment was unreal. Where does it rank?`
           : `This ${shortTopic} scene deserves a rewatch. Did you catch it?`,
         question: track === "football"
-          ? `Was ${shortTopic} the greatest in football?`
+          ? `Was ${shortTopic === "this story" ? "this moment" : shortTopic} the greatest in football?`
           : `Is ${shortTopic} the most iconic movie moment?`,
         hashtags
       };
-      state.studio = { track, topic: safeTopic, hookStyle };
-      state.generated = Object.fromEntries(Object.entries(result).map(([key, value]) => [key, typeof value === "string" ? redact(value, 2000) : value]));
+      const safeResult = Object.fromEntries(Object.entries(result).map(([key, value]) => [key, typeof value === "string" ? redact(value, 2000) : value]));
+      safeResult.episodes = createEpisodes(safeResult, episodeCount, shortTopic).map(episode => Object.fromEntries(
+        Object.entries(episode).map(([key, value]) => [key, typeof value === "string" ? redact(value, 2000) : value])
+      ));
+      state.studio = { track, topic: safeTopic, hookStyle, episodeCount: requestedCount ? String(episodeCount) : "" };
+      selectedEpisode = 0;
+      state.generated = safeResult;
       persist();
       render();
     }
@@ -920,6 +1012,7 @@
     function scriptMetadata() {
       const output = state.generated;
       const trackName = t(({ youtube:"youtubeTrack", football:"footballTrack", movies:"moviesTrack" })[output.track]);
+      const episodeScripts = output.episodes.map(episode => `EPISODE ${episode.number} / ${output.episodes.length}\n${episode.script}`).join("\n\n");
       return [
         "CLINA LEGEND STUDIO — SCRIPT & METADATA",
         `Track: ${trackName}`,
@@ -927,8 +1020,7 @@
         `Title: ${output.title}`,
         `Hook: ${output.hook}`,
         "",
-        "SCRIPT",
-        output.script,
+        episodeScripts,
         "",
         "DESCRIPTION",
         output.description,
@@ -945,28 +1037,57 @@
       showToast(t("downloadComplete"));
     }
     function wrapCanvasText(context, text, maxWidth, maxLines) {
-      const words = String(text).split(/\s+/);
+      const words = String(text).trim().split(/\s+/).filter(Boolean);
       const lines = [];
       let line = "";
-      for (const word of words) {
-        const candidate = line ? `${line} ${word}` : word;
-        if (context.measureText(candidate).width > maxWidth && line) {
-          lines.push(line);
-          line = word;
-          if (lines.length === maxLines) break;
-        } else {
-          line = candidate;
+      let truncated = false;
+      for (let wordIndex = 0; wordIndex < words.length; wordIndex++) {
+        let word = words[wordIndex];
+        while (context.measureText(word).width > maxWidth) {
+          if (line) {
+            lines.push(line);
+            line = "";
+            if (lines.length >= maxLines) {
+              truncated = true;
+              break;
+            }
+          }
+          const characters = Array.from(word);
+          let chunk = "";
+          let consumed = 0;
+          for (const character of characters) {
+            if (chunk && context.measureText(chunk + character).width > maxWidth) break;
+            chunk += character;
+            consumed++;
+          }
+          lines.push(chunk);
+          word = characters.slice(consumed).join("");
+          if (lines.length >= maxLines) {
+            truncated = Boolean(word) || wordIndex < words.length - 1;
+            break;
+          }
         }
+        if (truncated) break;
+        if (line && context.measureText(`${line} ${word}`).width > maxWidth) {
+          lines.push(line);
+          line = "";
+          if (lines.length >= maxLines) {
+            truncated = true;
+            break;
+          }
+        }
+        line = line ? `${line} ${word}` : word;
       }
-      if (lines.length < maxLines && line) lines.push(line);
-      if (lines.length === maxLines && words.join(" ").length > lines.join(" ").length) {
-        let last = lines[maxLines - 1];
-        while (last && context.measureText(`${last}…`).width > maxWidth) last = last.slice(0, -1);
-        lines[maxLines - 1] = `${last.trimEnd()}…`;
+      if (line && lines.length < maxLines) lines.push(line);
+      else if (line) truncated = true;
+      if (truncated && lines.length) {
+        let last = Array.from(lines[lines.length - 1]);
+        while (last.length && context.measureText(`${last.join("")}…`).width > maxWidth) last.pop();
+        lines[lines.length - 1] = `${last.join("").trimEnd()}…`;
       }
       return lines;
     }
-    function drawVideoFrame(context, elapsed, scenes, track) {
+    function drawVideoFrame(context, elapsed, scenes, track, episodeNumber, episodeTotal) {
       const themes = {
         youtube: ["#16112c", "#562b55", "#d0a557"],
         football: ["#071d1a", "#12634a", "#7ee2a3"],
@@ -1005,37 +1126,40 @@
       context.font = "800 30px system-ui, sans-serif";
       context.textAlign = "left";
       context.fillText(track === "youtube" ? "LEGEND · YOUTUBE SHORTS" : track === "football" ? "US TIKTOK · FOOTBALL" : "US TIKTOK · MOVIES", 84, 146);
+      context.textAlign = "center";
+      context.font = "750 30px system-ui, sans-serif";
+      context.fillText(`EPISODE ${episodeNumber} / ${episodeTotal}`, 540, 230);
       const scene = scenes[sceneIndex];
       context.save();
       context.globalAlpha = Math.max(0, progress);
       const scale = 0.96 + Math.min(sceneTime / 0.65, 1) * 0.04;
-      context.translate(540, 940 + (1 - progress) * 56);
+      context.translate(540, 900 + (1 - progress) * 48);
       context.scale(scale, scale);
       context.textAlign = "center";
       context.textBaseline = "middle";
       context.fillStyle = "#fff";
       context.shadowColor = "#0009";
       context.shadowBlur = 28;
-      context.font = "900 104px system-ui, -apple-system, sans-serif";
-      const lines = wrapCanvasText(context, scene.title, 860, 5);
-      const lineHeight = 126;
+      context.font = "900 84px system-ui, -apple-system, sans-serif";
+      const lines = wrapCanvasText(context, scene.title, 860, 4);
+      const lineHeight = 104;
       const startY = -((lines.length - 1) * lineHeight) / 2;
-      lines.forEach((line, index) => context.fillText(line, 0, startY + index * lineHeight, 860));
+      lines.forEach((line, index) => context.fillText(line, 0, startY + index * lineHeight));
       context.restore();
       context.shadowBlur = 0;
       context.textAlign = "center";
       context.fillStyle = "#f4f4f5";
-      context.font = "500 40px system-ui, sans-serif";
-      wrapCanvasText(context, scene.subtitle, 820, 3).forEach((line, index, lines) => {
-        context.fillText(line, 540, 1320 + (index - (lines.length - 1) / 2) * 56);
+      context.font = "500 38px system-ui, sans-serif";
+      wrapCanvasText(context, scene.subtitle, 840, 3).forEach((line, index, lines) => {
+        context.fillText(line, 540, 1330 + (index - (lines.length - 1) / 2) * 54);
       });
       context.fillStyle = "#ffffff38";
-      context.fillRect(84, 1770, 912, 8);
+      context.fillRect(96, 1760, 888, 8);
       context.fillStyle = highlight;
-      context.fillRect(84, 1770, 912 * Math.min(elapsed / 15, 1), 8);
+      context.fillRect(96, 1760, 888 * Math.min(elapsed / 15, 1), 8);
       context.fillStyle = "#ffffffb8";
       context.font = "650 27px system-ui, sans-serif";
-      context.fillText("9:16  ·  FULL HD 1080p", 540, 1840);
+      context.fillText("9:16  ·  FULL HD 1080p", 540, 1830);
     }
     async function recordVerticalVideo(button) {
       if (!state.generated) return showToast(t("metadataEmpty"));
@@ -1044,17 +1168,20 @@
         return;
       }
       const status = document.getElementById("studio-export-status");
-      button.disabled = true;
-      status.textContent = t("rendering");
+      const episodeSelect = document.getElementById("episode-select");
       const output = state.generated;
-      const scenes = output.track === "youtube" ? [
-        { title: output.hook, subtitle: output.title },
-        { title: `The story behind ${output.topic}`, subtitle: "One intriguing fact changes how you see it." },
-        { title: "Remember the detail.", subtitle: "Watch, share, and explore the full story." }
-      ] : [
-        { title: output.hook, subtitle: output.track === "football" ? "The moment fans still debate." : "A scene worth watching again." },
-        { title: output.caption, subtitle: output.track === "football" ? "Skill, timing, and a moment that mattered." : "The detail that made it unforgettable." },
-        { title: output.question, subtitle: output.hashtags }
+      const episodes = output.episodes;
+      const episode = episodes[Math.min(selectedEpisode, episodes.length - 1)];
+      const current = episode.number;
+      const total = episodes.length;
+      button.disabled = true;
+      if (episodeSelect) episodeSelect.disabled = true;
+      status.textContent = episodeText("rendering", current, total);
+      const scriptLines = episode.script.split("\n").map(line => line.replace(/^\d+:\d+\s+—\s*/, ""));
+      const scenes = [
+        { title: episode.hook, subtitle: episode.title },
+        { title: scriptLines[1] || "Look closer at the detail.", subtitle: episode.caption || `The story behind ${output.topic}.` },
+        { title: episode.question || "What should viewers remember?", subtitle: scriptLines[scriptLines.length - 1] || output.hashtags }
       ];
       const canvas = document.createElement("canvas");
       canvas.width = 1080;
@@ -1062,6 +1189,7 @@
       const context = canvas.getContext("2d", { alpha: false });
       if (!context) {
         button.disabled = false;
+        if (episodeSelect) episodeSelect.disabled = false;
         status.textContent = t("renderFailed");
         showToast(t("renderFailed"));
         return;
@@ -1072,6 +1200,7 @@
       } catch (error) {
         console.error("Could not capture Legend Studio canvas:", error);
         button.disabled = false;
+        if (episodeSelect) episodeSelect.disabled = false;
         status.textContent = t("renderFailed");
         showToast(t("renderFailed"));
         return;
@@ -1081,6 +1210,7 @@
       if (!mimeType) {
         stream.getTracks().forEach(track => track.stop());
         button.disabled = false;
+        if (episodeSelect) episodeSelect.disabled = false;
         status.textContent = t("renderUnsupported");
         showToast(t("renderUnsupported"));
         return;
@@ -1109,7 +1239,7 @@
           const startedAt = performance.now();
           const draw = () => {
             const elapsed = Math.min((performance.now() - startedAt) / 1000, 15);
-            drawVideoFrame(context, elapsed, scenes, output.track);
+            drawVideoFrame(context, elapsed, scenes, output.track, current, total);
             if (elapsed >= 15 && recorder.state === "recording") recorder.stop();
           };
           draw();
@@ -1117,9 +1247,10 @@
         });
         const extension = blob.type.includes("mp4") ? "mp4" : "webm";
         const slug = output.topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "legend-video";
-        downloadBlob(blob, `${slug}-1080p.${extension}`);
-        status.textContent = t("renderComplete");
-        showToast(t("renderComplete"));
+        const episodeSuffix = total > 1 ? `-episode-${current}-of-${total}` : "";
+        downloadBlob(blob, `${slug}${episodeSuffix}-1080p.${extension}`);
+        status.textContent = episodeText("renderComplete", current, total);
+        showToast(status.textContent);
       } catch (error) {
         console.error("Could not render Legend Studio video:", error);
         status.textContent = t("renderFailed");
@@ -1127,6 +1258,7 @@
       } finally {
         stream.getTracks().forEach(track => track.stop());
         button.disabled = false;
+        if (episodeSelect) episodeSelect.disabled = false;
       }
     }
     function submitApp(form) {
@@ -1174,6 +1306,7 @@
           localStorage.removeItem(STORE_KEY);
           state = emptyState();
           devPrompt = "";
+          selectedEpisode = 0;
           render();
         } catch (error) {
           console.error("Could not reset Clina demo state:", error);
@@ -1227,6 +1360,21 @@
         state.generated = null;
         persist();
         render();
+        return;
+      }
+      const episodeSelect = event.target.closest("#episode-select");
+      if (episodeSelect) {
+        const index = Number(episodeSelect.value);
+        if (!Number.isInteger(index) || index < 0 || index >= state.generated?.episodes.length) return;
+        selectedEpisode = index;
+        render();
+        return;
+      }
+      const episodeCountInput = event.target.closest("#episode-count");
+      if (episodeCountInput) {
+        const value = episodeCountInput.value;
+        state.studio.episodeCount = /^(?:[1-9]|1\d|20)$/.test(value) ? value : "";
+        persist();
         return;
       }
       const hookSelect = event.target.closest("#hook-style");
