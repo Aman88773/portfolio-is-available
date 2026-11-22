@@ -157,6 +157,8 @@
     .output-block { padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: #10131a; }
     .output-block strong { display: block; margin-bottom: 6px; color: #d3b27e; font-size: 10px; }
     .output-block p { margin: 0; color: #d8dce4; font-size: 11px; line-height: 1.55; white-space: pre-wrap; }
+    .studio-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 13px; }
+    .studio-status { min-height: 16px; margin: 9px 0 0; color: var(--muted); font-size: 10px; }
     .safety-note { padding: 10px 11px; border: 1px solid #51432d; border-radius: 11px; color: #ddc69f; background: #241f18; font-size: 10px; line-height: 1.5; }
     .notice { margin-bottom: 12px; padding: 11px 12px; border: 1px solid #5b3738; border-radius: 12px; color: #ffc5c5; background: #291a1c; font-size: 11px; line-height: 1.5; }
     .toast { position: fixed; z-index: 20; right: 16px; bottom: max(16px, env(safe-area-inset-bottom)); width: min(380px, calc(100% - 32px)); padding: 12px 14px; border: 1px solid #51432d; border-radius: 13px; color: #f2dfbd; background: #201d19; box-shadow: 0 14px 40px #0008; font-size: 11px; line-height: 1.5; }
@@ -282,6 +284,7 @@
     const STORE_KEY = "clina-4-robots-hub-v1";
     const LANGS = ["kk", "ru", "en"];
     const ROBOT_IDS = ["orchestrator", "legend", "apps", "release"];
+    const TRACK_IDS = ["youtube", "football", "movies"];
     const CHECKS = {
       apps: ["loadSpeed", "coreButtons", "mobileReady", "consoleErrors"],
       store: ["policy", "permissions", "testing", "storeAssets"],
@@ -315,10 +318,18 @@
         approvalNotice:"Мақұлдау тек демо сұрауын растайды. Бұл қолданба ешбір есепшотты төлемейді, файлды өзгертпейді немесе жарияламайды.",
         studioSub:"9:16 · 1080p · English short-form контент", aspect:"9:16 тік формат", studioTitle:"Legend Studio",
         topic:"Тақырып / идея", topicPlaceholder:"Мысалы: күнделікті әдеттер туралы таңғаларлық факт",
-        platform:"Платформа", youtube:"YouTube Shorts", tiktok:"Шетелдік TikTok",
+        track:"Контент бағыты", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Футбол", moviesTrack:"US TikTok · Фильмдер",
+        trackYouTubeHelp:"Аңызға айналған оқиғалар, қызықты деректер және 9:16 форматындағы баяндау.",
+        trackFootballHelp:"Футболдағы әсерлі сәттер мен әйгілі футболшылар туралы АҚШ аудиториясына арналған қысқа видео.",
+        trackMoviesHelp:"Есте қаларлық кино көріністері, деректер және әйгілі актерлер туралы қысқа видео.",
         hookStyle:"Hook стилі", curiosity:"Қызығушылық тудыратын", boldClaim:"Батыл мәлімдеме", question:"Күтпеген сұрақ",
-        generate:"Сценарий жасау", generated:"ЖАСАЛҒАН КОНТЕНТ", hook:"Вирустық hook", script:"English script", description:"YouTube сипаттамасы + хэштегтер",
-        caption:"TikTok жазбасы", performance:"Өнімділік тізімі", retention:"Алғашқы секундтарда назарды ұстау", views:"Мақсатты қаралымдарды бақылау", watchTime:"Көру уақытын тексеру",
+        generate:"Сценарий жасау", generated:"ЖАСАЛҒАН КОНТЕНТ", hook:"Ағылшынша hook", script:"English script",
+        title:"YouTube атауы", description:"YouTube сипаттамасы", tags:"YouTube тегтері", hashtags:"Хэштегтер",
+        caption:"TikTok жазбасы", debateQuestion:"Пікірталас сұрағы", performance:"Retention Checklist",
+        renderVideo:"Render & Download 1080p Video (Жоғары сапада жүктеп алу)", downloadMetadata:"Сценарий мен метадеректерді жүктеп алу (.txt)",
+        rendering:"1080p видео жасалуда… Осы бетті ашық ұстаңыз.", renderComplete:"Видео жүктелді.", renderUnsupported:"Бұл браузерде 1080p видео жазу қолжетімсіз. Жаңартылған Chrome немесе Safari қолданып көріңіз.",
+        renderFailed:"Видео жасау сәтсіз аяқталды. Браузердің медиа жазу қолдауын тексеріңіз.", downloadComplete:"Сценарий файлы жүктелді.",
+        metadataEmpty:"Алдымен тақырыпты енгізіп, сценарий жасаңыз.", retention:"Алғашқы секундтарда назарды ұстау", views:"Мақсатты қаралымдарды бақылау", watchTime:"Көру уақытын тексеру",
         requestPublish:"Жариялауға мақұлдау сұрау", outputEmpty:"Тақырып енгізіп, сценарийді жасаңыз.",
         appSub:"Жаңа мүмкіндік, қате түзету және жүйе саулығы", appTask:"Әзірлеу тапсырмасы", taskType:"Тапсырма түрі",
         newFeature:"Жаңа мүмкіндік", bugFix:"Қате түзету", uiux:"UI / UX жақсарту", healthCheck:"Саулықты тексеру",
@@ -377,10 +388,18 @@
         approvalNotice:"Согласование подтверждает только демо-запрос. Приложение не проводит платежи, не меняет файлы и ничего не публикует.",
         studioSub:"9:16 · 1080p · короткий контент на английском", aspect:"Вертикальный формат 9:16", studioTitle:"Legend Studio",
         topic:"Тема / идея", topicPlaceholder:"Например: удивительный факт о повседневных привычках",
-        platform:"Платформа", youtube:"YouTube Shorts", tiktok:"Зарубежный TikTok",
+        track:"Контент-направление", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Футбол", moviesTrack:"US TikTok · Фильмы",
+        trackYouTubeHelp:"Легендарные истории, интересные факты и повествование в формате 9:16.",
+        trackFootballHelp:"Короткие видео для аудитории США о ярких футбольных моментах и известных футболистах.",
+        trackMoviesHelp:"Короткие видео для аудитории США о памятных сценах, фактах и знаменитых актёрах.",
         hookStyle:"Стиль хука", curiosity:"Любопытство", boldClaim:"Смелое заявление", question:"Неожиданный вопрос",
-        generate:"Создать сценарий", generated:"СОЗДАННЫЙ КОНТЕНТ", hook:"Вирусный хук", script:"Сценарий на английском", description:"Описание YouTube + хэштеги",
-        caption:"Подпись TikTok", performance:"Чек-лист эффективности", retention:"Удержать внимание в первые секунды", views:"Отслеживать целевые просмотры", watchTime:"Проверить время просмотра",
+        generate:"Создать сценарий", generated:"СОЗДАННЫЙ КОНТЕНТ", hook:"Англоязычный хук", script:"Сценарий на английском",
+        title:"Название YouTube", description:"Описание YouTube", tags:"Теги YouTube", hashtags:"Хэштеги",
+        caption:"Подпись TikTok", debateQuestion:"Вопрос для обсуждения", performance:"Retention Checklist",
+        renderVideo:"Render & Download 1080p Video (Жоғары сапада жүктеп алу)", downloadMetadata:"Скачать сценарий и метаданные (.txt)",
+        rendering:"Создаётся видео 1080p… Не закрывайте страницу.", renderComplete:"Видео загружено.", renderUnsupported:"Запись видео 1080p не поддерживается этим браузером. Попробуйте обновлённый Chrome или Safari.",
+        renderFailed:"Не удалось создать видео. Проверьте поддержку записи медиа в браузере.", downloadComplete:"Файл сценария загружен.",
+        metadataEmpty:"Сначала введите тему и создайте сценарий.", retention:"Удержать внимание в первые секунды", views:"Отслеживать целевые просмотры", watchTime:"Проверить время просмотра",
         requestPublish:"Запросить согласование публикации", outputEmpty:"Введите тему и создайте сценарий.",
         appSub:"Новые функции, исправления и проверка состояния", appTask:"Задача разработки", taskType:"Тип задачи",
         newFeature:"Новая функция", bugFix:"Исправление ошибки", uiux:"Улучшение UI / UX", healthCheck:"Проверка состояния",
@@ -439,10 +458,18 @@
         approvalNotice:"Approval only confirms a demo request. This app does not charge accounts, modify files, or publish anything.",
         studioSub:"9:16 · 1080p · English short-form content", aspect:"9:16 vertical format", studioTitle:"Legend Studio",
         topic:"Topic / theme", topicPlaceholder:"e.g. a surprising fact about everyday habits",
-        platform:"Platform", youtube:"YouTube Shorts", tiktok:"Foreign TikTok",
+        track:"Content track", youtubeTrack:"YouTube · Legend", footballTrack:"US TikTok · Football", moviesTrack:"US TikTok · Movies",
+        trackYouTubeHelp:"Legendary stories, intriguing facts, and 9:16 storytelling.",
+        trackFootballHelp:"Short videos for US audiences about exciting football moments and famous footballers.",
+        trackMoviesHelp:"Short videos for US audiences about memorable movie scenes, facts, and famous actors.",
         hookStyle:"Hook style", curiosity:"Curiosity gap", boldClaim:"Bold claim", question:"Unexpected question",
-        generate:"Generate script", generated:"GENERATED CONTENT", hook:"Viral hook", script:"English script", description:"YouTube description + hashtags",
-        caption:"TikTok caption", performance:"Performance checklist", retention:"Hold attention in the opening seconds", views:"Track target views", watchTime:"Review watch time",
+        generate:"Generate script", generated:"GENERATED CONTENT", hook:"English hook", script:"English script",
+        title:"YouTube title", description:"YouTube description", tags:"YouTube tags", hashtags:"Hashtags",
+        caption:"TikTok caption", debateQuestion:"Comment / debate question", performance:"Retention Checklist",
+        renderVideo:"Render & Download 1080p Video (Жоғары сапада жүктеп алу)", downloadMetadata:"Download Script & Metadata (.txt)",
+        rendering:"Rendering 1080p video… Keep this page open.", renderComplete:"Video downloaded.", renderUnsupported:"1080p video recording is unavailable in this browser. Try an up-to-date Chrome or Safari.",
+        renderFailed:"Could not render the video. Check your browser's media recording support.", downloadComplete:"Script file downloaded.",
+        metadataEmpty:"Enter a topic and generate a script first.", retention:"Hold attention in the opening seconds", views:"Track target views", watchTime:"Review watch time",
         requestPublish:"Request publishing approval", outputEmpty:"Enter a topic and generate a script.",
         appSub:"Feature work, bug fixes, and health checks", appTask:"Development task", taskType:"Task type",
         newFeature:"New feature", bugFix:"Bug fix", uiux:"UI / UX improvement", healthCheck:"Health check",
@@ -483,10 +510,10 @@
     };
     const emptyState = () => ({
       lang: "kk", active: "orchestrator", tasks: [], approvals: [], logs: [],
-      checks: { apps: [false, false, false, false], store: [false, false, false, false], studio: [false, false, false] }
+      checks: { apps: [false, false, false, false], store: [false, false, false, false], studio: [false, false, false] },
+      studio: { track: "youtube", topic: "", hookStyle: "curiosity" }, generated: null
     });
     let state = emptyState();
-    let generated = null;
     let devPrompt = "";
     let toastTimer;
     const root = document.getElementById("workspace");
@@ -525,7 +552,13 @@
             apps: Array.isArray(saved.checks?.apps) ? CHECKS.apps.map((_, i) => saved.checks.apps[i] === true) : fresh.checks.apps,
             store: Array.isArray(saved.checks?.store) ? CHECKS.store.map((_, i) => saved.checks.store[i] === true) : fresh.checks.store,
             studio: Array.isArray(saved.checks?.studio) ? CHECKS.studio.map((_, i) => saved.checks.studio[i] === true) : fresh.checks.studio
-          }
+          },
+          studio: {
+            track: TRACK_IDS.includes(saved.studio?.track) ? saved.studio.track : fresh.studio.track,
+            topic: redact(saved.studio?.topic).slice(0, 300),
+            hookStyle: ["curiosity", "bold", "question"].includes(saved.studio?.hookStyle) ? saved.studio.hookStyle : fresh.studio.hookStyle
+          },
+          generated: restoreGenerated(saved.generated)
         };
         persist();
       } catch (error) {
@@ -654,30 +687,45 @@
         </div>`;
     }
     function renderGenerated() {
-      if (!generated) return `<div class="empty">${esc(t("outputEmpty"))}</div>`;
+      if (!state.generated) return `<div class="empty">${esc(t("outputEmpty"))}</div>`;
+      const output = state.generated.track === "youtube"
+        ? [["title", state.generated.title], ["hook", state.generated.hook], ["script", state.generated.script], ["description", state.generated.description], ["tags", state.generated.tags]]
+        : [["hook", state.generated.hook], ["script", state.generated.script], ["caption", state.generated.caption], ["debateQuestion", state.generated.question], ["hashtags", state.generated.hashtags]];
       return `<div class="output-grid">
-        <div class="output-block"><strong>${esc(t("hook"))}</strong><p>${esc(generated.hook)}</p></div>
-        <div class="output-block"><strong>${esc(t("script"))}</strong><p>${esc(generated.script)}</p></div>
-        <div class="output-block"><strong>${esc(t("description"))}</strong><p>${esc(generated.description)}</p></div>
-        <div class="output-block"><strong>${esc(t("caption"))}</strong><p>${esc(generated.caption)}</p></div>
+        ${output.map(([label, value]) => `<div class="output-block"><strong>${esc(t(label))}</strong><p>${esc(value)}</p></div>`).join("")}
       </div>`;
     }
     function renderLegend() {
+      const track = state.studio.track;
+      const helpKey = { youtube:"trackYouTubeHelp", football:"trackFootballHelp", movies:"trackMoviesHelp" }[track];
       return `${head("legend", t("studioTitle"), t("studioSub"), `<span class="badge">${esc(t("aspect"))}</span>`)}
         <div class="grid two">
           <section class="card"><div class="card-heading"><h3>${esc(t("topic"))}</h3><span class="badge">1080p</span></div>
             <form id="studio-form">
-              <div class="field"><label for="topic">${esc(t("topic"))}</label><textarea id="topic" name="topic" maxlength="300" required placeholder="${esc(t("topicPlaceholder"))}"></textarea></div>
+              <div class="field"><label for="studio-track">${esc(t("track"))}</label><select id="studio-track" name="track">
+                <option value="youtube" ${track === "youtube" ? "selected" : ""}>${esc(t("youtubeTrack"))}</option>
+                <option value="football" ${track === "football" ? "selected" : ""}>${esc(t("footballTrack"))}</option>
+                <option value="movies" ${track === "movies" ? "selected" : ""}>${esc(t("moviesTrack"))}</option>
+              </select><p class="card-copy" id="track-help">${esc(t(helpKey))}</p></div>
+              <div class="field"><label for="topic">${esc(t("topic"))}</label><textarea id="topic" name="topic" maxlength="300" required placeholder="${esc(t("topicPlaceholder"))}">${esc(state.studio.topic)}</textarea></div>
               <div class="form-row">
-                <div class="field"><label for="platform">${esc(t("platform"))}</label><select id="platform" name="platform"><option value="youtube">${esc(t("youtube"))}</option><option value="tiktok">${esc(t("tiktok"))}</option></select></div>
-                <div class="field"><label for="hook-style">${esc(t("hookStyle"))}</label><select id="hook-style" name="hook"><option value="curiosity">${esc(t("curiosity"))}</option><option value="bold">${esc(t("boldClaim"))}</option><option value="question">${esc(t("question"))}</option></select></div>
+                <div class="field" ${track !== "youtube" ? "hidden" : ""}><label for="hook-style">${esc(t("hookStyle"))}</label><select id="hook-style" name="hook">
+                  <option value="curiosity" ${state.studio.hookStyle === "curiosity" ? "selected" : ""}>${esc(t("curiosity"))}</option>
+                  <option value="bold" ${state.studio.hookStyle === "bold" ? "selected" : ""}>${esc(t("boldClaim"))}</option>
+                  <option value="question" ${state.studio.hookStyle === "question" ? "selected" : ""}>${esc(t("question"))}</option>
+                </select></div>
               </div>
               <button class="button primary" type="submit">${esc(t("generate"))}</button>
             </form>
-            <div style="margin-top:14px">${renderCheckList("studio", CHECKS.studio, t("performance"))}</div>
+            <div id="retention-checklist" style="margin-top:14px" ${track !== "youtube" ? "hidden" : ""}>${renderCheckList("studio", CHECKS.studio, t("performance"))}</div>
           </section>
           <section class="card"><div class="card-heading"><h3>${esc(t("generated"))}</h3></div>${renderGenerated()}
-            <button type="button" class="button" style="margin-top:13px" data-action="publish">${esc(t("requestPublish"))}</button>
+            <div class="studio-actions">
+              <button type="button" class="button primary" data-action="render-video" ${state.generated ? "" : "disabled"}>${esc(t("renderVideo"))}</button>
+              <button type="button" class="button" data-action="download-metadata" ${state.generated ? "" : "disabled"}>${esc(t("downloadMetadata"))}</button>
+              <button type="button" class="button subtle" data-action="publish">${esc(t("requestPublish"))}</button>
+            </div>
+            <p class="studio-status" id="studio-export-status" role="status" aria-live="polite"></p>
           </section>
         </div>`;
     }
@@ -745,13 +793,20 @@
       if (secretPatterns.some(pattern => { pattern.lastIndex = 0; return pattern.test(text); })) return true;
       return false;
     }
-    function redact(value) {
+    function redact(value, maxLength = 600) {
       let safe = String(value || "");
       for (const pattern of secretPatterns) {
         pattern.lastIndex = 0;
         safe = safe.replace(pattern, "[redacted]");
       }
-      return safe.slice(0, 600);
+      return safe.slice(0, maxLength);
+    }
+    function restoreGenerated(value) {
+      if (!value || typeof value !== "object" || !TRACK_IDS.includes(value.track)) return null;
+      const fields = ["topic", "platform", "hookStyle", "title", "hook", "script", "description", "tags", "caption", "question", "hashtags"];
+      const restored = { track: value.track };
+      fields.forEach(key => { restored[key] = redact(value[key], 2000); });
+      return restored;
     }
     function approvalReasonFor(text) {
       if (/\b(?:pay(?:ment)?s?|billing|invoice|charge|subscription)\b|төлем|шот|оплат[а-я]*|плат[её]ж[а-я]*|сч[её]т|биллинг/iu.test(text)) return "billing";
@@ -804,25 +859,275 @@
       const data = new FormData(form);
       const topic = String(data.get("topic") || "").trim();
       if (!topic) return showToast(t("emptyTopic"));
-      const safeTopic = redact(topic);
+      const safeTopic = redact(topic).slice(0, 300);
+      const track = TRACK_IDS.includes(String(data.get("track"))) ? String(data.get("track")) : "youtube";
+      const hookStyle = ["curiosity", "bold", "question"].includes(String(data.get("hook"))) ? String(data.get("hook")) : "curiosity";
       const topicEnglish = safeTopic;
-      const styles = {
-        curiosity: `Most people miss this surprising detail about ${topicEnglish}.`,
-        bold: `${topicEnglish} is not what you think — here's why.`,
-        question: `What if everything you knew about ${topicEnglish} was only half the story?`
+      const youtubeHooks = {
+        curiosity: `The legendary story of ${topicEnglish} has an intriguing detail most people miss.`,
+        bold: `${topicEnglish} changed history in a way few people expect.`,
+        question: `What made ${topicEnglish} truly legendary?`
       };
-      const platform = String(data.get("platform")) === "tiktok" ? t("tiktok") : t("youtube");
-      generated = {
-        topic: safeTopic,
-        platform,
-        hookStyle: String(data.get("hook") || "curiosity"),
-        hook: styles[String(data.get("hook"))] || styles.curiosity,
-        script: `0:00 — ${styles[String(data.get("hook"))] || styles.curiosity}\n0:03 — Break the idea into one clear, visual moment.\n0:08 — Share the useful reveal about ${topicEnglish}.\n0:14 — End with one memorable takeaway and a natural question.`,
-        description: `A quick, practical story about ${topicEnglish}. Watch to the end for the key takeaway.\n\n#Shorts #Storytelling #${topicEnglish.toLowerCase().replace(/[^a-z0-9]+/g, "")}`,
-        caption: `A fresh perspective on ${topicEnglish} ✨ What do you think? #fyp #storytime`,
-        performance: [false, false, false]
+      const shortTopic = topicEnglish.split(/\s+/).slice(0, 6).join(" ").slice(0, 48).trim();
+      const hook = track === "football"
+        ? "This football moment was unreal."
+        : track === "movies"
+          ? "You missed this movie detail."
+          : youtubeHooks[hookStyle];
+      const tagSeed = topicEnglish.toLowerCase().replace(/[^a-z0-9]+/g, "").slice(0, 30) || "legend";
+      const youtube = track === "youtube";
+      const script = youtube
+        ? `0:00 — ${hook}\n0:03 — Set the scene: ${topicEnglish} was more than a name or a moment.\n0:08 — Reveal the intriguing fact and why it mattered.\n0:14 — End with the detail viewers will remember.`
+        : track === "football"
+          ? `0:00 — ${hook}\n0:02 — Set up the decisive moment around ${topicEnglish}.\n0:06 — Show what made this play or player unforgettable.\n0:11 — Was it the greatest moment? Tell us why.`
+          : `0:00 — ${hook}\n0:02 — Set up the memorable scene or fact about ${topicEnglish}.\n0:06 — Reveal the detail that makes it iconic.\n0:11 — Did you catch it the first time? Tell us below.`;
+      const hashtags = track === "football" ? "#football #soccer #footballtok #fyp"
+        : track === "movies" ? "#movies #film #movietok #fyp"
+          : `#Shorts #Legend #Storytelling #${tagSeed}`;
+      const result = {
+        track, topic: safeTopic, platform: track === "youtube" ? "YouTube Shorts" : "US TikTok", hookStyle,
+        title: `${topicEnglish}: The Detail That Made It Legendary`,
+        hook,
+        script,
+        description: youtube
+          ? `Discover the legendary story and intriguing detail behind ${topicEnglish}. Watch in vertical 9:16, 1080p.\n\n${hashtags}`
+          : `A quick US TikTok about ${shortTopic}, made for ${track === "football" ? "football fans" : "movie fans"}.\n\n${hashtags}`,
+        tags: `${topicEnglish}, legendary stories, intriguing facts, storytelling, YouTube Shorts, 9:16 video`,
+        caption: track === "football"
+          ? `The ${shortTopic} moment was unreal. Where does it rank?`
+          : `This ${shortTopic} scene deserves a rewatch. Did you catch it?`,
+        question: track === "football"
+          ? `Was ${shortTopic} the greatest in football?`
+          : `Is ${shortTopic} the most iconic movie moment?`,
+        hashtags
       };
+      state.studio = { track, topic: safeTopic, hookStyle };
+      state.generated = Object.fromEntries(Object.entries(result).map(([key, value]) => [key, typeof value === "string" ? redact(value, 2000) : value]));
+      persist();
       render();
+    }
+    function downloadBlob(blob, filename) {
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = filename;
+      link.style.display = "none";
+      document.body.append(link);
+      link.click();
+      link.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+    }
+    function scriptMetadata() {
+      const output = state.generated;
+      const trackName = t(({ youtube:"youtubeTrack", football:"footballTrack", movies:"moviesTrack" })[output.track]);
+      return [
+        "CLINA LEGEND STUDIO — SCRIPT & METADATA",
+        `Track: ${trackName}`,
+        `Topic: ${output.topic}`,
+        `Title: ${output.title}`,
+        `Hook: ${output.hook}`,
+        "",
+        "SCRIPT",
+        output.script,
+        "",
+        "DESCRIPTION",
+        output.description,
+        "",
+        output.track === "youtube" ? `TAGS\n${output.tags}\n` : "",
+        output.track !== "youtube" ? `CAPTION\n${output.caption}\n\nCOMMENT / DEBATE QUESTION\n${output.question}\n` : "",
+        `HASHTAGS\n${output.hashtags}`
+      ].filter(Boolean).join("\n");
+    }
+    function downloadMetadata() {
+      if (!state.generated) return showToast(t("metadataEmpty"));
+      const slug = state.generated.topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "legend-script";
+      downloadBlob(new Blob([scriptMetadata()], { type: "text/plain;charset=utf-8" }), `${slug}-metadata.txt`);
+      showToast(t("downloadComplete"));
+    }
+    function wrapCanvasText(context, text, maxWidth, maxLines) {
+      const words = String(text).split(/\s+/);
+      const lines = [];
+      let line = "";
+      for (const word of words) {
+        const candidate = line ? `${line} ${word}` : word;
+        if (context.measureText(candidate).width > maxWidth && line) {
+          lines.push(line);
+          line = word;
+          if (lines.length === maxLines) break;
+        } else {
+          line = candidate;
+        }
+      }
+      if (lines.length < maxLines && line) lines.push(line);
+      if (lines.length === maxLines && words.join(" ").length > lines.join(" ").length) {
+        let last = lines[maxLines - 1];
+        while (last && context.measureText(`${last}…`).width > maxWidth) last = last.slice(0, -1);
+        lines[maxLines - 1] = `${last.trimEnd()}…`;
+      }
+      return lines;
+    }
+    function drawVideoFrame(context, elapsed, scenes, track) {
+      const themes = {
+        youtube: ["#16112c", "#562b55", "#d0a557"],
+        football: ["#071d1a", "#12634a", "#7ee2a3"],
+        movies: ["#1d1028", "#632b48", "#eea3b8"]
+      };
+      const [dark, accent, highlight] = themes[track];
+      const sceneIndex = Math.min(scenes.length - 1, Math.floor(elapsed / 5));
+      const sceneTime = elapsed - sceneIndex * 5;
+      const progress = Math.min(1, sceneTime / 0.65, (5 - sceneTime) / 0.65);
+      const phase = elapsed * 0.22;
+      const gradient = context.createLinearGradient(0, 0, 1080, 1920);
+      gradient.addColorStop(0, dark);
+      gradient.addColorStop(0.58, accent);
+      gradient.addColorStop(1, "#080b13");
+      context.fillStyle = gradient;
+      context.fillRect(0, 0, 1080, 1920);
+      const glow = context.createRadialGradient(840 + Math.sin(phase) * 150, 360 + Math.cos(phase) * 100, 20, 600, 700, 900);
+      glow.addColorStop(0, `${highlight}55`);
+      glow.addColorStop(1, `${highlight}00`);
+      context.fillStyle = glow;
+      context.fillRect(0, 0, 1080, 1920);
+      context.globalAlpha = 0.12;
+      context.strokeStyle = highlight;
+      context.lineWidth = 2;
+      for (let i = -4; i < 10; i++) {
+        const offset = (elapsed * 44) % 220;
+        context.beginPath();
+        context.moveTo(i * 180 + offset, 0);
+        context.lineTo(i * 180 - 900 + offset, 1920);
+        context.stroke();
+      }
+      context.globalAlpha = 1;
+      context.fillStyle = "#ffffff14";
+      context.fillRect(72, 72, 936, 2);
+      context.fillStyle = highlight;
+      context.font = "800 30px system-ui, sans-serif";
+      context.textAlign = "left";
+      context.fillText(track === "youtube" ? "LEGEND · YOUTUBE SHORTS" : track === "football" ? "US TIKTOK · FOOTBALL" : "US TIKTOK · MOVIES", 84, 146);
+      const scene = scenes[sceneIndex];
+      context.save();
+      context.globalAlpha = Math.max(0, progress);
+      const scale = 0.96 + Math.min(sceneTime / 0.65, 1) * 0.04;
+      context.translate(540, 940 + (1 - progress) * 56);
+      context.scale(scale, scale);
+      context.textAlign = "center";
+      context.textBaseline = "middle";
+      context.fillStyle = "#fff";
+      context.shadowColor = "#0009";
+      context.shadowBlur = 28;
+      context.font = "900 104px system-ui, -apple-system, sans-serif";
+      const lines = wrapCanvasText(context, scene.title, 860, 5);
+      const lineHeight = 126;
+      const startY = -((lines.length - 1) * lineHeight) / 2;
+      lines.forEach((line, index) => context.fillText(line, 0, startY + index * lineHeight, 860));
+      context.restore();
+      context.shadowBlur = 0;
+      context.textAlign = "center";
+      context.fillStyle = "#f4f4f5";
+      context.font = "500 40px system-ui, sans-serif";
+      wrapCanvasText(context, scene.subtitle, 820, 3).forEach((line, index, lines) => {
+        context.fillText(line, 540, 1320 + (index - (lines.length - 1) / 2) * 56);
+      });
+      context.fillStyle = "#ffffff38";
+      context.fillRect(84, 1770, 912, 8);
+      context.fillStyle = highlight;
+      context.fillRect(84, 1770, 912 * Math.min(elapsed / 15, 1), 8);
+      context.fillStyle = "#ffffffb8";
+      context.font = "650 27px system-ui, sans-serif";
+      context.fillText("9:16  ·  FULL HD 1080p", 540, 1840);
+    }
+    async function recordVerticalVideo(button) {
+      if (!state.generated) return showToast(t("metadataEmpty"));
+      if (!window.MediaRecorder || typeof document.createElement("canvas").captureStream !== "function") {
+        showToast(t("renderUnsupported"));
+        return;
+      }
+      const status = document.getElementById("studio-export-status");
+      button.disabled = true;
+      status.textContent = t("rendering");
+      const output = state.generated;
+      const scenes = output.track === "youtube" ? [
+        { title: output.hook, subtitle: output.title },
+        { title: `The story behind ${output.topic}`, subtitle: "One intriguing fact changes how you see it." },
+        { title: "Remember the detail.", subtitle: "Watch, share, and explore the full story." }
+      ] : [
+        { title: output.hook, subtitle: output.track === "football" ? "The moment fans still debate." : "A scene worth watching again." },
+        { title: output.caption, subtitle: output.track === "football" ? "Skill, timing, and a moment that mattered." : "The detail that made it unforgettable." },
+        { title: output.question, subtitle: output.hashtags }
+      ];
+      const canvas = document.createElement("canvas");
+      canvas.width = 1080;
+      canvas.height = 1920;
+      const context = canvas.getContext("2d", { alpha: false });
+      if (!context) {
+        button.disabled = false;
+        status.textContent = t("renderFailed");
+        showToast(t("renderFailed"));
+        return;
+      }
+      let stream;
+      try {
+        stream = canvas.captureStream(30);
+      } catch (error) {
+        console.error("Could not capture Legend Studio canvas:", error);
+        button.disabled = false;
+        status.textContent = t("renderFailed");
+        showToast(t("renderFailed"));
+        return;
+      }
+      const mimeType = ["video/mp4;codecs=avc1.42E01E", "video/mp4", "video/webm;codecs=vp9", "video/webm;codecs=vp8", "video/webm"]
+        .find(type => typeof MediaRecorder.isTypeSupported !== "function" || MediaRecorder.isTypeSupported(type));
+      if (!mimeType) {
+        stream.getTracks().forEach(track => track.stop());
+        button.disabled = false;
+        status.textContent = t("renderUnsupported");
+        showToast(t("renderUnsupported"));
+        return;
+      }
+      try {
+        const blob = await new Promise((resolve, reject) => {
+          const chunks = [];
+          const recorder = new MediaRecorder(stream, { mimeType, videoBitsPerSecond: 12_000_000 });
+          let interval;
+          let finished = false;
+          const finish = error => {
+            if (finished) return;
+            finished = true;
+            clearInterval(interval);
+            stream.getTracks().forEach(track => track.stop());
+            if (error) reject(error);
+            else {
+              const video = new Blob(chunks, { type: recorder.mimeType || mimeType });
+              video.size ? resolve(video) : reject(new Error("The video recording was empty."));
+            }
+          };
+          recorder.ondataavailable = event => { if (event.data.size) chunks.push(event.data); };
+          recorder.onerror = () => finish(new Error("The browser could not record the canvas stream."));
+          recorder.onstop = () => finish();
+          recorder.start(250);
+          const startedAt = performance.now();
+          const draw = () => {
+            const elapsed = Math.min((performance.now() - startedAt) / 1000, 15);
+            drawVideoFrame(context, elapsed, scenes, output.track);
+            if (elapsed >= 15 && recorder.state === "recording") recorder.stop();
+          };
+          draw();
+          interval = setInterval(draw, 1000 / 30);
+        });
+        const extension = blob.type.includes("mp4") ? "mp4" : "webm";
+        const slug = output.topic.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "legend-video";
+        downloadBlob(blob, `${slug}-1080p.${extension}`);
+        status.textContent = t("renderComplete");
+        showToast(t("renderComplete"));
+      } catch (error) {
+        console.error("Could not render Legend Studio video:", error);
+        status.textContent = t("renderFailed");
+        showToast(t("renderFailed"));
+      } finally {
+        stream.getTracks().forEach(track => track.stop());
+        button.disabled = false;
+      }
     }
     function submitApp(form) {
       const data = new FormData(form);
@@ -868,7 +1173,6 @@
         try {
           localStorage.removeItem(STORE_KEY);
           state = emptyState();
-          generated = null;
           devPrompt = "";
           render();
         } catch (error) {
@@ -878,9 +1182,13 @@
       } else if (action === "approve" || action === "reject") {
         handleDecision(button.dataset.approval, action === "approve" ? "approved" : "rejected");
       } else if (action === "publish") {
-        if (!generated) return showToast(t("emptyTopic"));
-        newTask(`${t("requestPublish")}: ${generated.topic}`, "legend", "publish");
+        if (!state.generated) return showToast(t("emptyTopic"));
+        newTask(`${t("requestPublish")}: ${state.generated.topic}`, "legend", "publish");
         render();
+      } else if (action === "download-metadata") {
+        downloadMetadata();
+      } else if (action === "render-video") {
+        void recordVerticalVideo(button);
       } else if (action === "store-submit") {
         newTask(t("submission"), "release", "publish");
         render();
@@ -912,6 +1220,21 @@
       else if (form.id === "scan-form") scanText(form);
     });
     document.addEventListener("change", event => {
+      const trackSelect = event.target.closest("#studio-track");
+      if (trackSelect) {
+        if (!TRACK_IDS.includes(trackSelect.value)) return;
+        state.studio.track = trackSelect.value;
+        state.generated = null;
+        persist();
+        render();
+        return;
+      }
+      const hookSelect = event.target.closest("#hook-style");
+      if (hookSelect) {
+        state.studio.hookStyle = hookSelect.value;
+        persist();
+        return;
+      }
       const input = event.target.closest("[data-check]");
       if (!input) return;
       const group = input.dataset.check;
@@ -920,6 +1243,12 @@
       state.checks[group][index] = input.checked;
       persist();
       render();
+    });
+    document.addEventListener("input", event => {
+      const topic = event.target.closest("#topic");
+      if (!topic) return;
+      state.studio.topic = redact(topic.value).slice(0, 300);
+      persist();
     });
     loadState();
     render();
