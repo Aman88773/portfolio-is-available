@@ -1,9 +1,10 @@
 "use strict";
 
-const CACHE_NAME = "zhairem-taxi-v4";
+const CACHE_NAME = "zhairem-taxi-v5";
 const CORE_ASSETS = [
   "./",
   "./index.html",
+  "./privacy.html",
   "./manifest.json",
   "./icon.svg"
 ];

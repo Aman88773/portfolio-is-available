@@ -1,0 +1,36 @@
+name: Check Zhairem Taxi web app
+
+on:
+  push:
+    paths:
+      - "taxi/**"
+      - ".github/workflows/taxi-check.yml"
+  pull_request:
+    paths:
+      - "taxi/**"
+      - ".github/workflows/taxi-check.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  taxi-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: taxi/package-lock.json
+
+      - name: Install dependencies
+        working-directory: taxi
+        run: npm ci
+
+      - name: Validate HTML, JavaScript, JSON, YAML, and app markers
+        working-directory: taxi
+        run: npm run check

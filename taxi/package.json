@@ -1,0 +1,21 @@
+{
+  "name": "zhairem-taxi",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zhairem Taxi web app and Capacitor Android wrapper",
+  "scripts": {
+    "build": "node scripts/copy-web-assets.mjs",
+    "android:add": "cap add android",
+    "android:sync": "npm run build && cap sync android",
+    "check": "node scripts/check.mjs"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.4.3",
+    "@capacitor/core": "^7.4.3"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^7.4.3",
+    "parse5": "^7.3.0",
+    "yaml": "^2.8.1"
+  }
+}

@@ -1,0 +1,8 @@
+{
+  "appId": "kz.zhairem.taxi",
+  "appName": "Zhairem Taxi",
+  "webDir": "www",
+  "android": {
+    "allowMixedContent": false
+  }
+}
