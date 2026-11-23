@@ -550,8 +550,9 @@
             <button class="icon-btn primary" id="sendChat" title="Жіберу">➤</button>
           </div>
           <div class="call-controls" style="margin-top:10px">
-            <a class="button" id="telCall" href="tel:+77478632459">Телефон қоңырауы</a>
-            <a class="button whatsapp" id="waCall" href="https://wa.me/77478632459" target="_blank" rel="noopener">WhatsApp</a>
+            <a class="button" id="callCounterpartyBtn" href="tel:+77478632459">Телефон қоңырауы</a>
+            <a class="button whatsapp" id="waCounterpartyLink" href="https://wa.me/77478632459" target="_blank" rel="noopener">WhatsApp</a>
+            <a class="button secondary" id="waGroupLink" href="https://chat.whatsapp.com/" target="_blank" rel="noopener">WhatsApp тобы</a>
             <button class="button primary" id="inAppCall">Қосымша ішілік қоңырау</button>
           </div>
         </article>
@@ -700,7 +701,9 @@
   <script>
   (() => {
     "use strict";
-    const ADMIN_PHONE = "+77478632459";
+    const OWN_PHONE = "+77478632459";
+    const ADMIN_PHONE = OWN_PHONE;
+    const DEFAULT_WA_GROUP = "https://chat.whatsapp.com/"; // Осында нақты топ сілтемесін қойыңыз
     const PRICE = 400, DRIVER_SHARE = 350, ADMIN_SHARE = 50;
     const INTERCITY_RATES = { zhezkazgan:6000, karaganda:15000, astana:25000 };
     const BONUS_REWARDS = { passenger:20, driver:50 };
@@ -714,6 +717,32 @@
     const WEATHER_CACHE_KEY = "zhairemWeatherCache";
     const $ = (s, p=document) => p.querySelector(s);
     const $$ = (s, p=document) => [...p.querySelectorAll(s)];
+    function normalizePhone(raw) {
+      return (raw || "").replace(/\D/g, "");
+    }
+    function applyWhatsAppLinks(counterpartyRaw, groupUrlRaw) {
+      const cleanGroup = (groupUrlRaw || DEFAULT_WA_GROUP).trim();
+      const groupEl = $("#waGroupLink");
+      if(groupEl)groupEl.href=cleanGroup;
+
+      const ownDigits=normalizePhone(OWN_PHONE);
+      const cpDigits=normalizePhone(counterpartyRaw);
+      const targetDigits=cpDigits&&cpDigits!==ownDigits?cpDigits:"";
+      const waCpEl=$("#waCounterpartyLink");
+      const callEl=$("#callCounterpartyBtn");
+
+      if(waCpEl){
+        waCpEl.href=targetDigits?`https://wa.me/${targetDigits}`:cleanGroup;
+        waCpEl.title=targetDigits
+          ?`Қарсы тарап WhatsApp: +${targetDigits}`
+          :"Қарсы тарап нөмірін енгізіңіз (өз нөміріңіз емес)";
+      }
+      if(callEl)callEl.href=targetDigits?`tel:+${targetDigits}`:`tel:${OWN_PHONE}`;
+    }
+    function refreshContactLinks() {
+      const counterpartyPhone=account?.role==="driver"?currentOrder?.phone:currentOrder?.driverPhone;
+      applyWhatsAppLinks(counterpartyPhone,DEFAULT_WA_GROUP);
+    }
     const store = {
       get:(key,fallback=null) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch(_) { return fallback; } },
       set:(key,value) => {
@@ -1265,6 +1294,7 @@
         $("#app").classList.remove("authenticated");
         $("#bottomNav").hidden=true;
         openDrawer(false);
+        refreshContactLinks();
         showScreen("auth");
         return;
       }
@@ -1305,6 +1335,7 @@
         $("#driverName").textContent=account.name;
         $("#driverVehicle").textContent=(account.carModel||"Көлік")+" · "+(account.carPlate||"Нөмірсіз");
       }
+      refreshContactLinks();
     }
     function updateNetworkIndicator() {
       const indicator=$("#networkIndicator");
@@ -1677,6 +1708,7 @@
     function renderRideActions() {
       const box=$("#activeRideActions");
       if(!box)return;
+      refreshContactLinks();
       if(!currentOrder){box.innerHTML='<span class="muted">Белсенді сапар жоқ.</span>';return;}
       box.innerHTML=`<span class="badge">Күй: ${escapeHtml(currentOrder.status)}</span>`;
       if(currentOrder.status==="arrived"){
