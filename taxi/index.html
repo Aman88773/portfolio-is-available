@@ -16,22 +16,24 @@
     }
     * { box-sizing:border-box; }
     html { font-size:var(--font-size); }
-    body { margin:0; background:var(--bg); color:var(--text); font-family:var(--font-family); }
+    body { margin:0; background:radial-gradient(ellipse at 50% -18%,#c1f11d12,transparent 42%),var(--bg); color:var(--text); font-family:var(--font-family); }
     button,input,select,textarea { font:inherit; }
     button,a { -webkit-tap-highlight-color:transparent; }
     button { cursor:pointer; }
+    button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible { outline:3px solid var(--accent); outline-offset:2px; }
+    button:disabled { cursor:wait; opacity:.65; }
     [hidden] { display:none !important; }
     .app { width:min(1120px,calc(100% - 24px)); margin:auto; padding-bottom:80px; }
     .app:not(.authenticated) #openDrawer,.app:not(.authenticated) #openNotifications { display:none; }
     .app:not(.authenticated) .drawer,.app:not(.authenticated) .drawer-backdrop { display:none !important; }
-    .topbar { height:68px; display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line); }
+    .topbar { position:sticky; top:0; z-index:25; height:68px; display:flex; align-items:center; justify-content:space-between; gap:10px; border-bottom:1px solid var(--line); background:color-mix(in srgb,var(--bg) 90%,transparent); backdrop-filter:blur(14px); }
     .brand { display:flex; align-items:center; gap:10px; color:var(--text); text-decoration:none; font-weight:900; }
-    .brand-mark { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; background:var(--accent); color:#111315; }
+    .brand-mark { width:42px; height:42px; display:grid; place-items:center; border-radius:14px; background:var(--accent); color:#111315; box-shadow:0 6px 20px #c1f11d2e; }
     .brand small { display:block; color:var(--muted); font-size:.68rem; }
     .top-actions { display:flex; gap:8px; align-items:center; }
     .icon-btn,.button { min-height:44px; border:1px solid var(--line); border-radius:12px; background:var(--surface); color:var(--text); padding:10px 14px; font-weight:800; }
     .icon-btn { width:44px; padding:0; }
-    .button.primary { background:var(--accent); border-color:var(--accent); color:#111315; }
+    .button.primary { background:var(--accent); border-color:var(--accent); color:#111315; box-shadow:0 5px 16px #c1f11d24; }
     .button.secondary { background:var(--surface2); }
     .button.danger { background:#632524; border-color:#873431; color:#fff; }
     .button.whatsapp { background:#25d366; border-color:#25d366; color:#081c10; }
@@ -40,14 +42,14 @@
     .grid { display:grid; gap:14px; }
     .grid-2 { grid-template-columns:repeat(2,minmax(0,1fr)); }
     .grid-3 { grid-template-columns:repeat(3,minmax(0,1fr)); }
-    .card { border:1px solid var(--line); border-radius:18px; background:var(--surface); padding:16px; }
+    .card { border:1px solid var(--line); border-radius:18px; background:var(--surface); padding:16px; box-shadow:0 10px 28px #00000012; }
     .card h2,.card h3 { margin-top:0; }
     .muted { color:var(--muted); }
-    .hero { position:relative; overflow:hidden; margin-top:14px; min-height:270px; border:1px solid var(--line); border-radius:22px; background:linear-gradient(135deg,#252a2c,#17191b); }
+    .hero { position:relative; overflow:hidden; margin-top:14px; min-height:270px; border:1px solid var(--line); border-radius:22px; background:radial-gradient(circle at 88% 0,#c1f11d1c,transparent 38%),linear-gradient(135deg,#252a2c,#17191b); box-shadow:0 16px 38px #00000024; }
     .hero-head { display:flex; justify-content:space-between; gap:10px; padding:16px 18px 8px; }
     .hero-head h1 { margin:3px 0 0; font-size:1.35rem; }
     .eyebrow { color:var(--accent); font-size:.72rem; font-weight:900; letter-spacing:.12em; }
-    .map { position:relative; height:210px; overflow:hidden; background:#252a2c; border-top:1px solid var(--line); }
+    .map { position:relative; height:210px; overflow:hidden; background:linear-gradient(145deg,#28312e,#1b2221); border-top:1px solid var(--line); }
     .map:before { content:""; position:absolute; inset:0; opacity:.45; background-image:linear-gradient(30deg,transparent 48%,#3a403d 49%,#3a403d 51%,transparent 52%),linear-gradient(120deg,transparent 48%,#343936 49%,#343936 51%,transparent 52%); background-size:92px 92px; }
     .map-road { position:absolute; height:12px; width:120%; left:-10%; top:52%; transform:rotate(-8deg); border:3px solid #6b726d; border-left:0; border-right:0; opacity:.7; }
     .map-point { position:absolute; z-index:2; display:flex; align-items:center; gap:7px; max-width:210px; border:1px solid var(--line); border-radius:999px; background:var(--surface); padding:6px 9px; box-shadow:0 5px 14px #0006; font-size:.72rem; }
@@ -77,7 +79,8 @@
     .tile strong { display:block; margin-top:6px; font-size:.78rem; }
     .field { display:grid; gap:6px; }
     label { font-weight:800; font-size:.82rem; }
-    input,select,textarea { width:100%; min-height:46px; border:1px solid var(--line); border-radius:12px; background:var(--surface2); color:var(--text); padding:10px 12px; }
+    input,select,textarea { width:100%; min-height:46px; border:1px solid var(--line); border-radius:12px; background:var(--surface2); color:var(--text); padding:10px 12px; transition:border-color .15s,box-shadow .15s; }
+    input:focus,select:focus,textarea:focus { border-color:var(--accent); box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 18%,transparent); outline:0; }
     textarea { min-height:86px; resize:vertical; }
     input[type=file] { padding:7px; }
     .route { grid-template-columns:1fr 40px 1fr; align-items:end; }
@@ -155,7 +158,7 @@
     .weather-temp { color:var(--accent); font-size:1.5rem; font-weight:900; }
     .legal-note { border-left:4px solid #f2c94c; border-radius:8px; background:#f2c94c12; padding:10px; }
     @media(max-width:700px) {
-      .app { width:min(100% - 16px,1120px); }
+      .app { width:min(100% - 16px,1120px); padding-bottom:92px; }
       .grid-2,.grid-3,.form-grid,.auth-choice { grid-template-columns:1fr; }
       .route { grid-template-columns:1fr 34px 1fr; }
       .quick { grid-template-columns:repeat(2,1fr); }
@@ -163,9 +166,19 @@
       .hero { min-height:250px; }
       .map { height:185px; }
       .brand small { display:none; }
-      .app:not(.authenticated) .network-indicator { max-width:44vw; }
+      .app:not(.authenticated) .network-indicator { max-width:38vw; }
+      .topbar { gap:6px; }
+      .brand { gap:7px; font-size:.9rem; }
+      .brand-mark { width:38px; height:38px; border-radius:12px; }
+      .top-actions { gap:5px; }
+      .network-indicator { max-width:43vw; padding:6px 8px; font-size:.65rem; }
+      .card { padding:14px; }
+      .screen-head { margin:12px 0; }
       .weather-reading { grid-template-columns:1fr; }
       .nav-readout { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+    @media(prefers-reduced-motion:reduce) {
+      *,*::before,*::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
     }
   </style>
 </head>
@@ -205,7 +218,6 @@
       <p id="permissionDialogIntro" class="muted"></p>
       <ol id="permissionDialogSteps"></ol>
       <div class="permission-actions">
-        <a class="button primary" id="permissionSettingsLink" hidden></a>
         <button class="button secondary" id="closePermissionDialog" type="button">Жабу</button>
       </div>
     </dialog>
@@ -275,7 +287,7 @@
         </section>
         <article class="card promo">
           <div><strong>Zhairem Taxi</strong><br><span class="muted">Жайрем бойынша 400 ₸ · 350 ₸ жүргізушіге / 50 ₸ әкімшіге</span></div>
-          <div><span class="badge">3–5 минутқа жету</span><span class="badge">Kaspi</span></div>
+          <div><span class="badge">WhatsApp-та растау</span><span class="badge">Kaspi</span></div>
           <div class="call-controls">
             <a class="button whatsapp" target="_blank" rel="noopener" href="https://wa.me/77478632459">WhatsApp</a>
             <button class="button secondary" data-screen="booking">Тапсырыс беру</button>
@@ -371,9 +383,9 @@
           <form class="card" id="rideForm">
             <h2>Қайда барамыз?</h2>
             <div class="grid route">
-              <div class="field"><label for="rideFrom">Қайдан</label><input id="rideFrom" value="Жайрем кенті"></div>
+              <div class="field"><label for="rideFrom">Қайдан</label><input id="rideFrom" value="Жайрем кенті" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off"></div>
               <button type="button" class="icon-btn swap" id="swapRoute">⇄</button>
-              <div class="field"><label for="rideTo">Қайда</label><input id="rideTo" placeholder="Мекенжайды енгізіңіз"></div>
+              <div class="field"><label for="rideTo">Қайда</label><input id="rideTo" placeholder="Мекенжайды енгізіңіз" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off"></div>
             </div>
             <div class="grid grid-2" style="margin-top:12px">
               <div class="field"><label for="rideName">Аты</label><input id="rideName"></div>
@@ -402,7 +414,7 @@
         <div class="grid grid-2">
           <article class="card">
             <p class="muted">Жайрем бағыттарының бастапқы бағасы. Сома — алдын ала есеп; нақты сапар бағасын жүргізуші WhatsApp-та растайды.</p>
-            <div class="field"><label for="intercityFrom">Қайдан</label><input id="intercityFrom" value="Жайрем кенті"></div>
+            <div class="field"><label for="intercityFrom">Қайдан</label><input id="intercityFrom" value="Жайрем кенті" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off"></div>
             <div class="field" style="margin-top:12px"><label for="intercityDestination">Қайда</label>
               <select id="intercityDestination">
                 <option value="zhezkazgan">Жезқазған</option>
@@ -412,12 +424,12 @@
               </select>
             </div>
             <div class="field" id="customDestinationField" style="margin-top:12px" hidden>
-              <label for="intercityCustomDestination">Қала / мекенжай</label><input id="intercityCustomDestination" placeholder="Қала немесе мекенжай">
+              <label for="intercityCustomDestination">Қала / мекенжай</label><input id="intercityCustomDestination" placeholder="Қала немесе мекенжай" autocorrect="off" spellcheck="false" autocapitalize="off" autocomplete="off">
             </div>
             <div class="field" style="margin-top:12px">
               <label for="intercityBasePrice">Бағыттың бастапқы бағасы (₸)</label>
-              <input id="intercityBasePrice" type="number" min="1" step="100" inputmode="numeric">
-              <p class="field-help">Бағаны осы өрісте қолмен өзгертуге болады.</p>
+              <input id="intercityBasePrice" type="number" min="1" step="1" inputmode="numeric" placeholder="Бағаны қолмен енгізіңіз">
+              <p class="field-help" id="intercityPriceHelp">Бағаны осы өрісте қолмен өзгертуге болады.</p>
             </div>
             <div class="field" style="margin-top:12px">
               <label for="intercityService">Қызмет түрі</label>
@@ -689,7 +701,7 @@
     "use strict";
     const ADMIN_PHONE = "+77478632459";
     const PRICE = 400, DRIVER_SHARE = 350, ADMIN_SHARE = 50;
-    const INTERCITY_RATES = { zhezkazgan:6000, karaganda:15000, astana:25000, custom:6000 };
+    const INTERCITY_RATES = { zhezkazgan:6000, karaganda:15000, astana:25000 };
     const BONUS_REWARDS = { passenger:20, driver:50 };
     const DEFAULT_LOCATION = { lat:48.0061, lng:67.5964 };
     const ROUTE_POINTS = {
@@ -708,6 +720,30 @@
         catch(error) {
           console.error("Жергілікті деректерді сақтау мүмкін болмады:",error);
           if(key!=="zhairemNotifications")toast("Деректерді сақтау мүмкін болмады.");
+          return false;
+        }
+      },
+      setMany:entries=>{
+        const snapshots=[];
+        const written=[];
+        try{
+          for(const [key,value] of entries)snapshots.push({key,previous:localStorage.getItem(key),serialized:JSON.stringify(value)});
+          for(const item of snapshots){
+            localStorage.setItem(item.key,item.serialized);
+            written.push(item);
+          }
+          return true;
+        }catch(error){
+          for(const item of written.reverse()){
+            try{
+              if(item.previous===null)localStorage.removeItem(item.key);
+              else localStorage.setItem(item.key,item.previous);
+            }catch(rollbackError){
+              console.error("Жергілікті деректерді кері қайтару мүмкін болмады:",rollbackError);
+            }
+          }
+          console.error("Жергілікті деректер транзакциясын сақтау мүмкін болмады:",error);
+          toast("Сапар мен бонус деректерін сақтау мүмкін болмады. Құрылғы жадын тексеріп, қайта көріңіз.");
           return false;
         }
       }
@@ -1019,18 +1055,16 @@
       const isIOS=/iPhone|iPad|iPod/i.test(userAgent)||(navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1);
       const isAndroid=/Android/i.test(userAgent);
       const steps=[];
-      let actionLabel="",actionHref="";
       $("#permissionDialogTitle").textContent=title+" рұқсатын баптау";
       if(isIOS){
-        $("#permissionDialogIntro").textContent="iPhone/iPad-та бұғатталған рұқсатты браузер қайта сұрай алмауы мүмкін. Веб-нұсқадан жүйелік баптауды тікелей өзгертуге болмайды.";
-        steps.push("Нативті Zhairem Taxi қолданбасында: Настройки → Zhairem Taxi → "+permission+" → рұқсат ету.");
-        steps.push("Safari/PWA нұсқасында: Safari-де осы сайтты ашыңыз → мекенжай жолағындағы «aA» → «Веб-сайт баптаулары» → "+permission+" → «Рұқсат ету».");
-        actionLabel="iPhone Настройкаларын ашу";actionHref="app-settings:";
+        $("#permissionDialogIntro").textContent="iOS жүйесі веб-бетке телефон баптауларын тікелей ашуға рұқсат бермейді. Қажетті рұқсатты төмендегі жолмен қолмен өзгертіңіз.";
+        steps.push("Нативті Zhairem Taxi қолданбасы орнатылған болса: Настройки → Zhairem Taxi → "+permission+" → рұқсат ету.");
+        steps.push("Safari веб-нұсқасы: Настройки → Safari → "+(name==="location"?"Локация":name==="microphone"?"Микрофон":"Хабарламалар")+" → рұқсат ету.");
+        steps.push("Тек осы сайтқа арналған Safari рұқсаты үшін: сайтты ашыңыз → мекенжай жолағындағы «aA» → «Веб-сайт баптаулары» → "+permission+" → «Рұқсат ету», содан соң бетті жаңартыңыз.");
       }else if(isAndroid){
-        $("#permissionDialogIntro").textContent="Нативті қолданба болса, төмендегі сілтеме Android баптауларын ашуға тырысады. Браузер/PWA үшін сайт рұқсатын браузердің сайт баптауынан өзгертіңіз.";
+        $("#permissionDialogIntro").textContent="Бұл веб-нұсқа жүйелік баптауларды тікелей аша алмайды. Рұқсатты нативті қолданба баптауынан немесе браузердің сайт рұқсаттарынан өзгертіңіз.";
         steps.push("Нативті қолданба: Настройки → Приложения → Zhairem Taxi → Разрешения → "+permission+" → «Разрешить».");
         steps.push("Браузер/PWA: мекенжай жолағындағы сайт белгішесі → «Разрешения»; немесе Настройки → Приложения → браузер (мысалы, Chrome) → Разрешения.");
-        actionLabel="Android Настройкаларын ашу";actionHref="intent://settings#Intent;action=android.settings.SETTINGS;end";
       }else{
         $("#permissionDialogIntro").textContent="Веб-нұсқа телефонның жүйелік баптауларын тікелей аша алмайды. Браузердегі осы сайттың рұқсат баптауларын өзгертіп, бетті қайта жүктеңіз.";
         steps.push("Браузердің мекенжай жолағындағы сайт белгішесін немесе құлып белгісін басыңыз.");
@@ -1040,10 +1074,6 @@
       stepList.replaceChildren(...steps.map(text=>{
         const item=document.createElement("li");item.textContent=text;return item;
       }));
-      const action=$("#permissionSettingsLink");
-      action.hidden=!actionHref;
-      action.textContent=actionLabel;
-      action.href=actionHref||"#";
       if(typeof dialog.showModal==="function")dialog.showModal();
       else toast($("#permissionDialogIntro").textContent+" "+steps.join(" "));
     }
@@ -1498,7 +1528,13 @@
     function updateIntercityDestination() {
       const destination=$("#intercityDestination").value;
       $("#customDestinationField").hidden=destination!=="custom";
-      $("#intercityBasePrice").value=String(INTERCITY_RATES[destination]);
+      if(Object.prototype.hasOwnProperty.call(INTERCITY_RATES,destination)){
+        $("#intercityBasePrice").value=String(INTERCITY_RATES[destination]);
+        $("#intercityPriceHelp").textContent="Бағаны осы өрісте қолмен өзгертуге болады.";
+      }else{
+        $("#intercityBasePrice").value="";
+        $("#intercityPriceHelp").textContent="Өз мекенжайына бекітілген тариф жоқ. Қалааралық есепті көру үшін бастапқы бағаны қолмен енгізіңіз.";
+      }
       renderIntercityQuote();
     }
     function updateIntercityService() {
@@ -1571,9 +1607,18 @@
     function completeIntercityOrder(id) {
       if(!account){toast("Бонусты тіркеу үшін аккаунтқа кіріңіз.");return;}
       const orders=store.get("zhairemIntercityTrips",[]);
+      if(!Array.isArray(orders)){toast("Қалааралық сапарлар тарихының дерегі оқылмады.");return;}
       const order=orders.find(item=>item.id===id);
       if(!order||order.status!=="requested"||order.accountId!==account.id||order.role!==account.role){
         toast("Бұл сапар осы аккаунтқа тиесілі емес немесе бұрын аяқталған.");
+        return;
+      }
+      if(!Object.prototype.hasOwnProperty.call(BONUS_REWARDS,account.role)){
+        toast("Бұл аккаунт рөліне бонус ережесі орнатылмаған.");
+        return;
+      }
+      if(!Number.isSafeInteger(order.bonus)||order.bonus<0||!Number.isSafeInteger(order.net)||order.net<0){
+        toast("Сапар бағасы немесе бонус дерегі жарамсыз. Есепті қайта жасаңыз.");
         return;
       }
       if(order.bonus>bonusBalance(account)){
@@ -1582,17 +1627,31 @@
       }
       if(!window.confirm("Сапар немесе жеткізу аяқталғанын растайсыз ба? Қолданылған бонус есептен алынып, аяқталған сапар бонусы қосылады."))return;
       const split=intercityOrderSplit(order);
-      order.platformShare=split.platformShare;order.driverEarnings=split.driverEarnings;order.commissionPercent=split.commissionPercent;
-      order.status="completed";order.completedAt=new Date().toISOString();
-      store.set("zhairemIntercityTrips",orders);
-      $("#intercityBonus").value="0";
-      if(order.bonus>0&&!recordBonusMovement("spent",order.bonus,"Қалааралық сапарға жеңілдік",order.id)){
-        order.status="requested";delete order.completedAt;store.set("zhairemIntercityTrips",orders);
-        toast("Бонусты есептен шығару мүмкін болмады. Балансыңызды тексеріңіз.");
-        return;
+      const completedAt=new Date().toISOString();
+      const completedOrder={...order,...split,status:"completed",completedAt};
+      const nextOrders=orders.map(item=>item.id===id?completedOrder:item);
+      const savedMovements=store.get("zhairemBonusHistory",[]);
+      if(!Array.isArray(savedMovements)){toast("Бонус тарихының дерегі оқылмады.");return;}
+      const movements=savedMovements;
+      let nextBalance=bonusBalance(account);
+      const nextMovements=[];
+      if(order.bonus>0){
+        nextBalance-=order.bonus;
+        nextMovements.push({id:"B-"+Date.now()+"-spent",accountId:account.id,role:account.role,type:"spent",amount:order.bonus,reason:"Қалааралық сапарға жеңілдік",orderId:order.id,time:completedAt,balanceAfter:nextBalance});
       }
-      recordBonusMovement("earned",BONUS_REWARDS[account.role],"Аяқталған қалааралық сапар / жеткізу",order.id);
+      const reward=BONUS_REWARDS[account.role];
+      nextBalance+=reward;
+      nextMovements.unshift({id:"B-"+Date.now()+"-earned",accountId:account.id,role:account.role,type:"earned",amount:reward,reason:"Аяқталған қалааралық сапар / жеткізу",orderId:order.id,time:completedAt,balanceAfter:nextBalance});
+      const nextAccount={...account,bonusBalances:{...(account.bonusBalances||{}),[account.role]:nextBalance},bonusBalance:nextBalance};
+      if(!store.setMany([
+        ["zhairemIntercityTrips",nextOrders],
+        ["zhairemBonusHistory",[...nextMovements,...movements].slice(0,200)],
+        ["zhairemAccount",nextAccount]
+      ]))return;
+      account=nextAccount;
+      $("#intercityBonus").value="0";
       renderIntercityOrders();renderHistory();
+      updateAccountUi();
       announceDeliveryStatus();
       toast("Сапар аяқталды. Бонус қозғалысы тарихқа сақталды.",true);
     }
@@ -1626,6 +1685,7 @@
     }
     function completeRide() {
       if(!currentOrder||currentOrder.status!=="arrived")return;
+      if(account?.role!=="driver"){toast("Сапарды жүргізуші аккаунты аяқтай алады.");return;}
       if(currentOrder.bonusAwarded)return;
       updateCurrentOrder({status:"completed",completedAt:new Date().toISOString(),bonusAwarded:true});
       if(account&&account.role in BONUS_REWARDS){
@@ -1717,14 +1777,24 @@
       const releaseMicrophone=()=>stream?.getTracks().forEach(track=>track.stop());
       try{
         const recognition=new SpeechRecognition();recognition.lang="kk-KZ";recognition.interimResults=false;
-        recognition.onresult=e=>targetCallback(e.results[0][0].transcript);
+        let receivedText=false,reportedError=false;
+        recognition.onresult=e=>{
+          const text=e.results?.[0]?.[0]?.transcript?.trim();
+          if(!text)return;
+          receivedText=true;
+          targetCallback(text);
+        };
         recognition.onerror=e=>{
+          reportedError=true;
           if(e.error==="not-allowed")updatePermissionStatus("microphone","denied");
           const reason=e.error==="not-allowed"?"Микрофонға рұқсат берілмеді":e.error==="no-speech"?"Дауыс анықталмады":"Дауысты тану аяқталмады";
           toast(reason+". Мәтінді қолмен енгізе аласыз.");
           releaseMicrophone();
         };
-        recognition.onend=releaseMicrophone;
+        recognition.onend=()=>{
+          releaseMicrophone();
+          if(!receivedText&&!reportedError)toast("Дауысты тану аяқталды. Мәтінді қолмен енгізе аласыз; AI-навигатордың дауыстап оқуы бөлек жұмыс істейді.");
+        };
         recognition.start();
       }catch(error){releaseMicrophone();toast("Микрофон іске қосылмады: "+(error.message||"рұқсат жоқ."));}
     }
@@ -1776,7 +1846,11 @@
       if(locationWatch!==null&&navigator.geolocation)navigator.geolocation.clearWatch(locationWatch);
       locationWatch=null;gpsHasFix=false;gpsState="idle";geoLocation={...DEFAULT_LOCATION};
       updateNetworkIndicator();
-      localStorage.removeItem("zhairemAccount");account=null;$("#bottomNav").hidden=true;showScreen("auth");toast("Аккаунттан шықты.");
+      localStorage.removeItem("zhairemAccount");account=null;authRole="passenger";
+      $("#authName").value="";$("#authPhone").value="+7 ";
+      ["carModel","carPlate","iin","docPhoto","licenseNumber","licensePhoto","authPhoto","smsCode"].forEach(id=>$("#"+id).value="");
+      $("#authSteps").hidden=true;$("#authInfo").classList.add("active");$("#authSms").classList.remove("active");
+      $("#bottomNav").hidden=true;showScreen("auth");toast("Аккаунттан шықты.");
       $("#app").classList.remove("authenticated");
     });
 
@@ -1846,6 +1920,10 @@
         if(!store.set("zhairemAccount",accountData))throw new Error("Аккаунтты құрылғыда сақтау мүмкін болмады.");
         account=accountData;
         smsCode="";$("#smsCode").value="";
+        smsPhone="";smsRole="";
+        $("#authName").value="";$("#authPhone").value="+7 ";
+        ["carModel","carPlate","iin","docPhoto","licenseNumber","licensePhoto","authPhoto"].forEach(id=>$("#"+id).value="");
+        $("#authSteps").hidden=true;$("#authInfo").classList.add("active");$("#authSms").classList.remove("active");
         updateAccountUi();showScreen("home");
         void refreshPermissionStatuses();
         toast((authRole==="driver"?"Жүргізуші тіркелді: жергілікті веб-нұсқада құжаттары енгізілген, бірақ серверлік тексеру жоқ.":"Жолаушы тіркелді.")+" Басты бет ашылды.");

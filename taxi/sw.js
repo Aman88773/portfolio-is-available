@@ -1,6 +1,6 @@
 "use strict";
 
-const CACHE_NAME = "zhairem-taxi-v3";
+const CACHE_NAME = "zhairem-taxi-v4";
 const CORE_ASSETS = [
   "./",
   "./index.html",

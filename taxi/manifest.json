@@ -1,6 +1,8 @@
 {
   "name": "Zhairem Taxi",
   "short_name": "Zhairem",
+  "lang": "kk",
+  "id": "./index.html",
   "description": "Жайрем кенті және қалааралық GPS навигация қосымшасы",
   "start_url": "./index.html",
   "scope": "./",
@@ -8,6 +10,7 @@
   "background_color": "#111315",
   "theme_color": "#111315",
   "orientation": "portrait-primary",
+  "categories": ["travel", "navigation"],
   "icons": [
     {
       "src": "./icon.svg",
