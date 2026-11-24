@@ -26,15 +26,17 @@ jobs:
           distribution: temurin
           java-version: 21
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
       - name: Install dependencies
         working-directory: taxi
         run: npm ci
 
-      - name: Add Android platform and sync taxi web files
+      - name: Build and sync taxi web files for Android
         working-directory: taxi
         run: |
           npm run build
-          npm run android:add
           npx cap sync android
 
       - name: Configure release signing when keystore secrets are present

@@ -61,6 +61,8 @@ const privacy = await read(resolve(taxiDir, "privacy.html"));
 const sw = await read(resolve(taxiDir, "sw.js"));
 checkHtml("index.html", index);
 checkHtml("privacy.html", privacy);
+checkHtml("root/index.html", await read(resolve(root, "index.html")));
+checkHtml("root/tools.html", await read(resolve(root, "tools.html")));
 try {
   new vm.Script(sw, { filename: "sw.js" });
 } catch (error) {
@@ -78,11 +80,20 @@ const requiredMarkers = [
   ["bonus system", /бонус/i],
   ["AI navigator", /AI-навигатор/],
   ["offline GPS navigator", /Офлайн GPS|спутник/i],
-  ["offline and online weather", /Офлайн.*Онлайн|Онлайн ауа райы/i]
+  ["offline and online weather", /Офлайн.*Онлайн|Онлайн ауа райы/i],
+  ["fixed verification code 8791", /8791/]
 ];
 for (const [label, pattern] of requiredMarkers) {
   if (!pattern.test(index)) errors.push(`index.html: required feature marker missing: ${label}`);
 }
+if (!/77478632459/.test(index)) errors.push("index.html: the required contact number is missing");
+if (!/8791/.test(index)) errors.push("index.html: the fixed SMS verification code 8791 is missing");
+const androidManifest = await read(resolve(taxiDir, "android/app/src/main/AndroidManifest.xml"));
+for (const permission of ["android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.INTERNET"]) {
+  if (!androidManifest.includes(permission)) errors.push(`AndroidManifest.xml: required permission ${permission} is missing`);
+}
+if (!/Аманжол Бейсенұлы Темешалиев/.test(privacy)) errors.push("privacy.html: responsible person's correct name is missing");
+if (!/7 күн ішінде өңделеді/.test(privacy)) errors.push("privacy.html: the 7-day data deletion deadline is missing");
 if (!/\.\/privacy\.html/.test(sw)) errors.push("sw.js: privacy.html is not in the service-worker asset list");
 if (!/privacy\.html/.test(index)) errors.push("index.html: public privacy policy link is missing");
 if (!/Аккаунт пен деректерді өшіру|Деректер мен аккаунтты өшіру/.test(privacy)) {

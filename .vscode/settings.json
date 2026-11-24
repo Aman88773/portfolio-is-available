@@ -1,0 +1,9 @@
+{
+  "editor.wordWrap": "on",
+  "editor.fontSize": 14,
+  "editor.minimap.enabled": false,
+  "breadcrumbs.enabled": false,
+  "files.autoSave": "afterDelay",
+  "workbench.startupEditor": "none",
+  "workbench.activityBar.location": "hidden"
+}

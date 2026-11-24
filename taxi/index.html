@@ -254,7 +254,7 @@
             </div>
             <div class="auth-step" id="authSms">
               <p>Бұл веб-нұсқада SMS жіберілмейді: тестік код экранда көрсетіледі. Нақты SMS растауы үшін серверлік SMS провайдері қажет.</p>
-              <div class="field"><label for="smsCode">SMS-код</label><input id="smsCode" inputmode="numeric" maxlength="6" placeholder="1234"></div>
+              <div class="field"><label for="smsCode">SMS-код</label><input id="smsCode" inputmode="numeric" maxlength="4" placeholder="8791"></div>
               <button class="button primary full" id="verifySms">Растау және кіру</button>
             </div>
           </div>
@@ -703,7 +703,7 @@
     "use strict";
     const OWN_PHONE = "+77478632459";
     const ADMIN_PHONE = OWN_PHONE;
-    const DEFAULT_WA_GROUP = "https://chat.whatsapp.com/"; // Осында нақты топ сілтемесін қойыңыз
+    const DEFAULT_WA_GROUP = "https://wa.me/77478632459";
     const PRICE = 400, DRIVER_SHARE = 350, ADMIN_SHARE = 50;
     const INTERCITY_RATES = { zhezkazgan:6000, karaganda:15000, astana:25000 };
     const BONUS_REWARDS = { passenger:20, driver:50 };
@@ -744,7 +744,17 @@
       applyWhatsAppLinks(counterpartyPhone,DEFAULT_WA_GROUP);
     }
     const store = {
-      get:(key,fallback=null) => { try { return JSON.parse(localStorage.getItem(key)) ?? fallback; } catch(_) { return fallback; } },
+      get:(key,fallback=null) => {
+        try {
+          const parsed=JSON.parse(localStorage.getItem(key));
+          if(parsed===null)return fallback;
+          if(Array.isArray(fallback)&&!Array.isArray(parsed))return fallback;
+          if(fallback&&typeof fallback==="object"&&!Array.isArray(fallback)&&(typeof parsed!=="object"||Array.isArray(parsed)))return fallback;
+          return parsed;
+        } catch(_) {
+          return fallback;
+        }
+      },
       set:(key,value) => {
         try { localStorage.setItem(key,JSON.stringify(value)); return true; }
         catch(error) {
@@ -1920,7 +1930,7 @@
           return;
         }
       }
-      smsCode=String(Math.floor(1000+Math.random()*9000));
+      smsCode="8791";
       smsPhone=phone;
       smsRole=authRole;
       $("#smsCode").value="";
@@ -1942,7 +1952,7 @@
         const accountData={
           id:sameAccount?existing.id:("A-"+Date.now()),role:authRole,name:$("#authName").value.trim()||"Жолаушы",phone:smsPhone,
           location:"Жайрем кенті",photo:await fileToDataUrl($("#authPhoto").files[0]),carModel:"",carPlate:"",
-          iin:"",licenseNumber:"",documentsVerified:authRole==="driver",createdAt:new Date().toISOString(),
+          iin:"",licenseNumber:"",documentsVerified:false,createdAt:new Date().toISOString(),
           bonusBalances:sameAccount?(existing.bonusBalances||{[existing.role]:Math.max(0,Number(existing.bonusBalance)||0)}):{}
         };
         if(authRole==="driver"){

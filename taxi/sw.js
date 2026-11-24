@@ -26,25 +26,31 @@ self.addEventListener("activate", event => {
 });
 
 self.addEventListener("fetch", event => {
-  if(event.request.method !== "GET")return;
+  if(event.request.method !== "GET") return;
   const url = new URL(event.request.url);
-  if(url.origin !== self.location.origin)return;
+  if(url.origin !== self.location.origin) return;
 
   if(event.request.mode === "navigate"){
     event.respondWith(
       fetch(event.request)
         .then(async response => {
-          if(!response.ok)return response;
-          const copy=response.clone();
-          try{await caches.open(CACHE_NAME).then(cache=>cache.put("./index.html",copy));}
-          catch(error){console.error("Zhairem Taxi навигация кэштелмеді:",error);}
+          if(!response.ok) return response;
+          const copy = response.clone();
+          try {
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(event.request, copy);
+          } catch(error) {
+            console.error("Zhairem Taxi навигация кэштелмеді:", error);
+          }
           return response;
         })
-        .catch(async()=>{
-          const cached=await caches.match(event.request)||await caches.match("./index.html")||await caches.match("./");
-          return cached||new Response("Zhairem Taxi офлайн кэші қолжетімсіз. Интернетке қосылып, бетті қайта жүктеңіз.",{
-            status:503,
-            headers:{"Content-Type":"text/plain; charset=utf-8"}
+        .catch(async () => {
+          const cached = await caches.match(event.request) ||
+            await caches.match("./index.html") ||
+            await caches.match("./");
+          return cached || new Response("Zhairem Taxi офлайн кэші қолжетімсіз. Интернетке қосылып, бетті қайта жүктеңіз.", {
+            status: 503,
+            headers: {"Content-Type": "text/plain; charset=utf-8"}
           });
         })
     );
