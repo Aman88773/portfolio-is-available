@@ -39,6 +39,9 @@ jobs:
         working-directory: taxi
         run: |
           npm run build
+          if [[ ! -d android ]]; then
+            npx cap add android
+          fi
           npx cap sync android
 
       - name: Configure release signing when keystore secrets are present
