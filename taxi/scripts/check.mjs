@@ -88,9 +88,13 @@ for (const [label, pattern] of requiredMarkers) {
 }
 if (!/77478632459/.test(index)) errors.push("index.html: the required contact number is missing");
 if (!/8791/.test(index)) errors.push("index.html: the fixed SMS verification code 8791 is missing");
-const androidManifest = await read(resolve(taxiDir, "android/app/src/main/AndroidManifest.xml"));
-for (const permission of ["android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.INTERNET"]) {
-  if (!androidManifest.includes(permission)) errors.push(`AndroidManifest.xml: required permission ${permission} is missing`);
+try {
+  const androidManifest = await readFile(resolve(taxiDir, "android/app/src/main/AndroidManifest.xml"), "utf8");
+  for (const permission of ["android.permission.ACCESS_FINE_LOCATION", "android.permission.ACCESS_COARSE_LOCATION", "android.permission.INTERNET"]) {
+    if (!androidManifest.includes(permission)) errors.push(`AndroidManifest.xml: required permission ${permission} is missing`);
+  }
+} catch (error) {
+  if (error.code !== "ENOENT") errors.push(`AndroidManifest.xml: unreadable file (${error.message})`);
 }
 if (!/Аманжол Бейсенұлы Темешалиев/.test(privacy)) errors.push("privacy.html: responsible person's correct name is missing");
 if (!/7 күн ішінде өңделеді/.test(privacy)) errors.push("privacy.html: the 7-day data deletion deadline is missing");
